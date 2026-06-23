@@ -1,0 +1,10 @@
+{
+    "username": "coder_neo",
+    "level": 42,
+    "skills": [
+        "Python",
+        "OOP",
+        "File I/O"
+    ],
+    "is_active": true
+}

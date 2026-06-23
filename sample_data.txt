@@ -1,0 +1,3 @@
+Line 1: Learning Python is awesome!
+Line 2: File IO is easy with context managers.
+Line 3: Keep practicing!
