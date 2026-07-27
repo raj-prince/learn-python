@@ -77,6 +77,15 @@ def run_io_threaded():
     end = time.time()
     print(f"⏱️ Threaded I/O took {end - start:.2f} seconds (Should be ~1.5s instead of ~6s!).")
 
+def run_io_multiprocessed():
+    start = time.time()
+    # ProcessPoolExecutor also works for I/O, but spawning processes has higher memory overhead
+    with ProcessPoolExecutor(max_workers=4) as executor:
+        file_ids = [1, 2, 3, 4]
+        results = list(executor.map(download_file, file_ids))
+    end = time.time()
+    print(f"⏱️ Multiprocessed I/O took {end - start:.2f} seconds (Fast, but higher process setup overhead).")
+
 
 # ================================================================================
 # PART 2: MULTIPROCESSING FOR CPU-BOUND TASKS (E.g., Heavy Math Calculations)
@@ -97,6 +106,15 @@ def run_cpu_sequential():
     end = time.time()
     print(f"⏱️ Sequential CPU tasks took {end - start:.2f} seconds.")
 
+def run_cpu_threaded():
+    start = time.time()
+    # ThreadPoolExecutor fails to speed up CPU tasks due to the GIL!
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        numbers = [8_000_000, 8_000_000, 8_000_000, 8_000_000]
+        results = list(executor.map(cpu_heavy_calculation, numbers))
+    end = time.time()
+    print(f"⏱️ Threaded CPU tasks took {end - start:.2f} seconds (Blocked by the GIL!).")
+
 def run_cpu_multiprocessed():
     start = time.time()
     # ProcessPoolExecutor bypasses the GIL by using separate CPU cores
@@ -104,23 +122,27 @@ def run_cpu_multiprocessed():
         numbers = [8_000_000, 8_000_000, 8_000_000, 8_000_000]
         results = list(executor.map(cpu_heavy_calculation, numbers))
     end = time.time()
-    print(f"⏱️ Multiprocessed CPU tasks took {end - start:.2f} seconds.")
+    print(f"⏱️ Multiprocessed CPU tasks took {end - start:.2f} seconds (True Parallelism!).")
 
 
 # --- DRIVER CODE ---
 if __name__ == "__main__":
     print("==================================================")
-    print("RUNNING I/O-BOUND TESTS (Threading vs. Sequential)")
+    print("RUNNING I/O-BOUND TESTS (Sequential vs Threaded vs Multiprocessed)")
     print("==================================================")
     run_io_sequential()
     print("-" * 50)
     run_io_threaded()
+    print("-" * 50)
+    run_io_multiprocessed()
     
     print("\n==================================================")
-    print("RUNNING CPU-BOUND TESTS (Multiprocessing vs. Sequential)")
+    print("RUNNING CPU-BOUND TESTS (Sequential vs Threaded vs Multiprocessed)")
     print("==================================================")
     # Note: On some systems, multiprocessing can take a moment to initialize processes.
     run_cpu_sequential()
+    print("-" * 50)
+    run_cpu_threaded()
     print("-" * 50)
     run_cpu_multiprocessed()
 
