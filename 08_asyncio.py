@@ -71,6 +71,28 @@ async def run_concurrent():
     print(f"⏱️ Concurrent Async took {end - start:.2f} seconds (Should be ~1.5s, the max delay!).")
 
 
+# --- Running Tasks in the Background with asyncio.create_task ---
+async def run_tasks_demo():
+    start = time.time()
+    
+    print("🚀 Spawning background tasks with asyncio.create_task()...")
+    # asyncio.create_task starts the coroutines in the background IMMEDIATELY without waiting!
+    task1 = asyncio.create_task(fetch_data("Database", 1.5))
+    task2 = asyncio.create_task(fetch_data("Weather API", 1.0))
+    
+    print("⚡ Main function continues running while tasks execute in background...")
+    await asyncio.sleep(0.2)  # Do some other work in main function
+    print("☕ Main function did 0.2s of other work!")
+    
+    # Now we await the tasks when we actually need their results
+    result1 = await task1
+    result2 = await task2
+    
+    end = time.time()
+    print(f"Results: {result1}, {result2}")
+    print(f"⏱️ Background tasks demo took {end - start:.2f} seconds.")
+
+
 # --- Main Entry Point ---
 # Since we cannot call 'await' in the global scope, we use a main async function
 # and run it using the asyncio event loop.
@@ -84,6 +106,11 @@ async def main():
     print("RUNNING CONCURRENT ASYNC DEMO (using asyncio.gather)")
     print("==================================================")
     await run_concurrent()
+
+    print("\n==================================================")
+    print("RUNNING BACKGROUND TASKS DEMO (using asyncio.create_task)")
+    print("==================================================")
+    await run_tasks_demo()
 
 if __name__ == "__main__":
     # asyncio.run initializes the Event Loop and runs our main coroutine
