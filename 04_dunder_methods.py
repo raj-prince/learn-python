@@ -23,6 +23,8 @@ Python's built-in operators and functions. This is called "Operator Overloading.
 - `__len__(self)`       : Hooks into the `len(obj)` function.
 - `__add__(self, other)`: Hooks into the addition operator `+`.
 - `__eq__(self, other)` : Hooks into the equality operator `==`.
+- `__enter__` / `__exit__`: Hooks into the `with` statement for context management.
+- `__reduce__(self)`    : Hooks into `pickle` to define custom object serialization.
 
 --------------------------------------------------------------------------------
 2. THE PLAYLIST EXAMPLE
@@ -69,6 +71,21 @@ class Playlist:
             return self.songs == other.songs
         return False
 
+    # 6. HOOKING INTO with STATEMENT (__enter__ and __exit__)
+    def __enter__(self):
+        print(f"▶️ Starting listening session for '{self.name}'...")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"⏹️ Ending listening session for '{self.name}'.")
+        # Return False so exceptions propagate if an error occurs inside the `with` block
+        return False
+
+    # 7. HOOKING INTO pickle SERIALIZATION (__reduce__)
+    def __reduce__(self):
+        # Returns a tuple: (Callable_Constructor, (args_tuple,))
+        return (Playlist, (self.name, self.songs))
+
 
 # ------------------------------------------------------------------------------
 # 3. TESTING DUNDER METHODS
@@ -99,6 +116,18 @@ another_pop = Playlist("My Pop Collection", ["Levitating", "Blinding Lights"])
 
 print(f"Is pop_mix equal to another_pop? {pop_mix == another_pop}")  # True
 print(f"Is pop_mix equal to rock_mix? {pop_mix == rock_mix}")        # False
+
+print("\n--- Testing __enter__ and __exit__ (Context Manager) ---")
+# Using Playlist with a 'with' statement invokes __enter__ on entry and __exit__ on exit
+with rock_mix as session:
+    print(f"  Currently playing song 1: {session.songs[0]}")
+
+print("\n--- Testing __reduce__ (Pickle Serialization) ---")
+import pickle
+# pickle.dumps calls __reduce__ to get the tuple (Playlist, (name, songs))
+serialized = pickle.dumps(rock_mix)
+deserialized_playlist = pickle.loads(serialized)
+print(f"  Restored Playlist from pickle bytes: {deserialized_playlist}")
 
 
 # ================================================================================
