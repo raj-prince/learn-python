@@ -2,12 +2,13 @@
   "summary": {
     "total_repositories": 8,
     "total_files_scanned": 3613,
-    "files_with_usages": 148,
-    "total_usages_found": 941,
+    "files_with_usages": 153,
+    "total_usages_found": 986,
     "cache_type_summary": {
-      "NOT_EXPLICIT": 941
+      "NOT_EXPLICIT": 984,
+      "parts": 2
     },
-    "elapsed_seconds": 308.97
+    "elapsed_seconds": 112.52
   },
   "per_repository": [
     {
@@ -17,7 +18,8 @@
       "total_usages_found": 152,
       "repo_url": "https://github.com/dask/dask",
       "cache_type_summary": {
-        "NOT_EXPLICIT": 152
+        "NOT_EXPLICIT": 150,
+        "parts": 2
       },
       "usages": [
         {
@@ -2904,7 +2906,7 @@
           "target_name": "fsspec_parquet.open_parquet_file",
           "enclosing_function": "_open_input_files",
           "enclosing_class": null,
-          "cache_type": "NOT_EXPLICIT",
+          "cache_type": "parts",
           "cache_options": null,
           "repo_url": "https://github.com/dask/dask",
           "file_url": "https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L210",
@@ -2925,7 +2927,7 @@
           "target_name": "fs.open",
           "enclosing_function": "_open_input_files",
           "enclosing_class": null,
-          "cache_type": "NOT_EXPLICIT",
+          "cache_type": "parts",
           "cache_options": null,
           "repo_url": "https://github.com/dask/dask",
           "file_url": "https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L221",
@@ -5275,13 +5277,366 @@
     {
       "target_source": "GitHub:zarr-developers/zarr-python (main)",
       "total_files_scanned": 379,
-      "files_with_usages": 2,
-      "total_usages_found": 19,
+      "files_with_usages": 4,
+      "total_usages_found": 38,
       "repo_url": "https://github.com/zarr-developers/zarr-python",
       "cache_type_summary": {
-        "NOT_EXPLICIT": 19
+        "NOT_EXPLICIT": 38
       },
       "usages": [
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 55,
+          "end_line_number": 55,
+          "target_name": "fs.to_json",
+          "enclosing_function": "_make_async",
+          "enclosing_class": null,
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L55",
+          "args": [],
+          "kwargs": {},
+          "code_snippet": "        # Convert sync instance of an async fs to an async instance\n        fs_dict = json.loads(fs.to_json())\n        fs_dict[\"asynchronous\"] = True",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 67,
+          "end_line_number": 67,
+          "target_name": "AsyncFileSystemWrapper",
+          "enclosing_function": "_make_async",
+          "enclosing_class": null,
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L67",
+          "args": [
+            "fs"
+          ],
+          "kwargs": {
+            "asynchronous": "True"
+          },
+          "code_snippet": "\n    return AsyncFileSystemWrapper(fs, asynchronous=True)\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 250,
+          "end_line_number": 250,
+          "target_name": "url_to_fs",
+          "enclosing_function": "from_url",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L250",
+          "args": [
+            "url"
+          ],
+          "kwargs": {},
+          "code_snippet": "\n        fs, path = url_to_fs(url, **opts)\n        if not fs.async_impl:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 268,
+          "end_line_number": 268,
+          "target_name": "self.fs._find",
+          "enclosing_function": "clear",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L268",
+          "args": [
+            "self.path"
+          ],
+          "kwargs": {
+            "withdirs": "True"
+          },
+          "code_snippet": "        try:\n            for subpath in await self.fs._find(self.path, withdirs=True):\n                if subpath != self.path:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 270,
+          "end_line_number": 270,
+          "target_name": "self.fs._rm",
+          "enclosing_function": "clear",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L270",
+          "args": [
+            "subpath"
+          ],
+          "kwargs": {
+            "recursive": "True"
+          },
+          "code_snippet": "                if subpath != self.path:\n                    await self.fs._rm(subpath, recursive=True)\n        except FileNotFoundError:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 298,
+          "end_line_number": 298,
+          "target_name": "self.fs._cat_file",
+          "enclosing_function": "get",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L298",
+          "args": [
+            "path"
+          ],
+          "kwargs": {},
+          "code_snippet": "            if byte_range is None:\n                value = prototype.buffer.from_bytes(await self.fs._cat_file(path))\n            elif isinstance(byte_range, RangeByteRequest):",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 301,
+          "end_line_number": 305,
+          "target_name": "self.fs._cat_file",
+          "enclosing_function": "get",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L301",
+          "args": [
+            "path"
+          ],
+          "kwargs": {
+            "start": "byte_range.start",
+            "end": "byte_range.end"
+          },
+          "code_snippet": "                value = prototype.buffer.from_bytes(\n                    await self.fs._cat_file(\n                        path,\n                        start=byte_range.start,\n                        end=byte_range.end,\n                    )\n                )",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 309,
+          "end_line_number": 309,
+          "target_name": "self.fs._cat_file",
+          "enclosing_function": "get",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L309",
+          "args": [
+            "path"
+          ],
+          "kwargs": {
+            "start": "byte_range.offset",
+            "end": "None"
+          },
+          "code_snippet": "                value = prototype.buffer.from_bytes(\n                    await self.fs._cat_file(path, start=byte_range.offset, end=None)\n                )",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 313,
+          "end_line_number": 313,
+          "target_name": "self.fs._cat_file",
+          "enclosing_function": "get",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L313",
+          "args": [
+            "path"
+          ],
+          "kwargs": {
+            "start": "-byte_range.suffix",
+            "end": "None"
+          },
+          "code_snippet": "                value = prototype.buffer.from_bytes(\n                    await self.fs._cat_file(path, start=-byte_range.suffix, end=None)\n                )",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 345,
+          "end_line_number": 345,
+          "target_name": "self.fs._pipe_file",
+          "enclosing_function": "set",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L345",
+          "args": [
+            "path",
+            "value.to_bytes()"
+          ],
+          "kwargs": {},
+          "code_snippet": "            raise NotImplementedError\n        await self.fs._pipe_file(path, value.to_bytes())\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 352,
+          "end_line_number": 352,
+          "target_name": "self.fs._rm",
+          "enclosing_function": "delete",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L352",
+          "args": [
+            "path"
+          ],
+          "kwargs": {},
+          "code_snippet": "        try:\n            await self.fs._rm(path)\n        except FileNotFoundError:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 369,
+          "end_line_number": 369,
+          "target_name": "self.fs._rm",
+          "enclosing_function": "delete_dir",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L369",
+          "args": [
+            "path_to_delete"
+          ],
+          "kwargs": {
+            "recursive": "True"
+          },
+          "code_snippet": "        with suppress(*self.allowed_exceptions):\n            await self.fs._rm(path_to_delete, recursive=True)\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 374,
+          "end_line_number": 374,
+          "target_name": "self.fs._exists",
+          "enclosing_function": "exists",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L374",
+          "args": [
+            "path"
+          ],
+          "kwargs": {},
+          "code_snippet": "        path = _dereference_path(self.path, key)\n        exists: bool = await self.fs._exists(path)\n        return exists",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 409,
+          "end_line_number": 409,
+          "target_name": "self.fs._cat_ranges",
+          "enclosing_function": "get_partial_values",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L409",
+          "args": [
+            "paths",
+            "starts",
+            "stops"
+          ],
+          "kwargs": {
+            "on_error": "'return'"
+          },
+          "code_snippet": "        # TODO: expectations for exceptions or missing keys?\n        res = await self.fs._cat_ranges(paths, starts, stops, on_error=\"return\")\n        # the following is an s3-specific condition we probably don't want to leak",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 420,
+          "end_line_number": 420,
+          "target_name": "self.fs._find",
+          "enclosing_function": "list",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L420",
+          "args": [
+            "self.path"
+          ],
+          "kwargs": {
+            "detail": "False",
+            "withdirs": "False"
+          },
+          "code_snippet": "        # docstring inherited\n        allfiles = await self.fs._find(self.path, detail=False, withdirs=False)\n        for onefile in (a.removeprefix(f\"{self.path}/\") for a in allfiles):",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 428,
+          "end_line_number": 428,
+          "target_name": "self.fs._ls",
+          "enclosing_function": "list_dir",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L428",
+          "args": [
+            "prefix"
+          ],
+          "kwargs": {
+            "detail": "False"
+          },
+          "code_snippet": "        try:\n            allfiles = await self.fs._ls(prefix, detail=False)\n        except FileNotFoundError:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 436,
+          "end_line_number": 438,
+          "target_name": "self.fs._find",
+          "enclosing_function": "list_prefix",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L436",
+          "args": [
+            "f'{self.path}/{prefix}'"
+          ],
+          "kwargs": {
+            "detail": "False",
+            "maxdepth": "None",
+            "withdirs": "False"
+          },
+          "code_snippet": "        # docstring inherited\n        for onefile in await self.fs._find(\n            f\"{self.path}/{prefix}\", detail=False, maxdepth=None, withdirs=False\n        ):\n            yield onefile.removeprefix(f\"{self.path}/\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "src/zarr/storage/_fsspec.py",
+          "line_number": 443,
+          "end_line_number": 443,
+          "target_name": "self.fs._info",
+          "enclosing_function": "getsize",
+          "enclosing_class": "FsspecStore",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L443",
+          "args": [
+            "path"
+          ],
+          "kwargs": {},
+          "code_snippet": "        path = _dereference_path(self.path, key)\n        info = await self.fs._info(path)\n",
+          "detection_method": "ast"
+        },
         {
           "file_path": "tests/test_store/test_fsspec.py",
           "line_number": 154,
@@ -5640,17 +5995,36 @@
           "kwargs": {},
           "code_snippet": "    # so clear state explicitly.\n    fs: MemoryFileSystem = MemoryFileSystem()\n    fs.store.clear()",
           "detection_method": "ast"
+        },
+        {
+          "file_path": "tests/test_store/test_zip.py",
+          "line_number": 271,
+          "end_line_number": 271,
+          "target_name": "fsspec.open",
+          "enclosing_function": "test_fsspec_file",
+          "enclosing_class": "TestZipStoreFileObj",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/zarr-developers/zarr-python",
+          "file_url": "https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_zip.py#L271",
+          "args": [
+            "f'local://{path}'",
+            "'rb'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        path.write_bytes(zip_bytes)\n        with fsspec.open(f\"local://{path}\", \"rb\") as fileobj:\n            store = ZipStore(fileobj, mode=\"r\")",
+          "detection_method": "ast"
         }
       ]
     },
     {
       "target_source": "GitHub:iterative/dvc (main)",
       "total_files_scanned": 554,
-      "files_with_usages": 68,
-      "total_usages_found": 521,
+      "files_with_usages": 71,
+      "total_usages_found": 547,
       "repo_url": "https://github.com/iterative/dvc",
       "cache_type_summary": {
-        "NOT_EXPLICIT": 521
+        "NOT_EXPLICIT": 547
       },
       "usages": [
         {
@@ -5747,6 +6121,44 @@
             "encoding": "encoding"
           },
           "code_snippet": "            try:\n                with fs.open(fs_path, mode=mode, encoding=encoding) as fobj:\n                    yield fobj",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/cachemgr.py",
+          "line_number": 30,
+          "end_line_number": 30,
+          "target_name": "fs.join",
+          "enclosing_function": "_get_odb",
+          "enclosing_class": null,
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/cachemgr.py#L30",
+          "args": [
+            "fs_path",
+            "*prefix"
+          ],
+          "kwargs": {},
+          "code_snippet": "    if prefix:\n        fs_path = fs.join(fs_path, *prefix)\n    if hash_name:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/cachemgr.py",
+          "line_number": 89,
+          "end_line_number": 89,
+          "target_name": "self.fs.join",
+          "enclosing_function": "fs_cache",
+          "enclosing_class": "CacheManager",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/cachemgr.py#L89",
+          "args": [
+            "self.local_cache_dir",
+            "self.FS_DIR"
+          ],
+          "kwargs": {},
+          "code_snippet": "            fs=self.local.fs,\n            path=self.local.fs.join(self.local_cache_dir, self.FS_DIR),\n        )",
           "detection_method": "ast"
         },
         {
@@ -11069,6 +11481,413 @@
           "detection_method": "ast"
         },
         {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 72,
+          "end_line_number": 72,
+          "target_name": "fs.ls",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L72",
+          "args": [
+            "'/'"
+          ],
+          "kwargs": {
+            "detail": "False"
+          },
+          "code_snippet": "\n        assert fs.ls(\"/\", detail=False) == M.unordered(\n            \"/.gitignore\", \"/scripts\", \"/data\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 75,
+          "end_line_number": 75,
+          "target_name": "fs.ls",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L75",
+          "args": [
+            "'scripts'"
+          ],
+          "kwargs": {
+            "detail": "False"
+          },
+          "code_snippet": "        )\n        assert fs.ls(\"scripts\", detail=False) == [\"scripts/script1\"]\n        assert fs.ls(\"data\", detail=False) == M.unordered(\"data/foo\", \"data/bar\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 76,
+          "end_line_number": 76,
+          "target_name": "fs.ls",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L76",
+          "args": [
+            "'data'"
+          ],
+          "kwargs": {
+            "detail": "False"
+          },
+          "code_snippet": "        assert fs.ls(\"scripts\", detail=False) == [\"scripts/script1\"]\n        assert fs.ls(\"data\", detail=False) == M.unordered(\"data/foo\", \"data/bar\")\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 85,
+          "end_line_number": 85,
+          "target_name": "fs.ls",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L85",
+          "args": [
+            "'/'"
+          ],
+          "kwargs": {},
+          "code_snippet": "\n        assert sorted(fs.ls(\"/\"), key=lambda i: i[\"name\"]) == [\n            M.dict(name=\"/.gitignore\", type=\"file\", isexec=False),",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 92,
+          "end_line_number": 92,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L92",
+          "args": [
+            "'/not-existing-path'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        with pytest.raises(FileNotFoundError):\n            fs.info(\"/not-existing-path\")\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 94,
+          "end_line_number": 94,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L94",
+          "args": [
+            "'/'"
+          ],
+          "kwargs": {},
+          "code_snippet": "\n        assert fs.info(\"/\") == M.dict(name=\"/\", isexec=False, type=\"directory\")\n        assert fs.info(\"/data\") == data_info",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 95,
+          "end_line_number": 95,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L95",
+          "args": [
+            "'/data'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.info(\"/\") == M.dict(name=\"/\", isexec=False, type=\"directory\")\n        assert fs.info(\"/data\") == data_info\n        assert fs.info(\"/scripts\") == scripts_info",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 96,
+          "end_line_number": 96,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L96",
+          "args": [
+            "'/scripts'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.info(\"/data\") == data_info\n        assert fs.info(\"/scripts\") == scripts_info\n        assert fs.info(\"/data/foo\") == M.dict(name=\"/data/foo\", type=\"file\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 97,
+          "end_line_number": 97,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L97",
+          "args": [
+            "'/data/foo'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.info(\"/scripts\") == scripts_info\n        assert fs.info(\"/data/foo\") == M.dict(name=\"/data/foo\", type=\"file\")\n        assert fs.info(\"/scripts/script1\") == M.dict(",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 98,
+          "end_line_number": 98,
+          "target_name": "fs.info",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L98",
+          "args": [
+            "'/scripts/script1'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.info(\"/data/foo\") == M.dict(name=\"/data/foo\", type=\"file\")\n        assert fs.info(\"/scripts/script1\") == M.dict(\n            name=\"/scripts/script1\", type=\"file\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 102,
+          "end_line_number": 102,
+          "target_name": "fs.isdvc",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L102",
+          "args": [
+            "'/'"
+          ],
+          "kwargs": {},
+          "code_snippet": "\n        assert not fs.isdvc(\"/\")\n        assert fs.isdvc(\"/data\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 103,
+          "end_line_number": 103,
+          "target_name": "fs.isdvc",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L103",
+          "args": [
+            "'/data'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert not fs.isdvc(\"/\")\n        assert fs.isdvc(\"/data\")\n        assert fs.isdvc(\"/data/foo\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 104,
+          "end_line_number": 104,
+          "target_name": "fs.isdvc",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L104",
+          "args": [
+            "'/data/foo'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.isdvc(\"/data\")\n        assert fs.isdvc(\"/data/foo\")\n        assert not fs.isdvc(\"/scripts\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 105,
+          "end_line_number": 105,
+          "target_name": "fs.isdvc",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L105",
+          "args": [
+            "'/scripts'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert fs.isdvc(\"/data/foo\")\n        assert not fs.isdvc(\"/scripts\")\n        assert not fs.isdvc(\"/scripts/script1\")",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 106,
+          "end_line_number": 106,
+          "target_name": "fs.isdvc",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L106",
+          "args": [
+            "'/scripts/script1'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        assert not fs.isdvc(\"/scripts\")\n        assert not fs.isdvc(\"/scripts/script1\")\n",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 109,
+          "end_line_number": 109,
+          "target_name": "fs.open",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L109",
+          "args": [
+            "'data'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        with pytest.raises((IsADirectoryError, PermissionError)):\n            fs.open(\"data\")\n        with pytest.raises((IsADirectoryError, PermissionError)):",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 111,
+          "end_line_number": 111,
+          "target_name": "fs.open",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L111",
+          "args": [
+            "'scripts'"
+          ],
+          "kwargs": {},
+          "code_snippet": "        with pytest.raises((IsADirectoryError, PermissionError)):\n            fs.open(\"scripts\")\n        with fs.open(\"/data/foo\") as fobj:",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 112,
+          "end_line_number": 112,
+          "target_name": "fs.open",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L112",
+          "args": [
+            "'/data/foo'"
+          ],
+          "kwargs": {},
+          "code_snippet": "            fs.open(\"scripts\")\n        with fs.open(\"/data/foo\") as fobj:\n            assert fobj.read() == b\"foo\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 114,
+          "end_line_number": 114,
+          "target_name": "fs.open",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L114",
+          "args": [
+            "'/scripts/script1'"
+          ],
+          "kwargs": {},
+          "code_snippet": "            assert fobj.read() == b\"foo\"\n        with fs.open(\"/scripts/script1\") as fobj:\n            assert fobj.read() == b\"script1\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 118,
+          "end_line_number": 118,
+          "target_name": "fs.get_file",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L118",
+          "args": [
+            "'data/foo'",
+            "(tmp / 'foo').fs_path"
+          ],
+          "kwargs": {},
+          "code_snippet": "        tmp = make_tmp_dir(\"temp-download\")\n        fs.get_file(\"data/foo\", (tmp / \"foo\").fs_path)\n        assert (tmp / \"foo\").read_text() == \"foo\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 121,
+          "end_line_number": 121,
+          "target_name": "fs.get_file",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L121",
+          "args": [
+            "'scripts/script1'",
+            "(tmp / 'script1').fs_path"
+          ],
+          "kwargs": {},
+          "code_snippet": "\n        fs.get_file(\"scripts/script1\", (tmp / \"script1\").fs_path)\n        assert (tmp / \"script1\").read_text() == \"script1\"",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "dvc/testing/api_tests.py",
+          "line_number": 124,
+          "end_line_number": 124,
+          "target_name": "fs.get",
+          "enclosing_function": "test_filesystem",
+          "enclosing_class": "TestAPI",
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L124",
+          "args": [
+            "'/'",
+            "(tmp / 'all').fs_path"
+          ],
+          "kwargs": {
+            "recursive": "True"
+          },
+          "code_snippet": "\n        fs.get(\"/\", (tmp / \"all\").fs_path, recursive=True)\n        assert (tmp / \"all\").read_text() == {",
+          "detection_method": "ast"
+        },
+        {
           "file_path": "dvc/testing/workspace_tests.py",
           "line_number": 195,
           "end_line_number": 195,
@@ -12166,6 +12985,42 @@
           ],
           "kwargs": {},
           "code_snippet": "            {},\n            {\"qux\": dvc.fs.info(str(tmp_dir / \"dir\" / \"subdir\" / \"qux\"))},\n        ),",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "tests/func/test_ls.py",
+          "line_number": 1007,
+          "end_line_number": 1007,
+          "target_name": "fs.pipe",
+          "enclosing_function": "test_fs_ls_tree",
+          "enclosing_class": null,
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1007",
+          "args": [
+            "{f: content.encode() for f, content in FS_STRUCTURE.items()}"
+          ],
+          "kwargs": {},
+          "code_snippet": "    fs = MemoryFileSystem(global_store=False)\n    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})\n    root = fs.root_marker",
+          "detection_method": "ast"
+        },
+        {
+          "file_path": "tests/func/test_ls.py",
+          "line_number": 1036,
+          "end_line_number": 1036,
+          "target_name": "fs.pipe",
+          "enclosing_function": "test_fs_ls_tree_maxdepth",
+          "enclosing_class": null,
+          "cache_type": "NOT_EXPLICIT",
+          "cache_options": null,
+          "repo_url": "https://github.com/iterative/dvc",
+          "file_url": "https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1036",
+          "args": [
+            "{f: content.encode() for f, content in FS_STRUCTURE.items()}"
+          ],
+          "kwargs": {},
+          "code_snippet": "    fs = MemoryFileSystem(global_store=False)\n    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})\n",
           "detection_method": "ast"
         },
         {

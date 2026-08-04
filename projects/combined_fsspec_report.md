@@ -2,9 +2,9 @@
 
 - **Repositories Crawled:** `8`
 - **Total Files Scanned:** `3613`
-- **Files with FSSPEC Usages:** `148`
-- **Total FSSPEC Usages Detected:** `941`
-- **Time Elapsed:** `308.97 seconds`
+- **Files with FSSPEC Usages:** `153`
+- **Total FSSPEC Usages Detected:** `986`
+- **Time Elapsed:** `112.52 seconds`
 
 ---
 
@@ -12,12 +12,12 @@
 
 | Project Name | Repository | Files Scanned | Files w/ Usages | Total Usages | Cache_Types |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Dask** | [dask/dask](https://github.com/dask/dask) | `365` | `22` | `152` | `NOT_EXPLICIT:152` |
+| **Dask** | [dask/dask](https://github.com/dask/dask) | `365` | `22` | `152` | `NOT_EXPLICIT:150, parts:2` |
 | **Intake** | [intake/intake](https://github.com/intake/intake) | `108` | `19` | `97` | `NOT_EXPLICIT:97` |
 | **pandas** | [pandas-dev/pandas](https://github.com/pandas-dev/pandas) | `1510` | `7` | `13` | `NOT_EXPLICIT:13` |
 | **xarray** | [pydata/xarray](https://github.com/pydata/xarray) | `239` | `2` | `12` | `NOT_EXPLICIT:12` |
-| **zarr** | [zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python) | `379` | `2` | `19` | `NOT_EXPLICIT:19` |
-| **DVC** | [iterative/dvc](https://github.com/iterative/dvc) | `554` | `68` | `521` | `NOT_EXPLICIT:521` |
+| **zarr** | [zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python) | `379` | `4` | `38` | `NOT_EXPLICIT:38` |
+| **DVC** | [iterative/dvc](https://github.com/iterative/dvc) | `554` | `71` | `547` | `NOT_EXPLICIT:547` |
 | **Kedro** | [kedro-org/kedro](https://github.com/kedro-org/kedro) | `224` | `3` | `9` | `NOT_EXPLICIT:9` |
 | **Hugging Face Datasets** | [huggingface/datasets](https://github.com/huggingface/datasets) | `234` | `25` | `118` | `NOT_EXPLICIT:118` |
 
@@ -27,7 +27,8 @@
 
 | Cache_Type Option | Total Occurrences | Description |
 | :--- | :--- | :--- |
-| `NOT_EXPLICIT` | `941` | cache_type keyword omitted (uses default fsspec strategy) |
+| `NOT_EXPLICIT` | `984` | cache_type keyword omitted (uses default fsspec strategy) |
+| `parts` | `2` | Custom cache strategy |
 
 ---
 
@@ -1894,7 +1895,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 ```
 
 #### 151. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L210) (Line 210)
-- **Target Call:** `fsspec_parquet.open_parquet_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Target Call:** `fsspec_parquet.open_parquet_file` | **Cache_Type:** `parts`
 - **Context:** `_open_input_files`
 - **Arguments:** `path`
 - **Keywords:** `{'fs': 'fs', 'row_groups': 'rgs'}`
@@ -1911,7 +1912,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 ```
 
 #### 152. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L221) (Line 221)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Target Call:** `fs.open` | **Cache_Type:** `parts`
 - **Context:** `_open_input_files`
 - **Arguments:** `path`
 - **Keywords:** `{}`
@@ -3420,9 +3421,231 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 ```
 
 ### zarr ([zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python))
-- **Usages Found:** `19` in `2` files.
+- **Usages Found:** `38` in `4` files.
 
-#### 1. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L154) (Line 154)
+#### 1. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L55) (Line 55)
+- **Target Call:** `fs.to_json` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `_make_async`
+- **Arguments:** ``
+- **Keywords:** `{}`
+
+```python
+        # Convert sync instance of an async fs to an async instance
+        fs_dict = json.loads(fs.to_json())
+        fs_dict["asynchronous"] = True
+```
+
+#### 2. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L67) (Line 67)
+- **Target Call:** `AsyncFileSystemWrapper` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `_make_async`
+- **Arguments:** `fs`
+- **Keywords:** `{'asynchronous': 'True'}`
+
+```python
+
+    return AsyncFileSystemWrapper(fs, asynchronous=True)
+
+```
+
+#### 3. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L250) (Line 250)
+- **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.from_url`
+- **Arguments:** `url`
+- **Keywords:** `{}`
+
+```python
+
+        fs, path = url_to_fs(url, **opts)
+        if not fs.async_impl:
+```
+
+#### 4. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L268) (Line 268)
+- **Target Call:** `self.fs._find` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.clear`
+- **Arguments:** `self.path`
+- **Keywords:** `{'withdirs': 'True'}`
+
+```python
+        try:
+            for subpath in await self.fs._find(self.path, withdirs=True):
+                if subpath != self.path:
+```
+
+#### 5. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L270) (Line 270)
+- **Target Call:** `self.fs._rm` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.clear`
+- **Arguments:** `subpath`
+- **Keywords:** `{'recursive': 'True'}`
+
+```python
+                if subpath != self.path:
+                    await self.fs._rm(subpath, recursive=True)
+        except FileNotFoundError:
+```
+
+#### 6. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L298) (Line 298)
+- **Target Call:** `self.fs._cat_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.get`
+- **Arguments:** `path`
+- **Keywords:** `{}`
+
+```python
+            if byte_range is None:
+                value = prototype.buffer.from_bytes(await self.fs._cat_file(path))
+            elif isinstance(byte_range, RangeByteRequest):
+```
+
+#### 7. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L301) (Line 301)
+- **Target Call:** `self.fs._cat_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.get`
+- **Arguments:** `path`
+- **Keywords:** `{'start': 'byte_range.start', 'end': 'byte_range.end'}`
+
+```python
+                value = prototype.buffer.from_bytes(
+                    await self.fs._cat_file(
+                        path,
+                        start=byte_range.start,
+                        end=byte_range.end,
+                    )
+                )
+```
+
+#### 8. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L309) (Line 309)
+- **Target Call:** `self.fs._cat_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.get`
+- **Arguments:** `path`
+- **Keywords:** `{'start': 'byte_range.offset', 'end': 'None'}`
+
+```python
+                value = prototype.buffer.from_bytes(
+                    await self.fs._cat_file(path, start=byte_range.offset, end=None)
+                )
+```
+
+#### 9. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L313) (Line 313)
+- **Target Call:** `self.fs._cat_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.get`
+- **Arguments:** `path`
+- **Keywords:** `{'start': '-byte_range.suffix', 'end': 'None'}`
+
+```python
+                value = prototype.buffer.from_bytes(
+                    await self.fs._cat_file(path, start=-byte_range.suffix, end=None)
+                )
+```
+
+#### 10. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L345) (Line 345)
+- **Target Call:** `self.fs._pipe_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.set`
+- **Arguments:** `path, value.to_bytes()`
+- **Keywords:** `{}`
+
+```python
+            raise NotImplementedError
+        await self.fs._pipe_file(path, value.to_bytes())
+
+```
+
+#### 11. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L352) (Line 352)
+- **Target Call:** `self.fs._rm` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.delete`
+- **Arguments:** `path`
+- **Keywords:** `{}`
+
+```python
+        try:
+            await self.fs._rm(path)
+        except FileNotFoundError:
+```
+
+#### 12. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L369) (Line 369)
+- **Target Call:** `self.fs._rm` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.delete_dir`
+- **Arguments:** `path_to_delete`
+- **Keywords:** `{'recursive': 'True'}`
+
+```python
+        with suppress(*self.allowed_exceptions):
+            await self.fs._rm(path_to_delete, recursive=True)
+
+```
+
+#### 13. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L374) (Line 374)
+- **Target Call:** `self.fs._exists` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.exists`
+- **Arguments:** `path`
+- **Keywords:** `{}`
+
+```python
+        path = _dereference_path(self.path, key)
+        exists: bool = await self.fs._exists(path)
+        return exists
+```
+
+#### 14. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L409) (Line 409)
+- **Target Call:** `self.fs._cat_ranges` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.get_partial_values`
+- **Arguments:** `paths, starts, stops`
+- **Keywords:** `{'on_error': "'return'"}`
+
+```python
+        # TODO: expectations for exceptions or missing keys?
+        res = await self.fs._cat_ranges(paths, starts, stops, on_error="return")
+        # the following is an s3-specific condition we probably don't want to leak
+```
+
+#### 15. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L420) (Line 420)
+- **Target Call:** `self.fs._find` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.list`
+- **Arguments:** `self.path`
+- **Keywords:** `{'detail': 'False', 'withdirs': 'False'}`
+
+```python
+        # docstring inherited
+        allfiles = await self.fs._find(self.path, detail=False, withdirs=False)
+        for onefile in (a.removeprefix(f"{self.path}/") for a in allfiles):
+```
+
+#### 16. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L428) (Line 428)
+- **Target Call:** `self.fs._ls` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.list_dir`
+- **Arguments:** `prefix`
+- **Keywords:** `{'detail': 'False'}`
+
+```python
+        try:
+            allfiles = await self.fs._ls(prefix, detail=False)
+        except FileNotFoundError:
+```
+
+#### 17. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L436) (Line 436)
+- **Target Call:** `self.fs._find` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.list_prefix`
+- **Arguments:** `f'{self.path}/{prefix}'`
+- **Keywords:** `{'detail': 'False', 'maxdepth': 'None', 'withdirs': 'False'}`
+
+```python
+        # docstring inherited
+        for onefile in await self.fs._find(
+            f"{self.path}/{prefix}", detail=False, maxdepth=None, withdirs=False
+        ):
+            yield onefile.removeprefix(f"{self.path}/")
+```
+
+#### 18. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L443) (Line 443)
+- **Target Call:** `self.fs._info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `FsspecStore.getsize`
+- **Arguments:** `path`
+- **Keywords:** `{}`
+
+```python
+        path = _dereference_path(self.path, key)
+        info = await self.fs._info(path)
+
+```
+
+#### 19. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L154) (Line 154)
 - **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.store_kwargs`
 - **Arguments:** `f's3://{test_bucket_name}'`
@@ -3436,7 +3659,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return {"fs": fs, "path": path}
 ```
 
-#### 2. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L165) (Line 165)
+#### 20. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L165) (Line 165)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.get`
 - **Arguments:** `'s3'`
@@ -3450,7 +3673,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.buffer_cls.from_bytes(new_fs.cat(f"{store.path}/{key}"))
 ```
 
-#### 3. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L168) (Line 168)
+#### 21. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L168) (Line 168)
 - **Target Call:** `new_fs.cat` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.get`
 - **Arguments:** `f'{store.path}/{key}'`
@@ -3462,7 +3685,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 4. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L172) (Line 172)
+#### 22. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L172) (Line 172)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.set`
 - **Arguments:** `'s3'`
@@ -3476,7 +3699,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         new_fs.write_bytes(f"{store.path}/{key}", value.to_bytes())
 ```
 
-#### 5. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L175) (Line 175)
+#### 23. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L175) (Line 175)
 - **Target Call:** `new_fs.write_bytes` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.set`
 - **Arguments:** `f'{store.path}/{key}', value.to_bytes()`
@@ -3488,7 +3711,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 6. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L258) (Line 258)
+#### 24. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L258) (Line 258)
 - **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestFsspecStoreS3.test_init_warns_if_fs_asynchronous_is_false`
 - **Arguments:** `f's3://{test_bucket_name}'`
@@ -3502,7 +3725,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         store_kwargs = {"fs": fs, "path": path}
 ```
 
-#### 7. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L361) (Line 361)
+#### 25. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L361) (Line 361)
 - **Target Call:** `ReferenceFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsspec_store_open_group_via_reference_filesystem`
 - **Arguments:** ``
@@ -3517,7 +3740,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     store = FsspecStore(fs=fs, path="/", read_only=True)
 ```
 
-#### 8. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L410) (Line 410)
+#### 26. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L410) (Line 410)
 - **Target Call:** `ReferenceFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsspec_store_read_array_chunk_via_reference_filesystem`
 - **Arguments:** ``
@@ -3532,7 +3755,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     store = FsspecStore(fs=fs, path="/", read_only=True)
 ```
 
-#### 9. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L470) (Line 470)
+#### 27. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L470) (Line 470)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_fsmap_file`
 - **Arguments:** `'file'`
@@ -3544,7 +3767,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     mapper = fs.get_mapper(tmp_path)
 ```
 
-#### 10. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L471) (Line 471)
+#### 28. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L471) (Line 471)
 - **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_fsmap_file`
 - **Arguments:** `tmp_path`
@@ -3556,7 +3779,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 11. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L491) (Line 491)
+#### 29. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L491) (Line 491)
 - **Target Call:** `fsspec.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_fsmap_file_raises`
 - **Arguments:** ``
@@ -3568,7 +3791,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     mapper = fs.get_mapper(tmp_path)
 ```
 
-#### 12. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L492) (Line 492)
+#### 30. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L492) (Line 492)
 - **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_fsmap_file_raises`
 - **Arguments:** `tmp_path`
@@ -3580,7 +3803,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     with pytest.raises(FileNotFoundError, match="No such file or directory: .*"):
 ```
 
-#### 13. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L533) (Line 533)
+#### 31. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L533) (Line 533)
 - **Target Call:** `self.fs.set_session` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_close_does_not_close_filesystem_session`
 - **Arguments:** ``
@@ -3592,7 +3815,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 14. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L550) (Line 550)
+#### 32. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L550) (Line 550)
 - **Target Call:** `self.fs.set_session` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_close_does_not_break_a_sibling_store`
 - **Arguments:** ``
@@ -3604,7 +3827,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 15. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L566) (Line 566)
+#### 33. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L566) (Line 566)
 - **Target Call:** `_fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_from_mapper_wraps_sync_filesystem`
 - **Arguments:** `'file'`
@@ -3616,7 +3839,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     mapper = fs.get_mapper(str(tmp_path))
 ```
 
-#### 16. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L567) (Line 567)
+#### 34. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L567) (Line 567)
 - **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_from_mapper_wraps_sync_filesystem`
 - **Arguments:** `str(tmp_path)`
@@ -3628,7 +3851,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     store = FsspecStore.from_mapper(mapper)
 ```
 
-#### 17. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
+#### 35. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
 - **Target Call:** `AsyncFileSystemWrapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_delete_dir_wrapped_filesystem`
 - **Arguments:** `LocalFileSystem(auto_mkdir=True)`
@@ -3640,7 +3863,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     store = FsspecStore(wrapped_fs, read_only=False, path=f"{tmp_path}/test/path")
 ```
 
-#### 18. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
+#### 36. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
 - **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_delete_dir_wrapped_filesystem`
 - **Arguments:** ``
@@ -3652,7 +3875,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     store = FsspecStore(wrapped_fs, read_only=False, path=f"{tmp_path}/test/path")
 ```
 
-#### 19. [tests/test_store/test_fsspec_get_ranges.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec_get_ranges.py#L35) (Line 35)
+#### 37. [tests/test_store/test_fsspec_get_ranges.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec_get_ranges.py#L35) (Line 35)
 - **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `memory_store`
 - **Arguments:** ``
@@ -3664,8 +3887,20 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     fs.store.clear()
 ```
 
+#### 38. [tests/test_store/test_zip.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_zip.py#L271) (Line 271)
+- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestZipStoreFileObj.test_fsspec_file`
+- **Arguments:** `f'local://{path}', 'rb'`
+- **Keywords:** `{}`
+
+```python
+        path.write_bytes(zip_bytes)
+        with fsspec.open(f"local://{path}", "rb") as fileobj:
+            store = ZipStore(fileobj, mode="r")
+```
+
 ### DVC ([iterative/dvc](https://github.com/iterative/dvc))
-- **Usages Found:** `521` in `68` files.
+- **Usages Found:** `547` in `71` files.
 
 #### 1. [dvc/api/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/api/artifacts.py#L53) (Line 53)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
@@ -3727,7 +3962,31 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                     yield fobj
 ```
 
-#### 6. [dvc/commands/dag.py](https://github.com/iterative/dvc/blob/main/dvc/commands/dag.py#L89) (Line 89)
+#### 6. [dvc/cachemgr.py](https://github.com/iterative/dvc/blob/main/dvc/cachemgr.py#L30) (Line 30)
+- **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `_get_odb`
+- **Arguments:** `fs_path, *prefix`
+- **Keywords:** `{}`
+
+```python
+    if prefix:
+        fs_path = fs.join(fs_path, *prefix)
+    if hash_name:
+```
+
+#### 7. [dvc/cachemgr.py](https://github.com/iterative/dvc/blob/main/dvc/cachemgr.py#L89) (Line 89)
+- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `CacheManager.fs_cache`
+- **Arguments:** `self.local_cache_dir, self.FS_DIR`
+- **Keywords:** `{}`
+
+```python
+            fs=self.local.fs,
+            path=self.local.fs.join(self.local_cache_dir, self.FS_DIR),
+        )
+```
+
+#### 8. [dvc/commands/dag.py](https://github.com/iterative/dvc/blob/main/dvc/commands/dag.py#L89) (Line 89)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_targets`
 - **Arguments:** `path`
@@ -3739,7 +3998,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             targets.extend(str(out))
 ```
 
-#### 7. [dvc/commands/dataset.py](https://github.com/iterative/dvc/blob/main/dvc/commands/dataset.py#L66) (Line 66)
+#### 9. [dvc/commands/dataset.py](https://github.com/iterative/dvc/blob/main/dvc/commands/dataset.py#L66) (Line 66)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `CmdDatasetAdd.run`
 - **Arguments:** `existing.manifest_path`
@@ -3751,7 +4010,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 raise DvcException(
 ```
 
-#### 8. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L99) (Line 99)
+#### 10. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L99) (Line 99)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Config.__init__`
 - **Arguments:** `dvc_dir`
@@ -3763,7 +4022,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 9. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L140) (Line 140)
+#### 11. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L140) (Line 140)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Config.files`
 - **Arguments:** `self.dvc_dir, self.CONFIG`
@@ -3775,7 +4034,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 10. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L211) (Line 211)
+#### 12. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L211) (Line 211)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Config.load_file`
 - **Arguments:** `path`
@@ -3787,7 +4046,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             try:
 ```
 
-#### 11. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L238) (Line 238)
+#### 13. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L238) (Line 238)
 - **Target Call:** `fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Config._save_config`
 - **Arguments:** `os.path.dirname(filename)`
@@ -3799,7 +4058,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 12. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L241) (Line 241)
+#### 14. [dvc/config.py](https://github.com/iterative/dvc/blob/main/dvc/config.py#L241) (Line 241)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Config._save_config`
 - **Arguments:** `filename, 'wb'`
@@ -3811,7 +4070,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             config.write(fobj)
 ```
 
-#### 13. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L39) (Line 39)
+#### 15. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L39) (Line 39)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Remote.odb`
 - **Arguments:** `path, '.dvc', CacheManager.FILES_DIR, DEFAULT_ALGORITHM`
@@ -3823,7 +4082,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 14. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L41) (Line 41)
+#### 16. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L41) (Line 41)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Remote.odb`
 - **Arguments:** `path, CacheManager.FILES_DIR, DEFAULT_ALGORITHM`
@@ -3835,7 +4094,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return get_odb(self.fs, path, hash_name=DEFAULT_ALGORITHM, **self.config)
 ```
 
-#### 15. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L214) (Line 214)
+#### 17. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L214) (Line 214)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataCloud._push`
 - **Arguments:** `odb.path`
@@ -3847,7 +4106,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             unit="file",
 ```
 
-#### 16. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L275) (Line 275)
+#### 18. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L275) (Line 275)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataCloud._pull`
 - **Arguments:** `odb.path`
@@ -3859,7 +4118,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             unit="file",
 ```
 
-#### 17. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L355) (Line 355)
+#### 19. [dvc/data_cloud.py](https://github.com/iterative/dvc/blob/main/dvc/data_cloud.py#L355) (Line 355)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataCloud.get_url_for`
 - **Arguments:** `path`
@@ -3870,7 +4129,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return odb.fs.unstrip_protocol(path)
 ```
 
-#### 18. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L34) (Line 34)
+#### 20. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L34) (Line 34)
 - **Target Call:** `self.fs.version_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Dependency.workspace_status`
 - **Arguments:** `self.fs_path, None`
@@ -3882,7 +4141,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 if self.changed_meta():
 ```
 
-#### 19. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L43) (Line 43)
+#### 21. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L43) (Line 43)
 - **Target Call:** `self.fs.version_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Dependency.update`
 - **Arguments:** `self.fs_path, rev`
@@ -3894,7 +4153,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             self.meta = self.get_meta()
 ```
 
-#### 20. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L45) (Line 45)
+#### 22. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L45) (Line 45)
 - **Target Call:** `self.fs.version_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Dependency.update`
 - **Arguments:** `self.fs_path, self.meta.version_id`
@@ -3906,7 +4165,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 21. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L53) (Line 53)
+#### 23. [dvc/dependency/base.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/base.py#L53) (Line 53)
 - **Target Call:** `self.fs.version_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Dependency.save`
 - **Arguments:** `self.fs_path, self.meta.version_id`
@@ -3918,7 +4177,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 22. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L40) (Line 40)
+#### 24. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L40) (Line 40)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `RepoDependency.__init__`
 - **Arguments:** `self.def_path`
@@ -3930,7 +4189,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 23. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L106) (Line 106)
+#### 25. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L106) (Line 106)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `RepoDependency.download`
 - **Arguments:** `src_path`
@@ -3942,7 +4201,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 hash_info = info["dvc_info"]["entry"].hash_info
 ```
 
-#### 24. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L108) (Line 108)
+#### 26. [dvc/dependency/repo.py](https://github.com/iterative/dvc/blob/main/dvc/dependency/repo.py#L108) (Line 108)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `RepoDependency.download`
 - **Arguments:** `dest_path`
@@ -3954,7 +4213,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             except (KeyError, AttributeError):
 ```
 
-#### 25. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L108) (Line 108)
+#### 27. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L108) (Line 108)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileMixin.exists`
 - **Arguments:** `self.path`
@@ -3966,7 +4225,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 26. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L136) (Line 136)
+#### 28. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L136) (Line 136)
 - **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileMixin._load`
 - **Arguments:** `self.path`
@@ -3978,7 +4237,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             raise StageFileIsNotDvcFileError(self.path)
 ```
 
-#### 27. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L333) (Line 333)
+#### 29. [dvc/dvcfile.py](https://github.com/iterative/dvc/blob/main/dvc/dvcfile.py#L333) (Line 333)
 - **Target Call:** `self.fs.parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ProjectFile.resolver`
 - **Arguments:** `self.path`
@@ -3990,7 +4249,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return DataResolver(self.repo, wdir, self.contents)
 ```
 
-#### 28. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L56) (Line 56)
+#### 30. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L56) (Line 56)
 - **Target Call:** `fs.name` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `fs_path`
@@ -4002,7 +4261,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if isinstance(fs, DVCFileSystem):
 ```
 
-#### 29. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L62) (Line 62)
+#### 31. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L62) (Line 62)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `fs_path`
@@ -4014,7 +4273,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                     else glob.escape(fs_path)
 ```
 
-#### 30. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L61) (Line 61)
+#### 32. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L61) (Line 61)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `glob.escape(fs_path)`
@@ -4026,7 +4285,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                     if fs.isdir(fs_path)
 ```
 
-#### 31. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L67) (Line 67)
+#### 33. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L67) (Line 67)
 - **Target Call:** `fs._get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `fs_path, to`
@@ -4038,7 +4297,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 32. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L71) (Line 71)
+#### 34. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L71) (Line 71)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `fs_path`
@@ -4050,7 +4309,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             from_infos = [
 ```
 
-#### 33. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L73) (Line 73)
+#### 35. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L73) (Line 73)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `fs_path`
@@ -4062,7 +4321,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             ]
 ```
 
-#### 34. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L79) (Line 79)
+#### 36. [dvc/fs/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/fs/__init__.py#L79) (Line 79)
 - **Target Call:** `fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `download`
 - **Arguments:** `info, fs_path`
@@ -4074,7 +4333,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             ]
 ```
 
-#### 35. [dvc/fs/data.py](https://github.com/iterative/dvc/blob/main/dvc/fs/data.py#L31) (Line 31)
+#### 37. [dvc/fs/data.py](https://github.com/iterative/dvc/blob/main/dvc/fs/data.py#L31) (Line 31)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataFileSystem.getcwd`
 - **Arguments:** ``
@@ -4086,7 +4345,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 36. [dvc/fs/data.py](https://github.com/iterative/dvc/blob/main/dvc/fs/data.py#L34) (Line 34)
+#### 38. [dvc/fs/data.py](https://github.com/iterative/dvc/blob/main/dvc/fs/data.py#L34) (Line 34)
 - **Target Call:** `self.fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataFileSystem.isdvc`
 - **Arguments:** `path`
@@ -4098,7 +4357,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 37. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L165) (Line 165)
+#### 39. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L165) (Line 165)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.getcwd`
 - **Arguments:** `self.repo.fs.getcwd(), self.repo.root_dir`
@@ -4110,7 +4369,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             relparts = self.repo.fs.relparts(self.repo.fs.getcwd(), self.repo.root_dir)
 ```
 
-#### 38. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L165) (Line 165)
+#### 40. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L165) (Line 165)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.getcwd`
 - **Arguments:** ``
@@ -4122,7 +4381,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             relparts = self.repo.fs.relparts(self.repo.fs.getcwd(), self.repo.root_dir)
 ```
 
-#### 39. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L166) (Line 166)
+#### 41. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L166) (Line 166)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.getcwd`
 - **Arguments:** `self.repo.fs.getcwd(), self.repo.root_dir`
@@ -4134,7 +4393,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.root_marker + self.sep.join(relparts)
 ```
 
-#### 40. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L166) (Line 166)
+#### 42. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L166) (Line 166)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.getcwd`
 - **Arguments:** ``
@@ -4146,7 +4405,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.root_marker + self.sep.join(relparts)
 ```
 
-#### 41. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L237) (Line 237)
+#### 43. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L237) (Line 237)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.fsid`
 - **Arguments:** `self.repo.url or self.repo.root_dir, self.repo.get_rev() if not isinstance(self.repo.scm, NoSCM) else None`
@@ -4161,7 +4420,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 42. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L244) (Line 244)
+#### 44. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L244) (Line 244)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._get_key`
 - **Arguments:** `path, self.repo.root_dir`
@@ -4173,7 +4432,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if parts == (os.curdir,):
 ```
 
-#### 43. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L268) (Line 268)
+#### 45. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L268) (Line 268)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._from_key`
 - **Arguments:** `self.repo.root_dir, *parts`
@@ -4185,7 +4444,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 44. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L334) (Line 334)
+#### 46. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L334) (Line 334)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._is_dvc_repo`
 - **Arguments:** `dir_path, Repo.DVC_DIR`
@@ -4197,7 +4456,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.repo.fs.isdir(repo_path)
 ```
 
-#### 45. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L335) (Line 335)
+#### 47. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L335) (Line 335)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._is_dvc_repo`
 - **Arguments:** `repo_path`
@@ -4209,7 +4468,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 46. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L362) (Line 362)
+#### 48. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L362) (Line 362)
 - **Target Call:** `self.fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._open`
 - **Arguments:** `fs_path`
@@ -4221,7 +4480,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         except FileNotFoundError:
 ```
 
-#### 47. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L401) (Line 401)
+#### 49. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L401) (Line 401)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.ls`
 - **Arguments:** `fs_path`
@@ -4233,7 +4492,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 if fs_info["type"] == "file":
 ```
 
-#### 48. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L408) (Line 408)
+#### 50. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L408) (Line 408)
 - **Target Call:** `fs.name` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.ls`
 - **Arguments:** `info['name']`
@@ -4245,7 +4504,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             except (FileNotFoundError, NotADirectoryError):
 ```
 
-#### 49. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L465) (Line 465)
+#### 51. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L465) (Line 465)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._info`
 - **Arguments:** `fs_path`
@@ -4257,7 +4516,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             if check_ignored and repo.dvcignore.is_ignored(
 ```
 
-#### 50. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L477) (Line 477)
+#### 52. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L477) (Line 477)
 - **Target Call:** `fs.parents` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._info`
 - **Arguments:** `fs_path`
@@ -4269,7 +4528,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 try:
 ```
 
-#### 51. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L479) (Line 479)
+#### 53. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L479) (Line 479)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem._info`
 - **Arguments:** `parent`
@@ -4281,7 +4540,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                         dvc_info = None
 ```
 
-#### 52. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L591) (Line 591)
+#### 54. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L591) (Line 591)
 - **Target Call:** `fs.get_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.get_file`
 - **Arguments:** `src, dest`
@@ -4293,7 +4552,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 53. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L615) (Line 615)
+#### 55. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L615) (Line 615)
 - **Target Call:** `self.fs.get_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_DVCFileSystem.get_file`
 - **Arguments:** `fs_path, lpath`
@@ -4305,7 +4564,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         except FileNotFoundError:
 ```
 
-#### 54. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L688) (Line 688)
+#### 56. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L688) (Line 688)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DVCFileSystem.getcwd`
 - **Arguments:** ``
@@ -4317,7 +4576,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 55. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L702) (Line 702)
+#### 57. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L702) (Line 702)
 - **Target Call:** `self.fs._get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DVCFileSystem._get`
 - **Arguments:** `from_info, to_info`
@@ -4336,7 +4595,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 56. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L734) (Line 734)
+#### 58. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L734) (Line 734)
 - **Target Call:** `self.fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DVCFileSystem.isdvc`
 - **Arguments:** `path`
@@ -4348,7 +4607,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 57. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L753) (Line 753)
+#### 59. [dvc/fs/dvc.py](https://github.com/iterative/dvc/blob/main/dvc/fs/dvc.py#L753) (Line 753)
 - **Target Call:** `self.fs.close` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DVCFileSystem.close`
 - **Arguments:** ``
@@ -4359,7 +4618,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             self.fs.close()
 ```
 
-#### 58. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L48) (Line 48)
+#### 60. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L48) (Line 48)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GitFileSystem.getcwd`
 - **Arguments:** ``
@@ -4371,7 +4630,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 59. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L51) (Line 51)
+#### 61. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L51) (Line 51)
 - **Target Call:** `self.fs.chdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GitFileSystem.chdir`
 - **Arguments:** `path`
@@ -4383,7 +4642,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 60. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L58) (Line 58)
+#### 62. [dvc/fs/git.py](https://github.com/iterative/dvc/blob/main/dvc/fs/git.py#L58) (Line 58)
 - **Target Call:** `self.fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GitFileSystem.ls`
 - **Arguments:** `path`
@@ -4394,7 +4653,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.fs.ls(path, detail=detail, **kwargs) or []
 ```
 
-#### 61. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L115) (Line 115)
+#### 63. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L115) (Line 115)
 - **Target Call:** `fs.isabs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnorePatterns.from_file`
 - **Arguments:** `path`
@@ -4406,7 +4665,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         dirname = fs.normpath(fs.dirname(path))
 ```
 
-#### 62. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L116) (Line 116)
+#### 64. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L116) (Line 116)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnorePatterns.from_file`
 - **Arguments:** `fs.dirname(path)`
@@ -4418,7 +4677,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         with fs.open(path, encoding="utf-8") as fobj:
 ```
 
-#### 63. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L116) (Line 116)
+#### 65. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L116) (Line 116)
 - **Target Call:** `fs.dirname` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnorePatterns.from_file`
 - **Arguments:** `path`
@@ -4430,7 +4689,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         with fs.open(path, encoding="utf-8") as fobj:
 ```
 
-#### 64. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L117) (Line 117)
+#### 66. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L117) (Line 117)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnorePatterns.from_file`
 - **Arguments:** `path`
@@ -4442,7 +4701,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             path_spec_lines = [
 ```
 
-#### 65. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L300) (Line 300)
+#### 67. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L300) (Line 300)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._get_key`
 - **Arguments:** `path, self.root_dir`
@@ -4454,7 +4713,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if parts == (os.curdir,):
 ```
 
-#### 66. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L310) (Line 310)
+#### 68. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L310) (Line 310)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_trie`
 - **Arguments:** `dirname, DvcIgnore.DVCIGNORE_FILE`
@@ -4466,7 +4725,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if not matches and self.fs.exists(path):
 ```
 
-#### 67. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L311) (Line 311)
+#### 69. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L311) (Line 311)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_trie`
 - **Arguments:** `path`
@@ -4478,7 +4737,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             name = self.fs.relpath(path, self.root_dir)
 ```
 
-#### 68. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L312) (Line 312)
+#### 70. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L312) (Line 312)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_trie`
 - **Arguments:** `path, self.root_dir`
@@ -4490,7 +4749,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             new_pattern = DvcIgnorePatterns.from_file(path, self.fs, name)
 ```
 
-#### 69. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L340) (Line 340)
+#### 71. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L340) (Line 340)
 - **Target Call:** `self.fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update`
 - **Arguments:** `dirname`
@@ -4502,7 +4761,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 except StopIteration:
 ```
 
-#### 70. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L345) (Line 345)
+#### 72. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L345) (Line 345)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update`
 - **Arguments:** `dirname, dname`
@@ -4514,7 +4773,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 71. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L353) (Line 353)
+#### 73. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L353) (Line 353)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_sub_repo`
 - **Arguments:** `path, Repo.DVC_DIR`
@@ -4526,7 +4785,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if not self.fs.exists(dvc_dir):
 ```
 
-#### 72. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L354) (Line 354)
+#### 74. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L354) (Line 354)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_sub_repo`
 - **Arguments:** `dvc_dir`
@@ -4538,7 +4797,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return
 ```
 
-#### 73. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L357) (Line 357)
+#### 75. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L357) (Line 357)
 - **Target Call:** `self.fs.split` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._update_sub_repo`
 - **Arguments:** `path`
@@ -4550,7 +4809,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         key = self._get_key(root)
 ```
 
-#### 74. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L377) (Line 377)
+#### 76. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L377) (Line 377)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.__call__`
 - **Arguments:** `root`
@@ -4562,7 +4821,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ignore_pattern = self._get_trie_pattern(
 ```
 
-#### 75. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L407) (Line 407)
+#### 77. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L407) (Line 407)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.ls`
 - **Arguments:** `path`
@@ -4574,7 +4833,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             name = fs.name(entry["name"])
 ```
 
-#### 76. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L408) (Line 408)
+#### 78. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L408) (Line 408)
 - **Target Call:** `fs.name` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.ls`
 - **Arguments:** `entry['name']`
@@ -4586,7 +4845,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             fs_dict[name] = entry
 ```
 
-#### 77. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L433) (Line 433)
+#### 79. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L433) (Line 433)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.walk`
 - **Arguments:** `path`
@@ -4598,7 +4857,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 if detail:
 ```
 
-#### 78. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L451) (Line 451)
+#### 80. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L451) (Line 451)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.walk`
 - **Arguments:** `path`
@@ -4610,7 +4869,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 79. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L460) (Line 460)
+#### 81. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L460) (Line 460)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.find`
 - **Arguments:** `path`
@@ -4622,7 +4881,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 80. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L470) (Line 470)
+#### 82. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L470) (Line 470)
 - **Target Call:** `self.fs.isin_or_eq` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._get_trie_pattern`
 - **Arguments:** `dirname, self.root_dir`
@@ -4634,7 +4893,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             # outside of the repo
 ```
 
-#### 81. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L481) (Line 481)
+#### 83. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L481) (Line 481)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._get_trie_pattern`
 - **Arguments:** `self.root_dir, *prefix_key`
@@ -4646,7 +4905,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 82. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L502) (Line 502)
+#### 84. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L502) (Line 502)
 - **Target Call:** `self.fs.split` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._is_ignored`
 - **Arguments:** `self.fs.normpath(path)`
@@ -4658,7 +4917,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ignore_pattern = self._get_trie_pattern(dirname, None, ignore_subrepos)
 ```
 
-#### 83. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L502) (Line 502)
+#### 85. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L502) (Line 502)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._is_ignored`
 - **Arguments:** `path`
@@ -4670,7 +4929,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ignore_pattern = self._get_trie_pattern(dirname, None, ignore_subrepos)
 ```
 
-#### 84. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L510) (Line 510)
+#### 86. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L510) (Line 510)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.is_ignored_dir`
 - **Arguments:** `path`
@@ -4682,7 +4941,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if path == self.root_dir:
 ```
 
-#### 85. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L518) (Line 518)
+#### 87. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L518) (Line 518)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.is_ignored_file`
 - **Arguments:** `path`
@@ -4694,7 +4953,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self._is_ignored(path, False, ignore_subrepos=ignore_subrepos)
 ```
 
-#### 86. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L522) (Line 522)
+#### 88. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L522) (Line 522)
 - **Target Call:** `self.fs.isin_or_eq` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter._outside_repo`
 - **Arguments:** `path, self.root_dir`
@@ -4706,7 +4965,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 87. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L527) (Line 527)
+#### 89. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L527) (Line 527)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.check_ignore`
 - **Arguments:** `target`
@@ -4718,7 +4977,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         matched_patterns: list[PatternInfo] = []
 ```
 
-#### 88. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L531) (Line 531)
+#### 90. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L531) (Line 531)
 - **Target Call:** `self.fs.split` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.check_ignore`
 - **Arguments:** `self.fs.normpath(full_target)`
@@ -4730,7 +4989,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             pattern = self._get_trie_pattern(dirname)
 ```
 
-#### 89. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L531) (Line 531)
+#### 91. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L531) (Line 531)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.check_ignore`
 - **Arguments:** `full_target`
@@ -4742,7 +5001,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             pattern = self._get_trie_pattern(dirname)
 ```
 
-#### 90. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L535) (Line 535)
+#### 92. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L535) (Line 535)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.check_ignore`
 - **Arguments:** `full_target`
@@ -4754,7 +5013,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 )
 ```
 
-#### 91. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L546) (Line 546)
+#### 93. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L546) (Line 546)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.is_ignored`
 - **Arguments:** `path`
@@ -4766,7 +5025,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return self.is_ignored_file(path, ignore_subrepos)
 ```
 
-#### 92. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L548) (Line 548)
+#### 94. [dvc/ignore.py](https://github.com/iterative/dvc/blob/main/dvc/ignore.py#L548) (Line 548)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DvcIgnoreFilter.is_ignored`
 - **Arguments:** `path`
@@ -4778,7 +5037,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return self.is_ignored_dir(path, ignore_subrepos)
 ```
 
-#### 93. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L367) (Line 367)
+#### 95. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L367) (Line 367)
 - **Target Call:** `self.fs.isabs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__init__`
 - **Arguments:** `self.def_path`
@@ -4790,7 +5049,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ):
 ```
 
-#### 94. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L399) (Line 399)
+#### 96. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L399) (Line 399)
 - **Target Call:** `self.fs.coalesce_version` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__init__`
 - **Arguments:** `self.def_path, self.meta.version_id`
@@ -4804,7 +5063,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             self.meta.version_id = version_id
 ```
 
-#### 95. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L448) (Line 448)
+#### 97. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L448) (Line 448)
 - **Target Call:** `fs.isabs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._parse_path`
 - **Arguments:** `fs_path`
@@ -4816,7 +5075,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ):
 ```
 
-#### 96. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L456) (Line 456)
+#### 98. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L456) (Line 456)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._parse_path`
 - **Arguments:** `self.stage.wdir, fs_path`
@@ -4828,7 +5087,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 97. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L458) (Line 458)
+#### 99. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L458) (Line 458)
 - **Target Call:** `fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._parse_path`
 - **Arguments:** `fs.normpath(fs_path)`
@@ -4840,7 +5099,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 98. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L458) (Line 458)
+#### 100. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L458) (Line 458)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._parse_path`
 - **Arguments:** `fs_path`
@@ -4852,7 +5111,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 99. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L474) (Line 474)
+#### 101. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L474) (Line 474)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__str__`
 - **Arguments:** `self.fs_path, self.repo.root_dir`
@@ -4864,7 +5123,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return self.fs_path
 ```
 
-#### 100. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L477) (Line 477)
+#### 102. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L477) (Line 477)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__str__`
 - **Arguments:** ``
@@ -4876,7 +5135,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if self.fs.isin(cur_dir, self.repo.root_dir):
 ```
 
-#### 101. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L478) (Line 478)
+#### 103. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L478) (Line 478)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__str__`
 - **Arguments:** `cur_dir, self.repo.root_dir`
@@ -4888,7 +5147,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return self.fs.relpath(self.fs_path, cur_dir)
 ```
 
-#### 102. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L479) (Line 479)
+#### 104. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L479) (Line 479)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__str__`
 - **Arguments:** `self.fs_path, cur_dir`
@@ -4900,7 +5159,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 103. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L481) (Line 481)
+#### 105. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L481) (Line 481)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.__str__`
 - **Arguments:** `self.fs_path, self.repo.root_dir`
@@ -4912,7 +5171,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 104. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L498) (Line 498)
+#### 106. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L498) (Line 498)
 - **Target Call:** `self.fs.isabs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.is_in_repo`
 - **Arguments:** `self.def_path`
@@ -4924,7 +5183,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return False
 ```
 
-#### 105. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L501) (Line 501)
+#### 107. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L501) (Line 501)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.is_in_repo`
 - **Arguments:** `self.fs_path, self.repo.root_dir`
@@ -4936,7 +5195,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 106. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L530) (Line 530)
+#### 108. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L530) (Line 530)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.cache_path`
 - **Arguments:** `self.cache.oid_to_path(self.hash_info.value)`
@@ -4950,7 +5209,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 107. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L585) (Line 585)
+#### 109. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L585) (Line 585)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.exists`
 - **Arguments:** `self.fs_path`
@@ -4962,7 +5221,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 108. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L592) (Line 592)
+#### 110. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L592) (Line 592)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.index_key`
 - **Arguments:** `self.fs_path, self.repo.root_dir`
@@ -4974,7 +5233,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 109. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L596) (Line 596)
+#### 111. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L596) (Line 596)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.index_key`
 - **Arguments:** `no_drive`
@@ -4986,7 +5245,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return workspace, key
 ```
 
-#### 110. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L653) (Line 653)
+#### 112. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L653) (Line 653)
 - **Target Call:** `self.fs.is_empty` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.is_empty`
 - **Arguments:** `self.fs_path`
@@ -4998,7 +5257,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 111. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L658) (Line 658)
+#### 113. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L658) (Line 658)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.isdir`
 - **Arguments:** `self.fs_path`
@@ -5010,7 +5269,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 112. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L663) (Line 663)
+#### 114. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L663) (Line 663)
 - **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.isfile`
 - **Arguments:** `self.fs_path`
@@ -5022,7 +5281,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 113. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L787) (Line 787)
+#### 115. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L787) (Line 787)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.commit`
 - **Arguments:** `filter_info or self.fs_path`
@@ -5034,7 +5293,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 with CheckoutCallback(desc=f"Checking out {rel}", unit="files") as cb:
 ```
 
-#### 114. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L803) (Line 803)
+#### 116. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L803) (Line 803)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._commit_granular_dir`
 - **Arguments:** `self.fs.relpath(filter_info, self.fs_path)`
@@ -5046,7 +5305,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         staging, _, obj = self._build(
 ```
 
-#### 115. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L803) (Line 803)
+#### 117. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L803) (Line 803)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._commit_granular_dir`
 - **Arguments:** `filter_info, self.fs_path`
@@ -5058,7 +5317,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         staging, _, obj = self._build(
 ```
 
-#### 116. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L844) (Line 844)
+#### 118. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L844) (Line 844)
 - **Target Call:** `self.fs.as_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.dumpd`
 - **Arguments:** `relpath(self.fs_path, self.stage.wdir)`
@@ -5070,7 +5329,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 117. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L990) (Line 990)
+#### 119. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L990) (Line 990)
 - **Target Call:** `self.fs.remove` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.remove`
 - **Arguments:** `self.fs_path`
@@ -5082,7 +5341,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         except FileNotFoundError:
 ```
 
-#### 118. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1002) (Line 1002)
+#### 120. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1002) (Line 1002)
 - **Target Call:** `self.fs.move` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.move`
 - **Arguments:** `self.fs_path, out.fs_path`
@@ -5094,7 +5353,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 119. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1049) (Line 1049)
+#### 121. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1049) (Line 1049)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.transfer`
 - **Arguments:** `odb.path`
@@ -5106,7 +5365,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             unit="file",
 ```
 
-#### 120. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1144) (Line 1144)
+#### 122. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1144) (Line 1144)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._collect_used_dir_cache`
 - **Arguments:** `self.fs.relpath(filter_info, self.fs_path)`
@@ -5118,7 +5377,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return obj.filter(prefix)
 ```
 
-#### 121. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1144) (Line 1144)
+#### 123. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1144) (Line 1144)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output._collect_used_dir_cache`
 - **Arguments:** `filter_info, self.fs_path`
@@ -5130,7 +5389,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return obj.filter(prefix)
 ```
 
-#### 122. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1286) (Line 1286)
+#### 124. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1286) (Line 1286)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.unstage`
 - **Arguments:** `self.fs.relpath(path, self.fs_path)`
@@ -5142,7 +5401,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 123. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1286) (Line 1286)
+#### 125. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1286) (Line 1286)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.unstage`
 - **Arguments:** `path, self.fs_path`
@@ -5154,7 +5413,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 124. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1320) (Line 1320)
+#### 126. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1320) (Line 1320)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.apply`
 - **Arguments:** `self.fs.relpath(path, self.fs_path)`
@@ -5166,7 +5425,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 125. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1320) (Line 1320)
+#### 127. [dvc/output.py](https://github.com/iterative/dvc/blob/main/dvc/output.py#L1320) (Line 1320)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Output.apply`
 - **Arguments:** `path, self.fs_path`
@@ -5178,7 +5437,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 126. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L143) (Line 143)
+#### 128. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L143) (Line 143)
 - **Target Call:** `fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataResolver.__init__`
 - **Arguments:** `wdir`
@@ -5190,7 +5449,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             wdir = "" if wdir == os.curdir else wdir
 ```
 
-#### 127. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L147) (Line 147)
+#### 129. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L147) (Line 147)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataResolver.__init__`
 - **Arguments:** `fs.join(self.wdir, 'dvc.yaml')`
@@ -5202,7 +5461,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 128. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L147) (Line 147)
+#### 130. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L147) (Line 147)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DataResolver.__init__`
 - **Arguments:** `self.wdir, 'dvc.yaml'`
@@ -5214,7 +5473,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 129. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L290) (Line 290)
+#### 131. [dvc/parsing/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/__init__.py#L290) (Line 290)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `EntryDefinition._resolve_wdir`
 - **Arguments:** `self.wdir, wdir`
@@ -5226,7 +5485,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 130. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L356) (Line 356)
+#### 132. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L356) (Line 356)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.load_from`
 - **Arguments:** `path`
@@ -5238,7 +5497,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             raise ParamsLoadError(f"'{path}' does not exist")
 ```
 
-#### 131. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L358) (Line 358)
+#### 133. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L358) (Line 358)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.load_from`
 - **Arguments:** `path`
@@ -5250,7 +5509,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             raise ParamsLoadError(f"'{path}' is a directory")
 ```
 
-#### 132. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L388) (Line 388)
+#### 134. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L388) (Line 388)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.merge_from`
 - **Arguments:** `fs.join(wdir, path)`
@@ -5262,7 +5521,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 133. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L388) (Line 388)
+#### 135. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L388) (Line 388)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.merge_from`
 - **Arguments:** `wdir, path`
@@ -5274,7 +5533,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 134. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L433) (Line 433)
+#### 136. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L433) (Line 433)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.load_from_vars`
 - **Arguments:** `wdir, default`
@@ -5286,7 +5545,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             if fs.exists(to_import):
 ```
 
-#### 135. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L434) (Line 434)
+#### 137. [dvc/parsing/context.py](https://github.com/iterative/dvc/blob/main/dvc/parsing/context.py#L434) (Line 434)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Context.load_from_vars`
 - **Arguments:** `to_import`
@@ -5298,7 +5557,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 self.merge_from(fs, default, wdir)
 ```
 
-#### 136. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L116) (Line 116)
+#### 138. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L116) (Line 116)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo._get_repo_dirs`
 - **Arguments:** `root_dir, self.DVC_DIR`
@@ -5310,7 +5569,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         except NotDvcRepoError:
 ```
 
-#### 137. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L203) (Line 203)
+#### 139. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L203) (Line 203)
 - **Target Call:** `self.fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.__init__`
 - **Arguments:** `self.tmp_dir`
@@ -5322,7 +5581,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 138. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L206) (Line 206)
+#### 140. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L206) (Line 206)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.__init__`
 - **Arguments:** `self.tmp_dir, 'lock'`
@@ -5334,7 +5593,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                     tmp_dir=self.tmp_dir,
 ```
 
-#### 139. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L272) (Line 272)
+#### 141. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L272) (Line 272)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.local_dvc_dir`
 - **Arguments:** `self.root_dir, '/'`
@@ -5346,7 +5605,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 140. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L393) (Line 393)
+#### 142. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L393) (Line 393)
 - **Target Call:** `fs._get_key_from_relative` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.get_data_index_entry`
 - **Arguments:** `fs_path`
@@ -5358,7 +5617,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             subrepo, _, key = fs._get_subrepo_info(key)
 ```
 
-#### 141. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L394) (Line 394)
+#### 143. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L394) (Line 394)
 - **Target Call:** `fs._get_subrepo_info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.get_data_index_entry`
 - **Arguments:** `key`
@@ -5370,7 +5629,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             index = subrepo.index.data[workspace]
 ```
 
-#### 142. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L398) (Line 398)
+#### 144. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L398) (Line 398)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.get_data_index_entry`
 - **Arguments:** `path, self.root_dir`
@@ -5382,7 +5641,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 143. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L414) (Line 414)
+#### 145. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L414) (Line 414)
 - **Target Call:** `fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_root`
 - **Arguments:** `root`
@@ -5394,7 +5653,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 144. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L416) (Line 416)
+#### 146. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L416) (Line 416)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_root`
 - **Arguments:** `root_dir`
@@ -5406,7 +5665,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             raise NotDvcRepoError(f"directory '{root}' does not exist")
 ```
 
-#### 145. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L420) (Line 420)
+#### 147. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L420) (Line 420)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_root`
 - **Arguments:** `root_dir, cls.DVC_DIR`
@@ -5418,7 +5677,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             if fs.isdir(dvc_dir):
 ```
 
-#### 146. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L421) (Line 421)
+#### 148. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L421) (Line 421)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_root`
 - **Arguments:** `dvc_dir`
@@ -5430,7 +5689,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 return root_dir
 ```
 
-#### 147. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L425) (Line 425)
+#### 149. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L425) (Line 425)
 - **Target Call:** `fs.parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_root`
 - **Arguments:** `root_dir`
@@ -5442,7 +5701,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             if parent == root_dir:
 ```
 
-#### 148. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L443) (Line 443)
+#### 150. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L443) (Line 443)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_dvc_dir`
 - **Arguments:** `root_dir, cls.DVC_DIR`
@@ -5454,7 +5713,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 149. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L554) (Line 554)
+#### 151. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L554) (Line 554)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.find_outs_by_path`
 - **Arguments:** `path`
@@ -5466,7 +5725,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         fs_path = abs_path
 ```
 
-#### 150. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L565) (Line 565)
+#### 152. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L565) (Line 565)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.func`
 - **Arguments:** `out.fs_path, fs_path`
@@ -5478,7 +5737,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 151. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L574) (Line 574)
+#### 153. [dvc/repo/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/__init__.py#L574) (Line 574)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Repo.is_dvc_internal`
 - **Arguments:** `path`
@@ -5490,7 +5749,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return self.DVC_DIR in path_parts
 ```
 
-#### 152. [dvc/repo/add.py](https://github.com/iterative/dvc/blob/main/dvc/repo/add.py#L181) (Line 181)
+#### 154. [dvc/repo/add.py](https://github.com/iterative/dvc/blob/main/dvc/repo/add.py#L181) (Line 181)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_add`
 - **Arguments:** `source`
@@ -5502,7 +5761,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     try:
 ```
 
-#### 153. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L102) (Line 102)
+#### 155. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L102) (Line 102)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.read`
 - **Arguments:** `dvcfile, self.repo.root_dir`
@@ -5514,7 +5773,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             artifacts[dvcyaml] = {}
 ```
 
-#### 154. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L180) (Line 180)
+#### 156. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L180) (Line 180)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.get_path`
 - **Arguments:** `scm_root, *dirparts, PROJECT_FILE`
@@ -5526,7 +5785,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         rela = fs.relpath(abspath, self.repo.root_dir)
 ```
 
-#### 155. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L181) (Line 181)
+#### 157. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L181) (Line 181)
 - **Target Call:** `fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.get_path`
 - **Arguments:** `abspath, self.repo.root_dir`
@@ -5538,7 +5797,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         try:
 ```
 
-#### 156. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L210) (Line 210)
+#### 158. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L210) (Line 210)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.download`
 - **Arguments:** `root, dirname`
@@ -5550,7 +5809,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             with Repo(_dirname, fs=self.repo.fs, scm=self.repo.scm) as r:
 ```
 
-#### 157. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L213) (Line 213)
+#### 159. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L213) (Line 213)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.download`
 - **Arguments:** `root, as_posix(path)`
@@ -5562,7 +5821,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 path = self.repo.fs.relpath(path, self.repo.root_dir)
 ```
 
-#### 158. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L214) (Line 214)
+#### 160. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L214) (Line 214)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.download`
 - **Arguments:** `path, self.repo.root_dir`
@@ -5574,7 +5833,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 # when the `repo` is a subrepo, the path `/subrepo/myart.pkl` for dvcfs
 ```
 
-#### 159. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L218) (Line 218)
+#### 161. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L218) (Line 218)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.download`
 - **Arguments:** `root, path`
@@ -5586,7 +5845,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 path = self.repo.fs.normpath(path)
 ```
 
-#### 160. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L219) (Line 219)
+#### 162. [dvc/repo/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/repo/artifacts.py#L219) (Line 219)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Artifacts.download`
 - **Arguments:** `path`
@@ -5598,7 +5857,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 161. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L64) (Line 64)
+#### 163. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L64) (Line 64)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** `self.root_dir, self.scm.root_dir`
@@ -5610,7 +5869,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         repo_root_parts = self.fs.relparts(self.root_dir, self.scm.root_dir)
 ```
 
-#### 162. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L65) (Line 65)
+#### 164. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L65) (Line 65)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** `self.root_dir, self.scm.root_dir`
@@ -5622,7 +5881,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 163. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L68) (Line 68)
+#### 165. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L68) (Line 68)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** `self.fs.getcwd(), self.scm.root_dir`
@@ -5634,7 +5893,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         cwd_parts = self.fs.relparts(self.fs.getcwd(), self.scm.root_dir)
 ```
 
-#### 164. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L68) (Line 68)
+#### 166. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L68) (Line 68)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** ``
@@ -5646,7 +5905,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         cwd_parts = self.fs.relparts(self.fs.getcwd(), self.scm.root_dir)
 ```
 
-#### 165. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L69) (Line 69)
+#### 167. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L69) (Line 69)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** `self.fs.getcwd(), self.scm.root_dir`
@@ -5658,7 +5917,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 166. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L69) (Line 69)
+#### 168. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L69) (Line 69)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `brancher`
 - **Arguments:** ``
@@ -5670,7 +5929,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 167. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L129) (Line 129)
+#### 169. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L129) (Line 129)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_switch_fs`
 - **Arguments:** `'/', *repo_root_parts`
@@ -5682,7 +5941,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     if not fs.exists(root_dir):
 ```
 
-#### 168. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L130) (Line 130)
+#### 170. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L130) (Line 130)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_switch_fs`
 - **Arguments:** `root_dir`
@@ -5694,7 +5953,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         raise NotDvcRepoError(f"Commit '{rev[:7]}' does not contain a DVC repo")
 ```
 
-#### 169. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L135) (Line 135)
+#### 171. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L135) (Line 135)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_switch_fs`
 - **Arguments:** `root_dir, repo.DVC_DIR`
@@ -5706,7 +5965,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     repo._reset()
 ```
 
-#### 170. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L139) (Line 139)
+#### 172. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L139) (Line 139)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_switch_fs`
 - **Arguments:** `'/', *cwd_parts`
@@ -5718,7 +5977,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         repo.fs.chdir(cwd)
 ```
 
-#### 171. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L140) (Line 140)
+#### 173. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L140) (Line 140)
 - **Target Call:** `self.fs.chdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_switch_fs`
 - **Arguments:** `cwd`
@@ -5730,7 +5989,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 172. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L152) (Line 152)
+#### 174. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L152) (Line 152)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** `repo.root_dir, repo.scm.root_dir`
@@ -5742,7 +6001,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         repo_root_parts = repo.fs.relparts(repo.root_dir, repo.scm.root_dir)
 ```
 
-#### 173. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L153) (Line 153)
+#### 175. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L153) (Line 153)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** `repo.root_dir, repo.scm.root_dir`
@@ -5754,7 +6013,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 174. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L156) (Line 156)
+#### 176. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L156) (Line 156)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** `repo.fs.getcwd(), repo.scm.root_dir`
@@ -5766,7 +6025,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         cwd_parts = repo.fs.relparts(repo.fs.getcwd(), repo.scm.root_dir)
 ```
 
-#### 175. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L156) (Line 156)
+#### 177. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L156) (Line 156)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** ``
@@ -5778,7 +6037,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         cwd_parts = repo.fs.relparts(repo.fs.getcwd(), repo.scm.root_dir)
 ```
 
-#### 176. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L157) (Line 157)
+#### 178. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L157) (Line 157)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** `repo.fs.getcwd(), repo.scm.root_dir`
@@ -5790,7 +6049,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 177. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L157) (Line 157)
+#### 179. [dvc/repo/brancher.py](https://github.com/iterative/dvc/blob/main/dvc/repo/brancher.py#L157) (Line 157)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `switch`
 - **Arguments:** ``
@@ -5802,7 +6061,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 178. [dvc/repo/cache.py](https://github.com/iterative/dvc/blob/main/dvc/repo/cache.py#L24) (Line 24)
+#### 180. [dvc/repo/cache.py](https://github.com/iterative/dvc/blob/main/dvc/repo/cache.py#L24) (Line 24)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `check_missing`
 - **Arguments:** `path`
@@ -5814,7 +6073,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             typ = "directory" if (entry.meta and entry.meta.isdir) else "file"
 ```
 
-#### 179. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L98) (Line 98)
+#### 181. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L98) (Line 98)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_check_can_delete`
 - **Arguments:** `path, *(entry.key or ())`
@@ -5826,7 +6085,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 180. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L174) (Line 174)
+#### 182. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L174) (Line 174)
 - **Target Call:** `self.fs.isin_or_eq` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `checkout_onerror`
 - **Arguments:** `dest_path, out_path`
@@ -5838,7 +6097,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 failed.add(out_path)
 ```
 
-#### 181. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L193) (Line 193)
+#### 183. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L193) (Line 193)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `checkout`
 - **Arguments:** `self.root_dir, *key`
@@ -5850,7 +6109,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 182. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L196) (Line 196)
+#### 184. [dvc/repo/checkout.py](https://github.com/iterative/dvc/blob/main/dvc/repo/checkout.py#L196) (Line 196)
 - **Target Call:** `self.fs.remove` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `checkout`
 - **Arguments:** `out_path`
@@ -5862,7 +6121,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             continue
 ```
 
-#### 183. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L34) (Line 34)
+#### 185. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L34) (Line 34)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_paths`
 - **Arguments:** `target`
@@ -5874,7 +6133,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 184. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L38) (Line 38)
+#### 186. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L38) (Line 38)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_paths`
 - **Arguments:** `fs_path`
@@ -5886,7 +6145,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             target_paths.extend(fs.find(fs_path))
 ```
 
-#### 185. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L39) (Line 39)
+#### 187. [dvc/repo/collect.py](https://github.com/iterative/dvc/blob/main/dvc/repo/collect.py#L39) (Line 39)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_paths`
 - **Arguments:** `fs_path`
@@ -5898,7 +6157,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         target_paths.append(fs_path)
 ```
 
-#### 186. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L61) (Line 61)
+#### 188. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L61) (Line 61)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_get_missing_paths`
 - **Arguments:** `list(paths_map)`
@@ -5912,7 +6171,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 187. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L371) (Line 371)
+#### 189. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L371) (Line 371)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_transform_git_paths_to_dvc`
 - **Arguments:** `repo.root_dir, repo.scm.root_dir`
@@ -5924,7 +6183,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 188. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L381) (Line 381)
+#### 190. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L381) (Line 381)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_transform_git_paths_to_dvc`
 - **Arguments:** `repo.fs.getcwd(), repo.root_dir`
@@ -5936,7 +6195,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     if start in (os.curdir, ""):
 ```
 
-#### 189. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L381) (Line 381)
+#### 191. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L381) (Line 381)
 - **Target Call:** `self.fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_transform_git_paths_to_dvc`
 - **Arguments:** ``
@@ -5948,7 +6207,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     if start in (os.curdir, ""):
 ```
 
-#### 190. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L385) (Line 385)
+#### 192. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L385) (Line 385)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_transform_git_paths_to_dvc`
 - **Arguments:** `file, start`
@@ -5960,7 +6219,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 191. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L513) (Line 513)
+#### 193. [dvc/repo/data.py](https://github.com/iterative/dvc/blob/main/dvc/repo/data.py#L513) (Line 513)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `status`
 - **Arguments:** `os.fspath(t)`
@@ -5972,7 +6231,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     # try to remove duplicate and overlapping keys
 ```
 
-#### 192. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L35) (Line 35)
+#### 194. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L35) (Line 35)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `du`
 - **Arguments:** `path`
@@ -5984,7 +6243,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             return [(path, fs.du(path, total=True))]
 ```
 
-#### 193. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L36) (Line 36)
+#### 195. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L36) (Line 36)
 - **Target Call:** `fs.du` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `du`
 - **Arguments:** `path`
@@ -5996,7 +6255,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 194. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L39) (Line 39)
+#### 196. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L39) (Line 39)
 - **Target Call:** `fs.du` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `du`
 - **Arguments:** `entry_path`
@@ -6008,7 +6267,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ]
 ```
 
-#### 195. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L39) (Line 39)
+#### 197. [dvc/repo/du.py](https://github.com/iterative/dvc/blob/main/dvc/repo/du.py#L39) (Line 39)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `du`
 - **Arguments:** `path`
@@ -6020,7 +6279,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         ]
 ```
 
-#### 196. [dvc/repo/experiments/cache.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/cache.py#L53) (Line 53)
+#### 198. [dvc/repo/experiments/cache.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/cache.py#L53) (Line 53)
 - **Target Call:** `self.fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ExpCache.get`
 - **Arguments:** `obj.path, 'rb'`
@@ -6032,7 +6291,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 data = fobj.read()
 ```
 
-#### 197. [dvc/repo/experiments/executor/base.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/executor/base.py#L362) (Line 362)
+#### 199. [dvc/repo/experiments/executor/base.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/executor/base.py#L362) (Line 362)
 - **Target Call:** `fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `BaseExecutor.pack_repro_args`
 - **Arguments:** `dpath`
@@ -6044,7 +6303,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 198. [dvc/repo/experiments/utils.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/utils.py#L44) (Line 44)
+#### 200. [dvc/repo/experiments/utils.py](https://github.com/iterative/dvc/blob/main/dvc/repo/experiments/utils.py#L44) (Line 44)
 - **Target Call:** `self.fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `get_exp_rwlock`
 - **Arguments:** `path`
@@ -6056,7 +6315,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 199. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L169) (Line 169)
+#### 201. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L169) (Line 169)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `fetch`
 - **Arguments:** `sorted((idx.data_tree.hash_info.value for idx in indexes.values()))`
@@ -6068,7 +6327,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     )
 ```
 
-#### 200. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L224) (Line 224)
+#### 202. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L224) (Line 224)
 - **Target Call:** `fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_log_unversioned`
 - **Arguments:** `fs.join(remote.path, *key)`
@@ -6080,7 +6339,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             else:
 ```
 
-#### 201. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L224) (Line 224)
+#### 203. [dvc/repo/fetch.py](https://github.com/iterative/dvc/blob/main/dvc/repo/fetch.py#L224) (Line 224)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_log_unversioned`
 - **Arguments:** `remote.path, *key`
@@ -6092,7 +6351,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             else:
 ```
 
-#### 202. [dvc/repo/get.py](https://github.com/iterative/dvc/blob/main/dvc/repo/get.py#L60) (Line 60)
+#### 204. [dvc/repo/get.py](https://github.com/iterative/dvc/blob/main/dvc/repo/get.py#L60) (Line 60)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `get`
 - **Arguments:** `path`
@@ -6104,7 +6363,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         else:
 ```
 
-#### 203. [dvc/repo/get.py](https://github.com/iterative/dvc/blob/main/dvc/repo/get.py#L63) (Line 63)
+#### 205. [dvc/repo/get.py](https://github.com/iterative/dvc/blob/main/dvc/repo/get.py#L63) (Line 63)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `get`
 - **Arguments:** `path`
@@ -6116,7 +6375,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         download(fs, fs_path, os.path.abspath(out), jobs=jobs)
 ```
 
-#### 204. [dvc/repo/graph.py](https://github.com/iterative/dvc/blob/main/dvc/repo/graph.py#L146) (Line 146)
+#### 206. [dvc/repo/graph.py](https://github.com/iterative/dvc/blob/main/dvc/repo/graph.py#L146) (Line 146)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_graph`
 - **Arguments:** `dep.fs_path`
@@ -6128,7 +6387,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             overlapping = [n.value for n in outs_trie.prefixes(dep_key)]
 ```
 
-#### 205. [dvc/repo/graph.py](https://github.com/iterative/dvc/blob/main/dvc/repo/graph.py#L176) (Line 176)
+#### 207. [dvc/repo/graph.py](https://github.com/iterative/dvc/blob/main/dvc/repo/graph.py#L176) (Line 176)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_outs_graph`
 - **Arguments:** `dep.fs_path`
@@ -6140,7 +6399,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             overlapping = [n.value for n in outs_trie.prefixes(dep_key)]
 ```
 
-#### 206. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L91) (Line 91)
+#### 208. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L91) (Line 91)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `collect_files`
 - **Arguments:** `root, file`
@@ -6152,7 +6411,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             try:
 ```
 
-#### 207. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L203) (Line 203)
+#### 209. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L203) (Line 203)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_load_storage_from_import`
 - **Arguments:** `dep.meta.to_dict()`
@@ -6164,7 +6423,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 208. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L210) (Line 210)
+#### 210. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L210) (Line 210)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_load_storage_from_import`
 - **Arguments:** `fs_cache.path, dep.fs.protocol, tokenize(dep.fs_path, meta_token)`
@@ -6180,7 +6439,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             )
 ```
 
-#### 209. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L213) (Line 213)
+#### 211. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L213) (Line 213)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_load_storage_from_import`
 - **Arguments:** `dep.fs_path, meta_token`
@@ -6192,7 +6451,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 ),
 ```
 
-#### 210. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L513) (Line 513)
+#### 212. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L513) (Line 513)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Index.metric_keys`
 - **Arguments:** `path, self.repo.root_dir`
@@ -6204,7 +6463,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             by_workspace["repo"].add(key)
 ```
 
-#### 211. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L527) (Line 527)
+#### 213. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L527) (Line 527)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Index.param_keys`
 - **Arguments:** `f'{self.repo.fs.root_marker}{default_file}'`
@@ -6216,7 +6475,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             param_paths = chain(param_paths, [default_file])
 ```
 
-#### 212. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L531) (Line 531)
+#### 214. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L531) (Line 531)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Index.param_keys`
 - **Arguments:** `path, self.repo.root_dir`
@@ -6228,7 +6487,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             by_workspace["repo"].add(key)
 ```
 
-#### 213. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L550) (Line 550)
+#### 215. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L550) (Line 550)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Index.plot_keys`
 - **Arguments:** `path`
@@ -6240,7 +6499,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             by_workspace["repo"].add(key)
 ```
 
-#### 214. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L788) (Line 788)
+#### 216. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L788) (Line 788)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `IndexView._data_prefixes`
 - **Arguments:** `filter_info, out.fs_path`
@@ -6252,7 +6511,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 key = key + out.fs.relparts(filter_info, out.fs_path)
 ```
 
-#### 215. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L789) (Line 789)
+#### 217. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L789) (Line 789)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `IndexView._data_prefixes`
 - **Arguments:** `filter_info, out.fs_path`
@@ -6264,7 +6523,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             entry = self._index.data[workspace].get(key)
 ```
 
-#### 216. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L805) (Line 805)
+#### 218. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L805) (Line 805)
 - **Target Call:** `self.fs.isin` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `IndexView.data_keys`
 - **Arguments:** `filter_info, out.fs_path`
@@ -6276,7 +6535,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
                 key = key + out.fs.relparts(filter_info, out.fs_path)
 ```
 
-#### 217. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L806) (Line 806)
+#### 219. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L806) (Line 806)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `IndexView.data_keys`
 - **Arguments:** `filter_info, out.fs_path`
@@ -6288,7 +6547,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             ret[workspace].add(key)
 ```
 
-#### 218. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L856) (Line 856)
+#### 220. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L856) (Line 856)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_data_index`
 - **Arguments:** `path, *key`
@@ -6300,7 +6559,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 219. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L861) (Line 861)
+#### 221. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L861) (Line 861)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_data_index`
 - **Arguments:** `out_path`
@@ -6312,7 +6571,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             continue
 ```
 
-#### 220. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L901) (Line 901)
+#### 222. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L901) (Line 901)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_data_index`
 - **Arguments:** `path, *key`
@@ -6324,7 +6583,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         if not fs.exists(parent_path):
 ```
 
-#### 221. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L902) (Line 902)
+#### 223. [dvc/repo/index.py](https://github.com/iterative/dvc/blob/main/dvc/repo/index.py#L902) (Line 902)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_data_index`
 - **Arguments:** `parent_path`
@@ -6336,7 +6595,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             continue
 ```
 
-#### 222. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L84) (Line 84)
+#### 224. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L84) (Line 84)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls`
 - **Arguments:** `path`
@@ -6348,7 +6607,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return _ls(fs, fs_path, recursive, dvc_only, maxdepth)
 ```
 
-#### 223. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L101) (Line 101)
+#### 225. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L101) (Line 101)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls_tree`
 - **Arguments:** `path`
@@ -6360,7 +6619,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         return _ls_tree(
 ```
 
-#### 224. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L114) (Line 114)
+#### 226. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L114) (Line 114)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls`
 - **Arguments:** `path`
@@ -6372,7 +6631,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 225. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L120) (Line 120)
+#### 227. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L120) (Line 120)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls`
 - **Arguments:** `fs_path`
@@ -6384,7 +6643,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         infos[os.path.basename(path) or os.curdir] = fs.info(fs_path)
 ```
 
-#### 226. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L121) (Line 121)
+#### 228. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L121) (Line 121)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls`
 - **Arguments:** `fs_path`
@@ -6396,7 +6655,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
     else:
 ```
 
-#### 227. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L123) (Line 123)
+#### 229. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L123) (Line 123)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls`
 - **Arguments:** `fs_path`
@@ -6414,7 +6673,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             parts = fs.relparts(root, fs_path)
 ```
 
-#### 228. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L130) (Line 130)
+#### 230. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L130) (Line 130)
 - **Target Call:** `fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls`
 - **Arguments:** `root, fs_path`
@@ -6426,7 +6685,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
             if parts == (".",):
 ```
 
-#### 229. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L151) (Line 151)
+#### 231. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L151) (Line 151)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls_tree`
 - **Arguments:** `path`
@@ -6438,7 +6697,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
     if _info is None:
 ```
 
-#### 230. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L168) (Line 168)
+#### 232. [dvc/repo/ls.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls.py#L168) (Line 168)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_ls_tree`
 - **Arguments:** `path`
@@ -6450,7 +6709,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         except FileNotFoundError:
 ```
 
-#### 231. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L10) (Line 10)
+#### 233. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L10) (Line 10)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls_url`
 - **Arguments:** `fs_path`
@@ -6462,7 +6721,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
     except FileNotFoundError as exc:
 ```
 
-#### 232. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L18) (Line 18)
+#### 234. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L18) (Line 18)
 - **Target Call:** `_LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls_url`
 - **Arguments:** ``
@@ -6474,7 +6733,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
     else:
 ```
 
-#### 233. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L24) (Line 24)
+#### 235. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L24) (Line 24)
 - **Target Call:** `fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls_url`
 - **Arguments:** `root, fs_path`
@@ -6486,7 +6745,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         if parts == (".",):
 ```
 
-#### 234. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L32) (Line 32)
+#### 236. [dvc/repo/ls_url.py](https://github.com/iterative/dvc/blob/main/dvc/repo/ls_url.py#L32) (Line 32)
 - **Target Call:** `fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ls_url`
 - **Arguments:** `info['name'], fs_path`
@@ -6498,7 +6757,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
                 "isdir": info["type"] == "directory",
 ```
 
-#### 235. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L28) (Line 28)
+#### 237. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L28) (Line 28)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_metrics`
 - **Arguments:** `repo.fs.parent(dvcfile), repo.root_dir`
@@ -6510,7 +6769,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         for file in metrics:
 ```
 
-#### 236. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L28) (Line 28)
+#### 238. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L28) (Line 28)
 - **Target Call:** `self.fs.parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_metrics`
 - **Arguments:** `dvcfile`
@@ -6522,7 +6781,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         for file in metrics:
 ```
 
-#### 237. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L30) (Line 30)
+#### 239. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L30) (Line 30)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_metrics`
 - **Arguments:** `wdir, as_posix(file)`
@@ -6534,7 +6793,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
             yield repo.fs.normpath(path)
 ```
 
-#### 238. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L31) (Line 31)
+#### 240. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L31) (Line 31)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_metrics`
 - **Arguments:** `path`
@@ -6546,7 +6805,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
 
 ```
 
-#### 239. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L104) (Line 104)
+#### 241. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L104) (Line 104)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_metrics`
 - **Arguments:** `metric`
@@ -6558,7 +6817,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
     # make paths absolute for DVCFileSystem
 ```
 
-#### 240. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L123) (Line 123)
+#### 242. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L123) (Line 123)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `try_expand_paths`
 - **Arguments:** `path`
@@ -6570,7 +6829,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
                 yield from fs.find(path)
 ```
 
-#### 241. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L124) (Line 124)
+#### 243. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L124) (Line 124)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `try_expand_paths`
 - **Arguments:** `path`
@@ -6582,7 +6841,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
                 continue
 ```
 
-#### 242. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L138) (Line 138)
+#### 244. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L138) (Line 138)
 - **Target Call:** `fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_relpath`
 - **Arguments:** ``
@@ -6594,7 +6853,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
 
 ```
 
-#### 243. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L165) (Line 165)
+#### 245. [dvc/repo/metrics/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/metrics/show.py#L165) (Line 165)
 - **Target Call:** `fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_gather_metrics`
 - **Arguments:** `repo_path`
@@ -6606,7 +6865,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         if not isinstance(result, Exception):
 ```
 
-#### 244. [dvc/repo/open_repo.py](https://github.com/iterative/dvc/blob/main/dvc/repo/open_repo.py#L70) (Line 70)
+#### 246. [dvc/repo/open_repo.py](https://github.com/iterative/dvc/blob/main/dvc/repo/open_repo.py#L70) (Line 70)
 - **Target Call:** `fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `make_repo`
 - **Arguments:** `path, root_dir`
@@ -6618,7 +6877,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
             _config.update(_get_remote_config(repo_path))
 ```
 
-#### 245. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L24) (Line 24)
+#### 247. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L24) (Line 24)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_params`
 - **Arguments:** `repo.fs.parent(dvcfile), repo.root_dir`
@@ -6630,7 +6889,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         for file in params:
 ```
 
-#### 246. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L24) (Line 24)
+#### 248. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L24) (Line 24)
 - **Target Call:** `self.fs.parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_params`
 - **Arguments:** `dvcfile`
@@ -6642,7 +6901,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         for file in params:
 ```
 
-#### 247. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L26) (Line 26)
+#### 249. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L26) (Line 26)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_params`
 - **Arguments:** `wdir, as_posix(file)`
@@ -6654,7 +6913,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
             yield repo.fs.normpath(path)
 ```
 
-#### 248. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L27) (Line 27)
+#### 250. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L27) (Line 27)
 - **Target Call:** `self.fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_top_level_params`
 - **Arguments:** `path`
@@ -6666,7 +6925,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
 
 ```
 
-#### 249. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L68) (Line 68)
+#### 251. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L68) (Line 68)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_params`
 - **Arguments:** `f'{fs.root_marker}{default_file}'`
@@ -6678,7 +6937,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
             params.append({default_file: []})
 ```
 
-#### 250. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L77) (Line 77)
+#### 252. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L77) (Line 77)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_params`
 - **Arguments:** `param`
@@ -6690,7 +6949,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         # make paths absolute for DVCFileSystem
 ```
 
-#### 251. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L96) (Line 96)
+#### 253. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L96) (Line 96)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_vars`
 - **Arguments:** `file`
@@ -6702,7 +6961,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
                 repo_path = repo.dvcfs.from_os_path(abspath)
 ```
 
-#### 252. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L141) (Line 141)
+#### 254. [dvc/repo/params/show.py](https://github.com/iterative/dvc/blob/main/dvc/repo/params/show.py#L141) (Line 141)
 - **Target Call:** `fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_gather_params`
 - **Arguments:** `repo_path`
@@ -6714,7 +6973,7 @@ def _ls_tree(fs, path, maxdepth=None, _info=None, **fs_kwargs):
         if not isinstance(result, Exception):
 ```
 
-#### 253. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L63) (Line 63)
+#### 255. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L63) (Line 63)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_unpack_dir_files`
 - **Arguments:** `path`
@@ -6726,7 +6985,7 @@ def _unpack_dir_files(fs, path, **kwargs):
     if not ret:
 ```
 
-#### 254. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L66) (Line 66)
+#### 256. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L66) (Line 66)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_unpack_dir_files`
 - **Arguments:** `path`
@@ -6738,7 +6997,7 @@ def _unpack_dir_files(fs, path, **kwargs):
     return ret
 ```
 
-#### 255. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
+#### 257. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
 - **Target Call:** `fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_relpath`
 - **Arguments:** `fs.join('/', fs.from_os_path(path)), fs.getcwd()`
@@ -6750,7 +7009,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 256. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
+#### 258. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_relpath`
 - **Arguments:** `'/', fs.from_os_path(path)`
@@ -6762,7 +7021,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 257. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
+#### 259. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
 - **Target Call:** `fs.from_os_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_relpath`
 - **Arguments:** `path`
@@ -6774,7 +7033,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 258. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
+#### 260. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L391) (Line 391)
 - **Target Call:** `fs.getcwd` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_relpath`
 - **Arguments:** ``
@@ -6786,7 +7045,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 259. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L405) (Line 405)
+#### 261. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L405) (Line 405)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_output_plots`
 - **Arguments:** `wdir_relpath, plot.def_path`
@@ -6798,7 +7057,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                 props=plot_props | props,
 ```
 
-#### 260. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L433) (Line 433)
+#### 262. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L433) (Line 433)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_adjust_sources`
 - **Arguments:** `config_dir, filepath`
@@ -6810,7 +7069,7 @@ def _unpack_dir_files(fs, path, **kwargs):
         new_plot_props[axis] = new
 ```
 
-#### 261. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L447) (Line 447)
+#### 263. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L447) (Line 447)
 - **Target Call:** `fs.dirname` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_definitions`
 - **Arguments:** `config_path`
@@ -6822,7 +7081,7 @@ def _unpack_dir_files(fs, path, **kwargs):
     result: dict[str, dict] = {}
 ```
 
-#### 262. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L451) (Line 451)
+#### 264. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L451) (Line 451)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_definitions`
 - **Arguments:** `config_dir, plot_id`
@@ -6834,7 +7093,7 @@ def _unpack_dir_files(fs, path, **kwargs):
     ]
 ```
 
-#### 263. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L457) (Line 457)
+#### 265. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L457) (Line 457)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_definitions`
 - **Arguments:** `config_dir, plot_id`
@@ -6846,7 +7105,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             if _matches(targets, config_path, plot_id):
 ```
 
-#### 264. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L480) (Line 480)
+#### 266. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L480) (Line 480)
 - **Target Call:** `fs.commonpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_closest_parent`
 - **Arguments:** `[path, parent]`
@@ -6858,7 +7117,7 @@ def _unpack_dir_files(fs, path, **kwargs):
         if len(common_path) > len(best_result):
 ```
 
-#### 265. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L524) (Line 524)
+#### 267. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L524) (Line 524)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_definitions`
 - **Arguments:** `target`
@@ -6870,7 +7129,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             unpacked = unpack_if_dir(fs, target, props=props, onerror=onerror)
 ```
 
-#### 266. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L533) (Line 533)
+#### 268. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L533) (Line 533)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `unpack_if_dir`
 - **Arguments:** `path`
@@ -6882,7 +7141,7 @@ def _unpack_dir_files(fs, path, **kwargs):
         unpacked = _unpack_dir_files(fs, path, onerror=onerror)
 ```
 
-#### 267. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L552) (Line 552)
+#### 269. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L552) (Line 552)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `parse`
 - **Arguments:** `path`
@@ -6894,7 +7153,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             return fd.read()
 ```
 
-#### 268. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L559) (Line 559)
+#### 270. [dvc/repo/plots/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/repo/plots/__init__.py#L559) (Line 559)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `parse`
 - **Arguments:** `path`
@@ -6906,7 +7165,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             contents = fd.read()
 ```
 
-#### 269. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L25) (Line 25)
+#### 271. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L25) (Line 25)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_rebuild`
 - **Arguments:** `fs.join(path, *key)`
@@ -6918,7 +7177,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             except FileNotFoundError:
 ```
 
-#### 270. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L25) (Line 25)
+#### 272. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L25) (Line 25)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_rebuild`
 - **Arguments:** `path, *key`
@@ -6930,7 +7189,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             except FileNotFoundError:
 ```
 
-#### 271. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L127) (Line 127)
+#### 273. [dvc/repo/push.py](https://github.com/iterative/dvc/blob/main/dvc/repo/push.py#L127) (Line 127)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `push`
 - **Arguments:** `sorted((idx.data_tree.hash_info.value for idx in indexes.values()))`
@@ -6942,7 +7201,7 @@ def _unpack_dir_files(fs, path, **kwargs):
     )
 ```
 
-#### 272. [dvc/repo/remove.py](https://github.com/iterative/dvc/blob/main/dvc/repo/remove.py#L27) (Line 27)
+#### 274. [dvc/repo/remove.py](https://github.com/iterative/dvc/blob/main/dvc/repo/remove.py#L27) (Line 27)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `remove`
 - **Arguments:** `target + DVC_FILE_SUFFIX`
@@ -6954,7 +7213,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             raise StageFileIsNotDvcFileError(target) from e
 ```
 
-#### 273. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L63) (Line 63)
+#### 275. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L63) (Line 63)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_maybe_collect_from_dvc_yaml`
 - **Arguments:** `PROJECT_FILE`
@@ -6966,7 +7225,7 @@ def _unpack_dir_files(fs, path, **kwargs):
         with suppress(StageNotFound):
 ```
 
-#### 274. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L90) (Line 90)
+#### 276. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L90) (Line 90)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_collect_specific_target`
 - **Arguments:** `target`
@@ -6978,7 +7237,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             stages = _maybe_collect_from_dvc_yaml(loader, target, with_deps)
 ```
 
-#### 275. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L223) (Line 223)
+#### 277. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L223) (Line 223)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `StageLoad._get_filepath`
 - **Arguments:** `path`
@@ -6990,7 +7249,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 276. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L349) (Line 349)
+#### 278. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L349) (Line 349)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `StageLoad.collect`
 - **Arguments:** `target`
@@ -7002,7 +7261,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             from dvc.repo.graph import collect_inside_path
 ```
 
-#### 277. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L352) (Line 352)
+#### 279. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L352) (Line 352)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `StageLoad.collect`
 - **Arguments:** `target`
@@ -7014,7 +7273,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             return collect_inside_path(path, graph or self.repo.index.graph)
 ```
 
-#### 278. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L394) (Line 394)
+#### 280. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L394) (Line 394)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `StageLoad.collect_granular`
 - **Arguments:** `target`
@@ -7026,7 +7285,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                 try:
 ```
 
-#### 279. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L397) (Line 397)
+#### 281. [dvc/repo/stage.py](https://github.com/iterative/dvc/blob/main/dvc/repo/stage.py#L397) (Line 397)
 - **Target Call:** `self.fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `StageLoad.collect_granular`
 - **Arguments:** `target`
@@ -7038,7 +7297,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                 except OutputNotFoundError:
 ```
 
-#### 280. [dvc/repo/trie.py](https://github.com/iterative/dvc/blob/main/dvc/repo/trie.py#L12) (Line 12)
+#### 282. [dvc/repo/trie.py](https://github.com/iterative/dvc/blob/main/dvc/repo/trie.py#L12) (Line 12)
 - **Target Call:** `self.fs.parts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `build_outs_trie`
 - **Arguments:** `out.fs_path`
@@ -7050,7 +7309,7 @@ def _unpack_dir_files(fs, path, **kwargs):
 
 ```
 
-#### 281. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L131) (Line 131)
+#### 283. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L131) (Line 131)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_merge_push_meta`
 - **Arguments:** `repo.root_dir, *subkey`
@@ -7062,7 +7321,7 @@ def _unpack_dir_files(fs, path, **kwargs):
             meta, hash_info = old_tree.get(repo.fs.relparts(fs_path, out.fs_path)) or (
 ```
 
-#### 282. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L132) (Line 132)
+#### 284. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L132) (Line 132)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_merge_push_meta`
 - **Arguments:** `fs_path, out.fs_path`
@@ -7074,7 +7333,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                 None,
 ```
 
-#### 283. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L331) (Line 331)
+#### 285. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L331) (Line 331)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_get_update_diff_index`
 - **Arguments:** `repo.root_dir, *entry.key`
@@ -7086,7 +7345,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                     tree = out.obj
 ```
 
-#### 284. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L335) (Line 335)
+#### 286. [dvc/repo/worktree.py](https://github.com/iterative/dvc/blob/main/dvc/repo/worktree.py#L335) (Line 335)
 - **Target Call:** `self.fs.relparts` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_get_update_diff_index`
 - **Arguments:** `fs_path, out.fs_path`
@@ -7098,7 +7357,7 @@ def _unpack_dir_files(fs, path, **kwargs):
                     )
 ```
 
-#### 285. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L46) (Line 46)
+#### 287. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L46) (Line 46)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_edit_rwlock`
 - **Arguments:** `lock_dir, RWLOCK_FILE`
@@ -7110,7 +7369,7 @@ def _edit_rwlock(lock_dir, fs, hardlink):
 
 ```
 
-#### 286. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L49) (Line 49)
+#### 288. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L49) (Line 49)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_edit_rwlock`
 - **Arguments:** `lock_dir, RWLOCK_LOCK`
@@ -7122,7 +7381,7 @@ def _edit_rwlock(lock_dir, fs, hardlink):
         tmp_dir=lock_dir,
 ```
 
-#### 287. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L55) (Line 55)
+#### 289. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L55) (Line 55)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_edit_rwlock`
 - **Arguments:** `path`
@@ -7134,7 +7393,7 @@ def _edit_rwlock(lock_dir, fs, hardlink):
                 lock = SCHEMA(json.load(fobj))
 ```
 
-#### 288. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L66) (Line 66)
+#### 290. [dvc/rwlock.py](https://github.com/iterative/dvc/blob/main/dvc/rwlock.py#L66) (Line 66)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_edit_rwlock`
 - **Arguments:** `path, 'w'`
@@ -7146,7 +7405,7 @@ def _edit_rwlock(lock_dir, fs, hardlink):
             json.dump(lock, fobj)
 ```
 
-#### 289. [dvc/stage/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/stage/__init__.py#L640) (Line 640)
+#### 291. [dvc/stage/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/stage/__init__.py#L640) (Line 640)
 - **Target Call:** `self.fs.isin_or_eq` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Stage._func`
 - **Arguments:** `fs_path, o.fs_path`
@@ -7158,7 +7417,7 @@ def _edit_rwlock(lock_dir, fs, hardlink):
 
 ```
 
-#### 290. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L185) (Line 185)
+#### 292. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L185) (Line 185)
 - **Target Call:** `fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `resolve_paths`
 - **Arguments:** `path`
@@ -7170,7 +7429,7 @@ def resolve_paths(fs, path, wdir=None):
     wdir = wdir or os.curdir
 ```
 
-#### 291. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
+#### 293. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
 - **Target Call:** `fs.abspath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `resolve_paths`
 - **Arguments:** `fs.join(fs.dirname(path), wdir)`
@@ -7182,7 +7441,7 @@ def resolve_paths(fs, path, wdir=None):
     return path, wdir
 ```
 
-#### 292. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
+#### 294. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `resolve_paths`
 - **Arguments:** `fs.dirname(path), wdir`
@@ -7194,7 +7453,7 @@ def resolve_paths(fs, path, wdir=None):
     return path, wdir
 ```
 
-#### 293. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
+#### 295. [dvc/stage/utils.py](https://github.com/iterative/dvc/blob/main/dvc/stage/utils.py#L187) (Line 187)
 - **Target Call:** `fs.dirname` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `resolve_paths`
 - **Arguments:** `path`
@@ -7206,7 +7465,271 @@ def resolve_paths(fs, path, wdir=None):
     return path, wdir
 ```
 
-#### 294. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L195) (Line 195)
+#### 296. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L72) (Line 72)
+- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/'`
+- **Keywords:** `{'detail': 'False'}`
+
+```python
+
+        assert fs.ls("/", detail=False) == M.unordered(
+            "/.gitignore", "/scripts", "/data"
+```
+
+#### 297. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L75) (Line 75)
+- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'scripts'`
+- **Keywords:** `{'detail': 'False'}`
+
+```python
+        )
+        assert fs.ls("scripts", detail=False) == ["scripts/script1"]
+        assert fs.ls("data", detail=False) == M.unordered("data/foo", "data/bar")
+```
+
+#### 298. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L76) (Line 76)
+- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'data'`
+- **Keywords:** `{'detail': 'False'}`
+
+```python
+        assert fs.ls("scripts", detail=False) == ["scripts/script1"]
+        assert fs.ls("data", detail=False) == M.unordered("data/foo", "data/bar")
+
+```
+
+#### 299. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L85) (Line 85)
+- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/'`
+- **Keywords:** `{}`
+
+```python
+
+        assert sorted(fs.ls("/"), key=lambda i: i["name"]) == [
+            M.dict(name="/.gitignore", type="file", isexec=False),
+```
+
+#### 300. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L92) (Line 92)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/not-existing-path'`
+- **Keywords:** `{}`
+
+```python
+        with pytest.raises(FileNotFoundError):
+            fs.info("/not-existing-path")
+
+```
+
+#### 301. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L94) (Line 94)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/'`
+- **Keywords:** `{}`
+
+```python
+
+        assert fs.info("/") == M.dict(name="/", isexec=False, type="directory")
+        assert fs.info("/data") == data_info
+```
+
+#### 302. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L95) (Line 95)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/data'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.info("/") == M.dict(name="/", isexec=False, type="directory")
+        assert fs.info("/data") == data_info
+        assert fs.info("/scripts") == scripts_info
+```
+
+#### 303. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L96) (Line 96)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/scripts'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.info("/data") == data_info
+        assert fs.info("/scripts") == scripts_info
+        assert fs.info("/data/foo") == M.dict(name="/data/foo", type="file")
+```
+
+#### 304. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L97) (Line 97)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/data/foo'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.info("/scripts") == scripts_info
+        assert fs.info("/data/foo") == M.dict(name="/data/foo", type="file")
+        assert fs.info("/scripts/script1") == M.dict(
+```
+
+#### 305. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L98) (Line 98)
+- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/scripts/script1'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.info("/data/foo") == M.dict(name="/data/foo", type="file")
+        assert fs.info("/scripts/script1") == M.dict(
+            name="/scripts/script1", type="file"
+```
+
+#### 306. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L102) (Line 102)
+- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/'`
+- **Keywords:** `{}`
+
+```python
+
+        assert not fs.isdvc("/")
+        assert fs.isdvc("/data")
+```
+
+#### 307. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L103) (Line 103)
+- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/data'`
+- **Keywords:** `{}`
+
+```python
+        assert not fs.isdvc("/")
+        assert fs.isdvc("/data")
+        assert fs.isdvc("/data/foo")
+```
+
+#### 308. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L104) (Line 104)
+- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/data/foo'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.isdvc("/data")
+        assert fs.isdvc("/data/foo")
+        assert not fs.isdvc("/scripts")
+```
+
+#### 309. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L105) (Line 105)
+- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/scripts'`
+- **Keywords:** `{}`
+
+```python
+        assert fs.isdvc("/data/foo")
+        assert not fs.isdvc("/scripts")
+        assert not fs.isdvc("/scripts/script1")
+```
+
+#### 310. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L106) (Line 106)
+- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/scripts/script1'`
+- **Keywords:** `{}`
+
+```python
+        assert not fs.isdvc("/scripts")
+        assert not fs.isdvc("/scripts/script1")
+
+```
+
+#### 311. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L109) (Line 109)
+- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'data'`
+- **Keywords:** `{}`
+
+```python
+        with pytest.raises((IsADirectoryError, PermissionError)):
+            fs.open("data")
+        with pytest.raises((IsADirectoryError, PermissionError)):
+```
+
+#### 312. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L111) (Line 111)
+- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'scripts'`
+- **Keywords:** `{}`
+
+```python
+        with pytest.raises((IsADirectoryError, PermissionError)):
+            fs.open("scripts")
+        with fs.open("/data/foo") as fobj:
+```
+
+#### 313. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L112) (Line 112)
+- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/data/foo'`
+- **Keywords:** `{}`
+
+```python
+            fs.open("scripts")
+        with fs.open("/data/foo") as fobj:
+            assert fobj.read() == b"foo"
+```
+
+#### 314. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L114) (Line 114)
+- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/scripts/script1'`
+- **Keywords:** `{}`
+
+```python
+            assert fobj.read() == b"foo"
+        with fs.open("/scripts/script1") as fobj:
+            assert fobj.read() == b"script1"
+```
+
+#### 315. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L118) (Line 118)
+- **Target Call:** `fs.get_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'data/foo', (tmp / 'foo').fs_path`
+- **Keywords:** `{}`
+
+```python
+        tmp = make_tmp_dir("temp-download")
+        fs.get_file("data/foo", (tmp / "foo").fs_path)
+        assert (tmp / "foo").read_text() == "foo"
+```
+
+#### 316. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L121) (Line 121)
+- **Target Call:** `fs.get_file` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'scripts/script1', (tmp / 'script1').fs_path`
+- **Keywords:** `{}`
+
+```python
+
+        fs.get_file("scripts/script1", (tmp / "script1").fs_path)
+        assert (tmp / "script1").read_text() == "script1"
+```
+
+#### 317. [dvc/testing/api_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/api_tests.py#L124) (Line 124)
+- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `TestAPI.test_filesystem`
+- **Arguments:** `'/', (tmp / 'all').fs_path`
+- **Keywords:** `{'recursive': 'True'}`
+
+```python
+
+        fs.get("/", (tmp / "all").fs_path, recursive=True)
+        assert (tmp / "all").read_text() == {
+```
+
+#### 318. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L195) (Line 195)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `match_files`
 - **Arguments:** `d['path']`
@@ -7218,7 +7741,7 @@ def match_files(fs, entries, expected):
     expected_content = {(fs.normpath(d["path"]), d["isdir"]) for d in expected}
 ```
 
-#### 295. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L196) (Line 196)
+#### 319. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L196) (Line 196)
 - **Target Call:** `fs.normpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `match_files`
 - **Arguments:** `d['path']`
@@ -7230,7 +7753,7 @@ def match_files(fs, entries, expected):
     assert entries_content == expected_content
 ```
 
-#### 296. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L206) (Line 206)
+#### 320. [dvc/testing/workspace_tests.py](https://github.com/iterative/dvc/blob/main/dvc/testing/workspace_tests.py#L206) (Line 206)
 - **Target Call:** `fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestLsUrl.test_file`
 - **Arguments:** `fs_path, fname`
@@ -7242,7 +7765,7 @@ def match_files(fs, entries, expected):
 
 ```
 
-#### 297. [dvc/utils/serialize/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/utils/serialize/__init__.py#L23) (Line 23)
+#### 321. [dvc/utils/serialize/__init__.py](https://github.com/iterative/dvc/blob/main/dvc/utils/serialize/__init__.py#L23) (Line 23)
 - **Target Call:** `fs.suffix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `load_path`
 - **Arguments:** `fs_path`
@@ -7254,7 +7777,7 @@ def load_path(fs_path, fs, **kwargs):
     loader = LOADERS[suffix]
 ```
 
-#### 298. [dvc/utils/serialize/_common.py](https://github.com/iterative/dvc/blob/main/dvc/utils/serialize/_common.py#L88) (Line 88)
+#### 322. [dvc/utils/serialize/_common.py](https://github.com/iterative/dvc/blob/main/dvc/utils/serialize/_common.py#L88) (Line 88)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_modify_data`
 - **Arguments:** `os.fspath(path)`
@@ -7266,7 +7789,7 @@ def load_path(fs_path, fs, **kwargs):
     data = _load_data(path, parser=parser, fs=fs) if file_exists else {}
 ```
 
-#### 299. [dvc/utils/strictyaml.py](https://github.com/iterative/dvc/blob/main/dvc/utils/strictyaml.py#L47) (Line 47)
+#### 323. [dvc/utils/strictyaml.py](https://github.com/iterative/dvc/blob/main/dvc/utils/strictyaml.py#L47) (Line 47)
 - **Target Call:** `fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `make_relpath`
 - **Arguments:** `fs_path`
@@ -7278,7 +7801,7 @@ def load_path(fs_path, fs, **kwargs):
     else:
 ```
 
-#### 300. [dvc/utils/studio.py](https://github.com/iterative/dvc/blob/main/dvc/utils/studio.py#L126) (Line 126)
+#### 324. [dvc/utils/studio.py](https://github.com/iterative/dvc/blob/main/dvc/utils/studio.py#L126) (Line 126)
 - **Target Call:** `self.fs.relpath` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `get_subrepo_relpath`
 - **Arguments:** `repo.root_dir, scm_root_dir`
@@ -7290,7 +7813,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 301. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L50) (Line 50)
+#### 325. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L50) (Line 50)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_new_simple`
 - **Arguments:** `'metrics.yaml'`
@@ -7302,7 +7825,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "foo: 2"
 ```
 
-#### 302. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L89) (Line 89)
+#### 326. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L89) (Line 89)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_experiment_exists`
 - **Arguments:** `'metrics.yaml'`
@@ -7314,7 +7837,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "foo: 3"
 ```
 
-#### 303. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L109) (Line 109)
+#### 327. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L109) (Line 109)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_failed_exp_workspace`
 - **Arguments:** `os.path.join(dvc.experiments.workspace_queue.pid_dir, 'workspace')`
@@ -7328,7 +7851,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 304. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L156) (Line 156)
+#### 328. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L156) (Line 156)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_update_py_params`
 - **Arguments:** `'params.py'`
@@ -7340,7 +7863,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "INT = 2"
 ```
 
-#### 305. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L158) (Line 158)
+#### 329. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L158) (Line 158)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_update_py_params`
 - **Arguments:** `'metrics.py'`
@@ -7352,7 +7875,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "INT = 2"
 ```
 
-#### 306. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L204) (Line 204)
+#### 330. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L204) (Line 204)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_update_py_params`
 - **Arguments:** `'params.py'`
@@ -7364,7 +7887,7 @@ def load_path(fs_path, fs, **kwargs):
         assert _dos2unix(fobj.read().strip()) == result
 ```
 
-#### 307. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L206) (Line 206)
+#### 331. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L206) (Line 206)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_update_py_params`
 - **Arguments:** `'metrics.py'`
@@ -7376,7 +7899,7 @@ def load_path(fs_path, fs, **kwargs):
         assert _dos2unix(fobj.read().strip()) == result
 ```
 
-#### 308. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L323) (Line 323)
+#### 332. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L323) (Line 323)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked`
 - **Arguments:** `'dvc.yaml'`
@@ -7388,7 +7911,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("dvc.lock")
 ```
 
-#### 309. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L324) (Line 324)
+#### 333. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L324) (Line 324)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked`
 - **Arguments:** `'dvc.lock'`
@@ -7400,7 +7923,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("copy.py")
 ```
 
-#### 310. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L325) (Line 325)
+#### 334. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L325) (Line 325)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked`
 - **Arguments:** `'copy.py'`
@@ -7412,7 +7935,7 @@ def load_path(fs_path, fs, **kwargs):
     with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
 ```
 
-#### 311. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L326) (Line 326)
+#### 335. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L326) (Line 326)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked`
 - **Arguments:** `'metrics.yaml'`
@@ -7424,7 +7947,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "foo: 2"
 ```
 
-#### 312. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L417) (Line 417)
+#### 336. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L417) (Line 417)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subdir`
 - **Arguments:** `f'dir/{fname}'`
@@ -7436,7 +7959,7 @@ def load_path(fs_path, fs, **kwargs):
     with fs.open("dir/metrics.yaml", mode="r", encoding="utf-8") as fobj:
 ```
 
-#### 313. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L418) (Line 418)
+#### 337. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L418) (Line 418)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subdir`
 - **Arguments:** `'dir/metrics.yaml'`
@@ -7448,7 +7971,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "foo: 2"
 ```
 
-#### 314. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L456) (Line 456)
+#### 338. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L456) (Line 456)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepo`
 - **Arguments:** `f'dir/repo/{fname}'`
@@ -7460,7 +7983,7 @@ def load_path(fs_path, fs, **kwargs):
     with fs.open("dir/repo/metrics.yaml", mode="r", encoding="utf-8") as fobj:
 ```
 
-#### 315. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L457) (Line 457)
+#### 339. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L457) (Line 457)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepo`
 - **Arguments:** `'dir/repo/metrics.yaml'`
@@ -7472,7 +7995,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read().strip() == "foo: 2"
 ```
 
-#### 316. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L479) (Line 479)
+#### 340. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L479) (Line 479)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_run_celery`
 - **Arguments:** `'metrics.yaml'`
@@ -7484,7 +8007,7 @@ def load_path(fs_path, fs, **kwargs):
             metrics.add(fobj.read().strip())
 ```
 
-#### 317. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L705) (Line 705)
+#### 341. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L705) (Line 705)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_local_config_is_propagated_to_tmp`
 - **Arguments:** `'file'`
@@ -7496,7 +8019,7 @@ def load_path(fs_path, fs, **kwargs):
         conf_obj = ConfigObj(fobj)
 ```
 
-#### 318. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L724) (Line 724)
+#### 342. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L724) (Line 724)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked_top_level_files_are_included_in_exp`
 - **Arguments:** `file`
@@ -7508,7 +8031,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 319. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L743) (Line 743)
+#### 343. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L743) (Line 743)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_copy_paths`
 - **Arguments:** `'dir'`
@@ -7520,7 +8043,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.exists("file")
 ```
 
-#### 320. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L744) (Line 744)
+#### 344. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L744) (Line 744)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_copy_paths`
 - **Arguments:** `'file'`
@@ -7532,7 +8055,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 321. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L53) (Line 53)
+#### 345. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L53) (Line 53)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_copy_paths_queue`
 - **Arguments:** `'dir'`
@@ -7544,7 +8067,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.exists("file")
 ```
 
-#### 322. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L54) (Line 54)
+#### 346. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L54) (Line 54)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_copy_paths_queue`
 - **Arguments:** `'file'`
@@ -7556,7 +8079,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 323. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L135) (Line 135)
+#### 347. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L135) (Line 135)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked_top_level_files_are_included_in_exp`
 - **Arguments:** `file`
@@ -7568,7 +8091,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 324. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L149) (Line 149)
+#### 348. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L149) (Line 149)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_untracked_dvclock_is_included_in_exp`
 - **Arguments:** `'dvc.lock'`
@@ -7580,7 +8103,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 325. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L161) (Line 161)
+#### 349. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L161) (Line 161)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exp_save_include_untracked_force`
 - **Arguments:** `'new_file'`
@@ -7592,7 +8115,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 326. [tests/func/experiments/test_stash_exp.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_stash_exp.py#L57) (Line 57)
+#### 350. [tests/func/experiments/test_stash_exp.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_stash_exp.py#L57) (Line 57)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_staged_new_file`
 - **Arguments:** `'file'`
@@ -7603,7 +8126,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("file")
 ```
 
-#### 327. [tests/func/test_data_cloud.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_cloud.py#L478) (Line 478)
+#### 351. [tests/func/test_data_cloud.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_cloud.py#L478) (Line 478)
 - **Target Call:** `fs.keys` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fetch_stats`
 - **Arguments:** ``
@@ -7615,7 +8138,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 328. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L346) (Line 346)
+#### 352. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L346) (Line 346)
 - **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_partial_missing_cache`
 - **Arguments:** `odb.oid_to_path('acbd18db4cc2f85cedef654fccc4a4d8')`
@@ -7627,7 +8150,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 329. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L370) (Line 370)
+#### 353. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L370) (Line 370)
 - **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_missing_dir_object_from_head`
 - **Arguments:** `odb.oid_to_path(stage.outs[0].hash_info.value)`
@@ -7639,7 +8162,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 330. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L392) (Line 392)
+#### 354. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L392) (Line 392)
 - **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_missing_dir_object_from_index`
 - **Arguments:** `odb.oid_to_path(stage.outs[0].hash_info.value)`
@@ -7651,7 +8174,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 331. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
+#### 355. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `dvc.fs.join(path, 'foo')`
@@ -7663,7 +8186,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
 ```
 
-#### 332. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
+#### 356. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'foo'`
@@ -7675,7 +8198,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
 ```
 
-#### 333. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
+#### 357. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
 - **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `dvc.fs.join(path, 'foo')`
@@ -7687,7 +8210,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.exists(dvc.fs.join(path, "dir"))
 ```
 
-#### 334. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
+#### 358. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'foo'`
@@ -7699,7 +8222,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.exists(dvc.fs.join(path, "dir"))
 ```
 
-#### 335. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
+#### 359. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `dvc.fs.join(path, 'dir')`
@@ -7711,7 +8234,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
 ```
 
-#### 336. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
+#### 360. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'dir'`
@@ -7723,7 +8246,7 @@ def load_path(fs_path, fs, **kwargs):
     assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
 ```
 
-#### 337. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
+#### 361. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `dvc.fs.join(path, 'dir')`
@@ -7735,7 +8258,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 338. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
+#### 362. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'dir'`
@@ -7747,7 +8270,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 339. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
+#### 363. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `subrepo.fs.join(path, 'foo')`
@@ -7759,7 +8282,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
 ```
 
-#### 340. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
+#### 364. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'foo'`
@@ -7771,7 +8294,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
 ```
 
-#### 341. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
+#### 365. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
 - **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `subrepo.fs.join(path, 'foo')`
@@ -7783,7 +8306,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
 ```
 
-#### 342. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
+#### 366. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'foo'`
@@ -7795,7 +8318,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
 ```
 
-#### 343. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
+#### 367. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
 - **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `subrepo.fs.join(path, 'dir')`
@@ -7807,7 +8330,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
 ```
 
-#### 344. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
+#### 368. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'dir'`
@@ -7819,7 +8342,7 @@ def load_path(fs_path, fs, **kwargs):
     assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
 ```
 
-#### 345. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
+#### 369. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
 - **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `subrepo.fs.join(path, 'dir')`
@@ -7831,7 +8354,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 346. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
+#### 370. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_cleanfs_subrepo`
 - **Arguments:** `path, 'dir'`
@@ -7843,7 +8366,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 347. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L66) (Line 66)
+#### 371. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L66) (Line 66)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / 'dir')`
@@ -7855,7 +8378,7 @@ def load_path(fs_path, fs, **kwargs):
             {
 ```
 
-#### 348. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L68) (Line 68)
+#### 372. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L68) (Line 68)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / 'bar')`
@@ -7867,7 +8390,7 @@ def load_path(fs_path, fs, **kwargs):
                 ".dvcignore": dvc.fs.info(str(tmp_dir / ".dvcignore")),
 ```
 
-#### 349. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L69) (Line 69)
+#### 373. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L69) (Line 69)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / '.dvcignore')`
@@ -7879,7 +8402,7 @@ def load_path(fs_path, fs, **kwargs):
             },
 ```
 
-#### 350. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L75) (Line 75)
+#### 374. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L75) (Line 75)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / 'dir' / 'subdir')`
@@ -7891,7 +8414,7 @@ def load_path(fs_path, fs, **kwargs):
             },
 ```
 
-#### 351. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L78) (Line 78)
+#### 375. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L78) (Line 78)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / 'dir' / 'baz')`
@@ -7903,7 +8426,7 @@ def load_path(fs_path, fs, **kwargs):
             },
 ```
 
-#### 352. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L84) (Line 84)
+#### 376. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L84) (Line 84)
 - **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `str(tmp_dir / 'dir' / 'subdir' / 'qux')`
@@ -7915,7 +8438,31 @@ def load_path(fs_path, fs, **kwargs):
         ),
 ```
 
-#### 353. [tests/func/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/func/test_remote.py#L161) (Line 161)
+#### 377. [tests/func/test_ls.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1007) (Line 1007)
+- **Target Call:** `fs.pipe` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `test_fs_ls_tree`
+- **Arguments:** `{f: content.encode() for f, content in FS_STRUCTURE.items()}`
+- **Keywords:** `{}`
+
+```python
+    fs = MemoryFileSystem(global_store=False)
+    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})
+    root = fs.root_marker
+```
+
+#### 378. [tests/func/test_ls.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1036) (Line 1036)
+- **Target Call:** `fs.pipe` | **Cache_Type:** `NOT_EXPLICIT`
+- **Context:** `test_fs_ls_tree_maxdepth`
+- **Arguments:** `{f: content.encode() for f, content in FS_STRUCTURE.items()}`
+- **Keywords:** `{}`
+
+```python
+    fs = MemoryFileSystem(global_store=False)
+    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})
+
+```
+
+#### 379. [tests/func/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/func/test_remote.py#L161) (Line 161)
 - **Target Call:** `self.fs.remove` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dir_hash_should_be_key_order_agnostic`
 - **Arguments:** `dvc.cache.local.oid_to_path(hash1.as_raw().value)`
@@ -7927,7 +8474,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 354. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L34) (Line 34)
+#### 380. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L34) (Line 34)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_check`
 - **Arguments:** `'/'`
@@ -7939,7 +8486,7 @@ def load_path(fs_path, fs, **kwargs):
             fs.execute("git --version")
 ```
 
-#### 355. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L35) (Line 35)
+#### 381. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L35) (Line 35)
 - **Target Call:** `fs.execute` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_check`
 - **Arguments:** `'git --version'`
@@ -7951,7 +8498,7 @@ def load_path(fs_path, fs, **kwargs):
         except asyncssh.Error:
 ```
 
-#### 356. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L106) (Line 106)
+#### 382. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L106) (Line 106)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_staging_file`
 - **Arguments:** `path`
@@ -7963,7 +8510,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 357. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L132) (Line 132)
+#### 383. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L132) (Line 132)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_staging_dir`
 - **Arguments:** `path`
@@ -7974,7 +8521,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists(path)
 ```
 
-#### 358. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L26) (Line 26)
+#### 384. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L26) (Line 26)
 - **Target Call:** `self.fs._get_key` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_key`
 - **Arguments:** `path`
@@ -7986,7 +8533,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 359. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L35) (Line 35)
+#### 385. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L35) (Line 35)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists`
 - **Arguments:** `'foo'`
@@ -7998,7 +8545,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 360. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L44) (Line 44)
+#### 386. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L44) (Line 44)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open`
 - **Arguments:** `'foo', 'r'`
@@ -8010,7 +8557,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read() == "foo"
 ```
 
-#### 361. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L53) (Line 53)
+#### 387. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L53) (Line 53)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_dirty_hash`
 - **Arguments:** `'file', 'r'`
@@ -8022,7 +8569,7 @@ def load_path(fs_path, fs, **kwargs):
         # NOTE: Unlike DVCFileSystem, DataFileSystem should not
 ```
 
-#### 362. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L66) (Line 66)
+#### 388. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L66) (Line 66)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_no_remote`
 - **Arguments:** `'file', 'r'`
@@ -8034,7 +8581,7 @@ def load_path(fs_path, fs, **kwargs):
             pass
 ```
 
-#### 363. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L78) (Line 78)
+#### 389. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L78) (Line 78)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_dirty_no_hash`
 - **Arguments:** `'file', 'r'`
@@ -8046,7 +8593,7 @@ def load_path(fs_path, fs, **kwargs):
             pass
 ```
 
-#### 364. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L95) (Line 95)
+#### 390. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L95) (Line 95)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_in_history`
 - **Arguments:** `'foo', 'r'`
@@ -8058,7 +8605,7 @@ def load_path(fs_path, fs, **kwargs):
             assert fobj.read() == "foo"
 ```
 
-#### 365. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L103) (Line 103)
+#### 391. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L103) (Line 103)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8070,7 +8617,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir")
 ```
 
-#### 366. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L104) (Line 104)
+#### 392. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L104) (Line 104)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8082,7 +8629,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile")
 ```
 
-#### 367. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L105) (Line 105)
+#### 393. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L105) (Line 105)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8094,7 +8641,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datafile")
 ```
 
-#### 368. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L106) (Line 106)
+#### 394. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L106) (Line 106)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8106,7 +8653,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 369. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L113) (Line 113)
+#### 395. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L113) (Line 113)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8118,7 +8665,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir")
 ```
 
-#### 370. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L114) (Line 114)
+#### 396. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L114) (Line 114)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8130,7 +8677,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile")
 ```
 
-#### 371. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L115) (Line 115)
+#### 397. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L115) (Line 115)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8142,7 +8689,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datafile")
 ```
 
-#### 372. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L116) (Line 116)
+#### 398. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L116) (Line 116)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8154,7 +8701,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 373. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L125) (Line 125)
+#### 399. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L125) (Line 125)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_mixed`
 - **Arguments:** `'dir'`
@@ -8166,7 +8713,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("dir")
 ```
 
-#### 374. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L126) (Line 126)
+#### 400. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L126) (Line 126)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_mixed`
 - **Arguments:** `'dir'`
@@ -8178,7 +8725,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 375. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L155) (Line 155)
+#### 401. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L155) (Line 155)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `'dir'`
@@ -8190,7 +8737,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 376. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L189) (Line 189)
+#### 402. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L189) (Line 189)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_dir`
 - **Arguments:** `'dir'`
@@ -8202,7 +8749,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 377. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L200) (Line 200)
+#### 403. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L200) (Line 200)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_missing`
 - **Arguments:** `'dir'`
@@ -8214,7 +8761,7 @@ def load_path(fs_path, fs, **kwargs):
         pass
 ```
 
-#### 378. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L208) (Line 208)
+#### 404. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L208) (Line 208)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_not_a_dir`
 - **Arguments:** `'foo'`
@@ -8226,7 +8773,7 @@ def load_path(fs_path, fs, **kwargs):
         pass
 ```
 
-#### 379. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L215) (Line 215)
+#### 405. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L215) (Line 215)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_file`
 - **Arguments:** `'foo'`
@@ -8238,7 +8785,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 380. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L222) (Line 222)
+#### 406. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L222) (Line 222)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_dir`
 - **Arguments:** `'dir'`
@@ -8250,7 +8797,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not hash_file_spy.called
 ```
 
-#### 381. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L230) (Line 230)
+#### 407. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L230) (Line 230)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_granular`
 - **Arguments:** `subdir`
@@ -8262,7 +8809,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, subdir, fs, "md5", dry_run=True)
 ```
 
-#### 382. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L234) (Line 234)
+#### 408. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L234) (Line 234)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_granular`
 - **Arguments:** `data`
@@ -8274,7 +8821,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, data, fs, "md5", dry_run=True)
 ```
 
-#### 383. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L245) (Line 245)
+#### 409. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L245) (Line 245)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_dirty_file`
 - **Arguments:** `'file'`
@@ -8286,7 +8833,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, "file", fs, "md5", dry_run=True)
 ```
 
-#### 384. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L256) (Line 256)
+#### 410. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L256) (Line 256)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_dirty_dir`
 - **Arguments:** `'dir'`
@@ -8298,7 +8845,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, "dir", fs, "md5", dry_run=True)
 ```
 
-#### 385. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L21) (Line 21)
+#### 411. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L21) (Line 21)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists`
 - **Arguments:** `'foo'`
@@ -8310,7 +8857,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 386. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L30) (Line 30)
+#### 412. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L30) (Line 30)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open`
 - **Arguments:** `'foo', 'r'`
@@ -8322,7 +8869,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read() == "foo"
 ```
 
-#### 387. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L39) (Line 39)
+#### 413. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L39) (Line 39)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_dirty_hash`
 - **Arguments:** `'file', 'r'`
@@ -8334,7 +8881,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read() == "something"
 ```
 
-#### 388. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L48) (Line 48)
+#### 414. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L48) (Line 48)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_dirty_no_hash`
 - **Arguments:** `'file', 'r'`
@@ -8346,7 +8893,7 @@ def load_path(fs_path, fs, **kwargs):
         assert fobj.read() == "file"
 ```
 
-#### 389. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L65) (Line 65)
+#### 415. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L65) (Line 65)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_open_in_history`
 - **Arguments:** `'foo', 'r'`
@@ -8358,7 +8905,7 @@ def load_path(fs_path, fs, **kwargs):
             assert fobj.read() == "foo"
 ```
 
-#### 390. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L88) (Line 88)
+#### 416. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L88) (Line 88)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8370,7 +8917,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir")
 ```
 
-#### 391. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L89) (Line 89)
+#### 417. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L89) (Line 89)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8382,7 +8929,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdvc("datadir")
 ```
 
-#### 392. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L90) (Line 90)
+#### 418. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L90) (Line 90)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8394,7 +8941,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile")
 ```
 
-#### 393. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L91) (Line 91)
+#### 419. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L91) (Line 91)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8406,7 +8953,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datafile")
 ```
 
-#### 394. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L92) (Line 92)
+#### 420. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L92) (Line 92)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8418,7 +8965,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdvc("datafile")
 ```
 
-#### 395. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L93) (Line 93)
+#### 421. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L93) (Line 93)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8430,7 +8977,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 396. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L109) (Line 109)
+#### 422. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L109) (Line 109)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8442,7 +8989,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir")
 ```
 
-#### 397. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L110) (Line 110)
+#### 423. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L110) (Line 110)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8454,7 +9001,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("datadir")
 ```
 
-#### 398. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L111) (Line 111)
+#### 424. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L111) (Line 111)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datadir'`
@@ -8466,7 +9013,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile")
 ```
 
-#### 399. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L112) (Line 112)
+#### 425. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L112) (Line 112)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8478,7 +9025,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datafile")
 ```
 
-#### 400. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L113) (Line 113)
+#### 426. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L113) (Line 113)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8490,7 +9037,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("datafile")
 ```
 
-#### 401. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L114) (Line 114)
+#### 427. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L114) (Line 114)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'datafile'`
@@ -8502,7 +9049,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 402. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L116) (Line 116)
+#### 428. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L116) (Line 116)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'subdir'`
@@ -8514,7 +9061,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("subdir")
 ```
 
-#### 403. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L117) (Line 117)
+#### 429. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L117) (Line 117)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'subdir'`
@@ -8526,7 +9073,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdvc("subdir")
 ```
 
-#### 404. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L118) (Line 118)
+#### 430. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L118) (Line 118)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'subdir'`
@@ -8538,7 +9085,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("subdir/baz")
 ```
 
-#### 405. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L119) (Line 119)
+#### 431. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L119) (Line 119)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'subdir/baz'`
@@ -8550,7 +9097,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("subdir/data")
 ```
 
-#### 406. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L120) (Line 120)
+#### 432. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L120) (Line 120)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_isfile`
 - **Arguments:** `'subdir/data'`
@@ -8562,7 +9109,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 407. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L130) (Line 130)
+#### 433. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L130) (Line 130)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8574,7 +9121,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("datadir")
 ```
 
-#### 408. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L131) (Line 131)
+#### 434. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L131) (Line 131)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8586,7 +9133,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("datadir/foo")
 ```
 
-#### 409. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L132) (Line 132)
+#### 435. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L132) (Line 132)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8598,7 +9145,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datafile")
 ```
 
-#### 410. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L133) (Line 133)
+#### 436. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L133) (Line 133)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8610,7 +9157,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir")
 ```
 
-#### 411. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L134) (Line 134)
+#### 437. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L134) (Line 134)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8622,7 +9169,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datadir/foo")
 ```
 
-#### 412. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L135) (Line 135)
+#### 438. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L135) (Line 135)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8634,7 +9181,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile")
 ```
 
-#### 413. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L136) (Line 136)
+#### 439. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L136) (Line 136)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8646,7 +9193,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("datadir")
 ```
 
-#### 414. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L137) (Line 137)
+#### 440. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L137) (Line 137)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8658,7 +9205,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datadir/foo")
 ```
 
-#### 415. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L138) (Line 138)
+#### 441. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L138) (Line 138)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8670,7 +9217,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 416. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L142) (Line 142)
+#### 442. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L142) (Line 142)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8682,7 +9229,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("datadir")
 ```
 
-#### 417. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L143) (Line 143)
+#### 443. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L143) (Line 143)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8694,7 +9241,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.exists("datadir/foo")
 ```
 
-#### 418. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L144) (Line 144)
+#### 444. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L144) (Line 144)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8706,7 +9253,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("datafile/foo")
 ```
 
-#### 419. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L145) (Line 145)
+#### 445. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L145) (Line 145)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile/foo'`
@@ -8718,7 +9265,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datafile")
 ```
 
-#### 420. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L146) (Line 146)
+#### 446. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L146) (Line 146)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8730,7 +9277,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datadir")
 ```
 
-#### 421. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L147) (Line 147)
+#### 447. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L147) (Line 147)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8742,7 +9289,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("datadir/foo")
 ```
 
-#### 422. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L148) (Line 148)
+#### 448. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L148) (Line 148)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8754,7 +9301,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("datafile/foo")
 ```
 
-#### 423. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L149) (Line 149)
+#### 449. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L149) (Line 149)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile/foo'`
@@ -8766,7 +9313,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("datafile")
 ```
 
-#### 424. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L150) (Line 150)
+#### 450. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L150) (Line 150)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile'`
@@ -8778,7 +9325,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datadir")
 ```
 
-#### 425. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L151) (Line 151)
+#### 451. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L151) (Line 151)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir'`
@@ -8790,7 +9337,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datadir/foo")
 ```
 
-#### 426. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L152) (Line 152)
+#### 452. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L152) (Line 152)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datadir/foo'`
@@ -8802,7 +9349,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdir("datafile/foo")
 ```
 
-#### 427. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L153) (Line 153)
+#### 453. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L153) (Line 153)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_exists_isdir_isfile_dirty`
 - **Arguments:** `'datafile/foo'`
@@ -8814,7 +9361,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 428. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L162) (Line 162)
+#### 454. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L162) (Line 162)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_mixed`
 - **Arguments:** `'dir'`
@@ -8826,7 +9373,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isfile("dir")
 ```
 
-#### 429. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L163) (Line 163)
+#### 455. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L163) (Line 163)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdir_mixed`
 - **Arguments:** `'dir'`
@@ -8838,7 +9385,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 430. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L173) (Line 173)
+#### 456. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L173) (Line 173)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_ls_dirty`
 - **Arguments:** `'data'`
@@ -8850,7 +9397,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 431. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L181) (Line 181)
+#### 457. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L181) (Line 181)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_ls_file_not_found`
 - **Arguments:** `'missing'`
@@ -8862,7 +9409,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 432. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L190) (Line 190)
+#### 458. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L190) (Line 190)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_ls_dir_empty`
 - **Arguments:** `'empty'`
@@ -8874,7 +9421,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 433. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L231) (Line 231)
+#### 459. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L231) (Line 231)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk`
 - **Arguments:** `'dir'`
@@ -8886,7 +9433,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 434. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L267) (Line 267)
+#### 460. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L267) (Line 267)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_dirty`
 - **Arguments:** `'dir'`
@@ -8898,7 +9445,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 435. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L282) (Line 282)
+#### 461. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L282) (Line 282)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_dirty_cached_dir`
 - **Arguments:** `'data'`
@@ -8910,7 +9457,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 436. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L307) (Line 307)
+#### 462. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L307) (Line 307)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_mixed_dir`
 - **Arguments:** `'dir'`
@@ -8922,7 +9469,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 437. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L318) (Line 318)
+#### 463. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L318) (Line 318)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_missing`
 - **Arguments:** `'dir'`
@@ -8934,7 +9481,7 @@ def load_path(fs_path, fs, **kwargs):
         pass
 ```
 
-#### 438. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L326) (Line 326)
+#### 464. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L326) (Line 326)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_not_a_dir`
 - **Arguments:** `'foo'`
@@ -8946,7 +9493,7 @@ def load_path(fs_path, fs, **kwargs):
         pass
 ```
 
-#### 439. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L335) (Line 335)
+#### 465. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L335) (Line 335)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdvc`
 - **Arguments:** `'foo'`
@@ -8958,7 +9505,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not fs.isdvc("bar")
 ```
 
-#### 440. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L336) (Line 336)
+#### 466. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L336) (Line 336)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdvc`
 - **Arguments:** `'bar'`
@@ -8970,7 +9517,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir")
 ```
 
-#### 441. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L337) (Line 337)
+#### 467. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L337) (Line 337)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdvc`
 - **Arguments:** `'dir'`
@@ -8982,7 +9529,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir/baz")
 ```
 
-#### 442. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L338) (Line 338)
+#### 468. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L338) (Line 338)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdvc`
 - **Arguments:** `'dir/baz'`
@@ -8994,7 +9541,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir/baz", recursive=True)
 ```
 
-#### 443. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L339) (Line 339)
+#### 469. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L339) (Line 339)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_isdvc`
 - **Arguments:** `'dir/baz'`
@@ -9006,7 +9553,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 444. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L375) (Line 375)
+#### 470. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L375) (Line 375)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/foo'`
@@ -9018,7 +9565,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("dir/repo/bar") is False
 ```
 
-#### 445. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L376) (Line 376)
+#### 471. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L376) (Line 376)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/bar'`
@@ -9030,7 +9577,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 446. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L378) (Line 378)
+#### 472. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L378) (Line 378)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/foo'`
@@ -9042,7 +9589,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("dir/repo/dir1/bar") is True
 ```
 
-#### 447. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L379) (Line 379)
+#### 473. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L379) (Line 379)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/dir1/bar'`
@@ -9054,7 +9601,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("dir/repo/dir1") is False
 ```
 
-#### 448. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L380) (Line 380)
+#### 474. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L380) (Line 380)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/dir1'`
@@ -9066,7 +9613,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 449. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L382) (Line 382)
+#### 475. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L382) (Line 382)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/dir1'`
@@ -9078,7 +9625,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("dir/repo/dir1/bar") is False
 ```
 
-#### 450. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L383) (Line 383)
+#### 476. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L383) (Line 383)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/dir1/bar'`
@@ -9090,7 +9637,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir/repo/foo") is True
 ```
 
-#### 451. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L384) (Line 384)
+#### 477. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L384) (Line 384)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo/foo'`
@@ -9102,7 +9649,7 @@ def load_path(fs_path, fs, **kwargs):
     mocker.stop(mock_subrepo1)
 ```
 
-#### 452. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L390) (Line 390)
+#### 478. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L390) (Line 390)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/lorem'`
@@ -9114,7 +9661,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("dir/repo2/ipsum") is False
 ```
 
-#### 453. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L391) (Line 391)
+#### 479. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L391) (Line 391)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/ipsum'`
@@ -9126,7 +9673,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 454. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L393) (Line 393)
+#### 480. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L393) (Line 393)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/lorem'`
@@ -9138,7 +9685,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("dir/repo2/dir2/ipsum") is True
 ```
 
-#### 455. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L394) (Line 394)
+#### 481. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L394) (Line 394)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/dir2/ipsum'`
@@ -9150,7 +9697,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("dir/repo2/dir2") is False
 ```
 
-#### 456. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L395) (Line 395)
+#### 482. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L395) (Line 395)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/dir2'`
@@ -9162,7 +9709,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 457. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L397) (Line 397)
+#### 483. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L397) (Line 397)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/dir2'`
@@ -9174,7 +9721,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("dir/repo2/dir2/ipsum") is False
 ```
 
-#### 458. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L398) (Line 398)
+#### 484. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L398) (Line 398)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/dir2/ipsum'`
@@ -9186,7 +9733,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir/repo2/lorem") is True
 ```
 
-#### 459. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L399) (Line 399)
+#### 485. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L399) (Line 399)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepos`
 - **Arguments:** `'dir/repo2/lorem'`
@@ -9198,7 +9745,7 @@ def load_path(fs_path, fs, **kwargs):
     mocker.stop(mock_subrepo2)
 ```
 
-#### 460. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L456) (Line 456)
+#### 486. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L456) (Line 456)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_subrepo_walk`
 - **Arguments:** `'dir'`
@@ -9210,7 +9757,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 461. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L491) (Line 491)
+#### 487. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L491) (Line 491)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'/'`
@@ -9222,7 +9769,7 @@ def load_path(fs_path, fs, **kwargs):
         for entry in dirs + files:
 ```
 
-#### 462. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L498) (Line 498)
+#### 488. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L498) (Line 498)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'lorem'`
@@ -9234,7 +9781,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isfile("dir/repo/foo") is False
 ```
 
-#### 463. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L499) (Line 499)
+#### 489. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L499) (Line 499)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'dir/repo/foo'`
@@ -9246,7 +9793,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("dir/repo") is False
 ```
 
-#### 464. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L500) (Line 500)
+#### 490. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L500) (Line 500)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'dir/repo'`
@@ -9258,7 +9805,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdir("dir") is True
 ```
 
-#### 465. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L501) (Line 501)
+#### 491. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L501) (Line 501)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'dir'`
@@ -9270,7 +9817,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 466. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L503) (Line 503)
+#### 492. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L503) (Line 503)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'lorem'`
@@ -9282,7 +9829,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.isdvc("dir/repo/dir1") is False
 ```
 
-#### 467. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L504) (Line 504)
+#### 493. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L504) (Line 504)
 - **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'dir/repo/dir1'`
@@ -9294,7 +9841,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 468. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L506) (Line 506)
+#### 494. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L506) (Line 506)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'dir/repo.txt'`
@@ -9306,7 +9853,7 @@ def load_path(fs_path, fs, **kwargs):
     assert fs.exists("repo/ipsum") is False
 ```
 
-#### 469. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L507) (Line 507)
+#### 495. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L507) (Line 507)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_dvcfs_no_subrepos`
 - **Arguments:** `'repo/ipsum'`
@@ -9318,7 +9865,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 470. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L514) (Line 514)
+#### 496. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L514) (Line 514)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_file`
 - **Arguments:** `'foo'`
@@ -9330,7 +9877,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, "foo", fs, "md5")
 ```
 
-#### 471. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L518) (Line 518)
+#### 497. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L518) (Line 518)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_file`
 - **Arguments:** `'foo'`
@@ -9342,7 +9889,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 472. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L525) (Line 525)
+#### 498. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L525) (Line 525)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_dir`
 - **Arguments:** `'dir'`
@@ -9354,7 +9901,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, "dir", fs, "md5")
 ```
 
-#### 473. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L530) (Line 530)
+#### 499. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L530) (Line 530)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_dir`
 - **Arguments:** `'dir'`
@@ -9366,7 +9913,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, "dir", fs, "md5")
 ```
 
-#### 474. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L539) (Line 539)
+#### 500. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L539) (Line 539)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_granular`
 - **Arguments:** `subdir`
@@ -9378,7 +9925,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, subdir, fs, "md5")
 ```
 
-#### 475. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L542) (Line 542)
+#### 501. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L542) (Line 542)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_granular`
 - **Arguments:** `posixpath.join(subdir, 'data')`
@@ -9390,7 +9937,7 @@ def load_path(fs_path, fs, **kwargs):
     _, _, obj = build(dvc.cache.local, posixpath.join(subdir, "data"), fs, "md5")
 ```
 
-#### 476. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L547) (Line 547)
+#### 502. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L547) (Line 547)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_cached_granular`
 - **Arguments:** `posixpath.join(subdir, 'data')`
@@ -9402,7 +9949,7 @@ def load_path(fs_path, fs, **kwargs):
         == "8d777f385d3dfec8815d20f7496026dc"
 ```
 
-#### 477. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L586) (Line 586)
+#### 503. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L586) (Line 586)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_dirty_file`
 - **Arguments:** `'file'`
@@ -9414,7 +9961,7 @@ def load_path(fs_path, fs, **kwargs):
     staging, _, obj = build(dvc.cache.local, "file", fs, "md5")
 ```
 
-#### 478. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L593) (Line 593)
+#### 504. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L593) (Line 593)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_get_hash_dirty_file`
 - **Arguments:** `'file'`
@@ -9426,7 +9973,7 @@ def load_path(fs_path, fs, **kwargs):
     _, hash_info = hash_file("file", fs, "md5", state=dvc.state)
 ```
 
-#### 479. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L662) (Line 662)
+#### 505. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L662) (Line 662)
 - **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_walk_nested_subrepos`
 - **Arguments:** `'/'`
@@ -9438,7 +9985,7 @@ def load_path(fs_path, fs, **kwargs):
         actual[root] = set(dirs + files)
 ```
 
-#### 480. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L669) (Line 669)
+#### 506. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L669) (Line 669)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsid_noscm`
 - **Arguments:** `dvc.root_dir, None`
@@ -9450,7 +9997,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 481. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L674) (Line 674)
+#### 507. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L674) (Line 674)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsid`
 - **Arguments:** `dvc.root_dir, scm.get_rev()`
@@ -9462,7 +10009,7 @@ def load_path(fs_path, fs, **kwargs):
     old_fsid = fs.fsid
 ```
 
-#### 482. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L680) (Line 680)
+#### 508. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L680) (Line 680)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsid`
 - **Arguments:** `dvc.root_dir, scm.get_rev()`
@@ -9474,7 +10021,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 483. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L689) (Line 689)
+#### 509. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L689) (Line 689)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsid_url`
 - **Arguments:** `url, erepo_dir.scm.get_rev()`
@@ -9486,7 +10033,7 @@ def load_path(fs_path, fs, **kwargs):
         old_fsid = fs.fsid
 ```
 
-#### 484. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L698) (Line 698)
+#### 510. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L698) (Line 698)
 - **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_fsid_url`
 - **Arguments:** `url, erepo_dir.scm.get_rev()`
@@ -9498,7 +10045,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 485. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L164) (Line 164)
+#### 511. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L164) (Line 164)
 - **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DVCFixtures.local_fs`
 - **Arguments:** ``
@@ -9510,7 +10057,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 486. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L217) (Line 217)
+#### 512. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L217) (Line 217)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
 - **Arguments:** `fs_join(source, 'file2'), target`
@@ -9522,7 +10069,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isfile(target_file2)
 ```
 
-#### 487. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L221) (Line 221)
+#### 513. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L221) (Line 221)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', 'subfile1'), target`
@@ -9534,7 +10081,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isfile(target_subfile1)
 ```
 
-#### 488. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L230) (Line 230)
+#### 514. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L230) (Line 230)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
 - **Arguments:** `fs_join(source, 'file2'), target + '/'`
@@ -9546,7 +10093,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isdir(target)
 ```
 
-#### 489. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L234) (Line 234)
+#### 515. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L234) (Line 234)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', 'subfile1'), target + '/'`
@@ -9558,7 +10105,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isfile(target_subfile1)
 ```
 
-#### 490. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L252) (Line 252)
+#### 516. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L252) (Line 252)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_new_directory`
 - **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newdir/')`
@@ -9572,7 +10119,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 491. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L275) (Line 275)
+#### 517. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L275) (Line 275)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_file_in_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newfile')`
@@ -9584,7 +10131,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isfile(local_join(target, "newfile"))
 ```
 
-#### 492. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L293) (Line 293)
+#### 518. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L293) (Line 293)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_file_to_file_in_new_directory`
 - **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newdir', 'newfile')`
@@ -9599,7 +10146,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 493. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L323) (Line 323)
+#### 519. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L323) (Line 323)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
 - **Arguments:** `s, t`
@@ -9611,7 +10158,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.ls(target) == []
 ```
 
-#### 494. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L327) (Line 327)
+#### 520. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L327) (Line 327)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
 - **Arguments:** `s, t`
@@ -9623,7 +10170,7 @@ def load_path(fs_path, fs, **kwargs):
             if source_slash:
 ```
 
-#### 495. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L356) (Line 356)
+#### 521. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L356) (Line 356)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
 - **Arguments:** `s, t`
@@ -9635,7 +10182,7 @@ def load_path(fs_path, fs, **kwargs):
             if source_slash:
 ```
 
-#### 496. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L403) (Line 403)
+#### 522. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L403) (Line 403)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
 - **Arguments:** `s, t`
@@ -9647,7 +10194,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.ls(target) == []
 ```
 
-#### 497. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L407) (Line 407)
+#### 523. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L407) (Line 407)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
 - **Arguments:** `s, t`
@@ -9659,7 +10206,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 498. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L421) (Line 421)
+#### 524. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L421) (Line 421)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
 - **Arguments:** `s, t`
@@ -9671,7 +10218,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 499. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L450) (Line 450)
+#### 525. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L450) (Line 450)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', '*'), t`
@@ -9683,7 +10230,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isfile(local_join(target, "subfile1"))
 ```
 
-#### 500. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L468) (Line 468)
+#### 526. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L468) (Line 468)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', glob), t`
@@ -9695,7 +10242,7 @@ def load_path(fs_path, fs, **kwargs):
                 assert local_fs.isfile(local_join(target, "subfile1"))
 ```
 
-#### 501. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L486) (Line 486)
+#### 527. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L486) (Line 486)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
 - **Arguments:** `fs_join(source, 'subdir', glob), t`
@@ -9709,7 +10256,7 @@ def load_path(fs_path, fs, **kwargs):
                 assert local_fs.isfile(local_join(target, "subfile1"))
 ```
 
-#### 502. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L524) (Line 524)
+#### 528. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L524) (Line 524)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
 - **Arguments:** `fs_join(source, 'subdir', '*'), t`
@@ -9721,7 +10268,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 503. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L540) (Line 540)
+#### 529. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L540) (Line 540)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
 - **Arguments:** `fs_join(source, 'subdir', glob), t`
@@ -9733,7 +10280,7 @@ def load_path(fs_path, fs, **kwargs):
                 assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 504. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L555) (Line 555)
+#### 530. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L555) (Line 555)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
 - **Arguments:** `fs_join(source, 'subdir', glob), t`
@@ -9747,7 +10294,7 @@ def load_path(fs_path, fs, **kwargs):
                 assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 505. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L596) (Line 596)
+#### 531. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L596) (Line 596)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
 - **Arguments:** `fs_join(source, path), t`
@@ -9759,7 +10306,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 506. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L601) (Line 601)
+#### 532. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L601) (Line 601)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
 - **Arguments:** `local_join(target, 'newdir', p)`
@@ -9771,7 +10318,7 @@ def load_path(fs_path, fs, **kwargs):
                 ]
 ```
 
-#### 507. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L605) (Line 605)
+#### 533. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L605) (Line 605)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
 - **Arguments:** `local_join(target, p)`
@@ -9783,7 +10330,7 @@ def load_path(fs_path, fs, **kwargs):
                 ]
 ```
 
-#### 508. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L638) (Line 638)
+#### 534. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L638) (Line 638)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_list_of_files_to_existing_directory`
 - **Arguments:** `source_files, t`
@@ -9795,7 +10342,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isfile(local_join(target, "file1"))
 ```
 
-#### 509. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L674) (Line 674)
+#### 535. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L674) (Line 674)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_list_of_files_to_new_directory`
 - **Arguments:** `source_files, local_join(target, 'newdir') + '/'`
@@ -9807,7 +10354,7 @@ def load_path(fs_path, fs, **kwargs):
         assert local_fs.isdir(local_join(target, "newdir"))
 ```
 
-#### 510. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L689) (Line 689)
+#### 536. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L689) (Line 689)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_recursive`
 - **Arguments:** `src, target`
@@ -9819,7 +10366,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isdir(target)
 ```
 
-#### 511. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L705) (Line 705)
+#### 537. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L705) (Line 705)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_recursive`
 - **Arguments:** `src + '/', target`
@@ -9831,7 +10378,7 @@ def load_path(fs_path, fs, **kwargs):
             assert local_fs.isdir(target)
 ```
 
-#### 512. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L724) (Line 724)
+#### 538. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L724) (Line 724)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_without_files_with_same_name_prefix`
 - **Arguments:** `fs_join(source, 'subdir'), target`
@@ -9843,7 +10390,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 513. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L733) (Line 733)
+#### 539. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L733) (Line 733)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_directory_without_files_with_same_name_prefix`
 - **Arguments:** `fs_join(source, 'subdir*'), target`
@@ -9855,7 +10402,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 514. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L759) (Line 759)
+#### 540. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L759) (Line 759)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_with_source_and_destination_as_list`
 - **Arguments:** `local_join(target, f'{hashed_i}.txt')`
@@ -9867,7 +10414,7 @@ def load_path(fs_path, fs, **kwargs):
             )
 ```
 
-#### 515. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L763) (Line 763)
+#### 541. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L763) (Line 763)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TestDVCFileSystemGet.test_get_with_source_and_destination_as_list`
 - **Arguments:** ``
@@ -9879,7 +10426,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 516. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L785) (Line 785)
+#### 542. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L785) (Line 785)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_maxdepth`
 - **Arguments:** `'dir', 'dir1'`
@@ -9891,7 +10438,7 @@ def load_path(fs_path, fs, **kwargs):
     assert (tmp_dir / "dir1").read_text() == {"file1": "file1"}
 ```
 
-#### 517. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L788) (Line 788)
+#### 543. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L788) (Line 788)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_maxdepth`
 - **Arguments:** `'dir', 'dir2'`
@@ -9903,7 +10450,7 @@ def load_path(fs_path, fs, **kwargs):
     assert (tmp_dir / "dir2").read_text() == {
 ```
 
-#### 518. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L794) (Line 794)
+#### 544. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L794) (Line 794)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_maxdepth`
 - **Arguments:** `'dir', 'dir3'`
@@ -9915,7 +10462,7 @@ def load_path(fs_path, fs, **kwargs):
     assert (tmp_dir / "dir3").read_text() == {
 ```
 
-#### 519. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L800) (Line 800)
+#### 545. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L800) (Line 800)
 - **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_maxdepth`
 - **Arguments:** `'dir', 'dir4'`
@@ -9927,7 +10474,7 @@ def load_path(fs_path, fs, **kwargs):
     assert (tmp_dir / "dir4").read_text() == {
 ```
 
-#### 520. [tests/unit/remote/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/unit/remote/test_remote.py#L52) (Line 52)
+#### 546. [tests/unit/remote/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/unit/remote/test_remote.py#L52) (Line 52)
 - **Target Call:** `fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_makedirs_not_create_for_top_level_path`
 - **Arguments:** `url`
@@ -9939,7 +10486,7 @@ def load_path(fs_path, fs, **kwargs):
     assert not mocked_client.called
 ```
 
-#### 521. [tests/unit/utils/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/unit/utils/test_fs.py#L70) (Line 70)
+#### 547. [tests/unit/utils/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/unit/utils/test_fs.py#L70) (Line 70)
 - **Target Call:** `self.fs.contains_symlink_up_to` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `test_should_call_recursive_on_no_condition_matched`
 - **Arguments:** `os.path.join('foo', 'path'), 'foo'`
