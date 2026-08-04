@@ -39,6 +39,31 @@ def read_gcs(url):
     assert u.line_number == 5
 
 
+def test_dask_kwargs_pop_parts_cache_type():
+    code = """
+import fsspec.parquet as fsspec_parquet
+
+def _open_parquet_files(paths, fs=None, context_stack=None, **kwargs):
+    cache_type = kwargs.pop("cache_type", "parts")
+    if cache_type != "parts":
+        raise ValueError()
+    return [
+        fsspec_parquet.open_parquet_file(
+            path,
+            fs=fs,
+            **kwargs
+        )
+        for path in paths
+    ]
+"""
+    engine = FsspecCrawlerEngine()
+    usages = engine.scan_code("dask/dataframe/io/utils.py", code)
+    assert len(usages) == 1
+    u = usages[0]
+    assert u.target_name == "fsspec_parquet.open_parquet_file"
+    assert u.cache_type == "parts"
+
+
 def test_repo_url_and_file_url():
     code = """
 import fsspec

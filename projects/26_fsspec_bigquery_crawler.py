@@ -238,11 +238,25 @@ class FsspecASTVisitor(ast.NodeVisitor):
         self.current_class = old_class
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Track function context."""
+        """Track function context and local kwargs.pop/get('cache_type', default) assignments."""
         old_func = self.current_function
+        old_ct = getattr(self, "local_cache_type", None)
         self.current_function = node.name
+        self.local_cache_type = None
+
+        # Inspect function body to detect cache_type = kwargs.pop/get("cache_type", default)
+        for child in ast.walk(node):
+            if isinstance(child, ast.Assign) and isinstance(child.value, ast.Call):
+                func_val = child.value.func
+                if isinstance(func_val, ast.Attribute) and func_val.attr in ("pop", "get") and child.value.args:
+                    arg0 = child.value.args[0]
+                    if isinstance(arg0, ast.Constant) and arg0.value == "cache_type":
+                        if len(child.value.args) >= 2 and isinstance(child.value.args[1], ast.Constant):
+                            self.local_cache_type = str(child.value.args[1].value)
+
         self.generic_visit(node)
         self.current_function = old_func
+        self.local_cache_type = old_ct
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef):
         """Track async function context."""
@@ -323,7 +337,12 @@ class FsspecASTVisitor(ast.NodeVisitor):
 
             # Extract cache_type and cache_options explicitly
             raw_cache_type = kwargs_repr.get("cache_type") or kwargs_repr.get("simple_cache")
-            cache_type = self._clean_str_literal(raw_cache_type) if raw_cache_type else "NOT_EXPLICIT"
+            if raw_cache_type:
+                cache_type = self._clean_str_literal(raw_cache_type)
+            elif getattr(self, "local_cache_type", None):
+                cache_type = getattr(self, "local_cache_type")
+            else:
+                cache_type = "NOT_EXPLICIT"
             cache_options = kwargs_repr.get("cache_options")
 
             file_url = self._build_file_url(start_line)
