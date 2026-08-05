@@ -1,10 +1,10 @@
 # Master FSSPEC Usage Report Across 8 Major Python Ecosystem Repositories
 
 - **Repositories Crawled:** `8`
-- **Total Files Scanned:** `3613`
-- **Files with FSSPEC Usages:** `153`
-- **Total FSSPEC Usages Detected:** `986`
-- **Time Elapsed:** `112.52 seconds`
+- **Total Files Scanned:** `1850`
+- **Files with FSSPEC Usages:** `107`
+- **Total FSSPEC Usages Detected:** `610`
+- **Time Elapsed:** `43.52 seconds`
 
 ---
 
@@ -12,14 +12,14 @@
 
 | Project Name | Repository | Files Scanned | Files w/ Usages | Total Usages | Cache_Types |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Dask** | [dask/dask](https://github.com/dask/dask) | `365` | `22` | `152` | `NOT_EXPLICIT:150, parts:2` |
-| **Intake** | [intake/intake](https://github.com/intake/intake) | `108` | `19` | `97` | `NOT_EXPLICIT:97` |
-| **pandas** | [pandas-dev/pandas](https://github.com/pandas-dev/pandas) | `1510` | `7` | `13` | `NOT_EXPLICIT:13` |
-| **xarray** | [pydata/xarray](https://github.com/pydata/xarray) | `239` | `2` | `12` | `NOT_EXPLICIT:12` |
-| **zarr** | [zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python) | `379` | `4` | `38` | `NOT_EXPLICIT:38` |
-| **DVC** | [iterative/dvc](https://github.com/iterative/dvc) | `554` | `71` | `547` | `NOT_EXPLICIT:547` |
-| **Kedro** | [kedro-org/kedro](https://github.com/kedro-org/kedro) | `224` | `3` | `9` | `NOT_EXPLICIT:9` |
-| **Hugging Face Datasets** | [huggingface/datasets](https://github.com/huggingface/datasets) | `234` | `25` | `118` | `NOT_EXPLICIT:118` |
+| **Dask** | [dask/dask](https://github.com/dask/dask) | `201` | `15` | `79` | `NOT_EXPLICIT:77, parts:2` |
+| **Intake** | [intake/intake](https://github.com/intake/intake) | `71` | `15` | `86` | `NOT_EXPLICIT:86` |
+| **pandas** | [pandas-dev/pandas](https://github.com/pandas-dev/pandas) | `538` | `2` | `4` | `NOT_EXPLICIT:4` |
+| **xarray** | [pydata/xarray](https://github.com/pydata/xarray) | `162` | `1` | `5` | `NOT_EXPLICIT:5` |
+| **zarr** | [zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python) | `238` | `1` | `18` | `NOT_EXPLICIT:18` |
+| **DVC** | [iterative/dvc](https://github.com/iterative/dvc) | `326` | `55` | `326` | `NOT_EXPLICIT:326` |
+| **Kedro** | [kedro-org/kedro](https://github.com/kedro-org/kedro) | `152` | `1` | `4` | `NOT_EXPLICIT:4` |
+| **Hugging Face Datasets** | [huggingface/datasets](https://github.com/huggingface/datasets) | `162` | `17` | `88` | `NOT_EXPLICIT:88` |
 
 ---
 
@@ -27,7 +27,7 @@
 
 | Cache_Type Option | Total Occurrences | Description |
 | :--- | :--- | :--- |
-| `NOT_EXPLICIT` | `984` | cache_type keyword omitted (uses default fsspec strategy) |
+| `NOT_EXPLICIT` | `608` | cache_type keyword omitted (uses default fsspec strategy) |
 | `parts` | `2` | Custom cache strategy |
 
 ---
@@ -35,7 +35,7 @@
 ## 🔍 Detailed Usage Breakdown by Repository
 
 ### Dask ([dask/dask](https://github.com/dask/dask))
-- **Usages Found:** `152` in `22` files.
+- **Usages Found:** `79` in `15` files.
 
 #### 1. [dask/bag/avro.py](https://github.com/dask/dask/blob/main/dask/bag/avro.py#L67) (Line 67)
 - **Target Call:** `OpenFile` | **Cache_Type:** `NOT_EXPLICIT`
@@ -278,741 +278,7 @@
         return read_block(f, off, bs, delimiter)
 ```
 
-#### 19. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L21) (Line 21)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 1, 2`
-- **Keywords:** `{}`
-
-```python
-
-    assert read_block(f, 1, 2) == b"23"
-    assert read_block(f, 0, 1, delimiter=b"\n") == b"123\n"
-```
-
-#### 20. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L22) (Line 22)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 1`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 1, 2) == b"23"
-    assert read_block(f, 0, 1, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 2, delimiter=b"\n") == b"123\n"
-```
-
-#### 21. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L23) (Line 23)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 2`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 1, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 2, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 3, delimiter=b"\n") == b"123\n"
-```
-
-#### 22. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L24) (Line 24)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 3`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 2, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 3, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 5, delimiter=b"\n") == b"123\n456\n"
-```
-
-#### 23. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L25) (Line 25)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 5`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 3, delimiter=b"\n") == b"123\n"
-    assert read_block(f, 0, 5, delimiter=b"\n") == b"123\n456\n"
-    assert read_block(f, 0, 8, delimiter=b"\n") == b"123\n456\n789"
-```
-
-#### 24. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L26) (Line 26)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 8`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 5, delimiter=b"\n") == b"123\n456\n"
-    assert read_block(f, 0, 8, delimiter=b"\n") == b"123\n456\n789"
-    assert read_block(f, 0, 100, delimiter=b"\n") == b"123\n456\n789"
-```
-
-#### 25. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L27) (Line 27)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 0, 100`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 8, delimiter=b"\n") == b"123\n456\n789"
-    assert read_block(f, 0, 100, delimiter=b"\n") == b"123\n456\n789"
-    assert read_block(f, 1, 1, delimiter=b"\n") == b""
-```
-
-#### 26. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L28) (Line 28)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 1, 1`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 0, 100, delimiter=b"\n") == b"123\n456\n789"
-    assert read_block(f, 1, 1, delimiter=b"\n") == b""
-    assert read_block(f, 1, 5, delimiter=b"\n") == b"456\n"
-```
-
-#### 27. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L29) (Line 29)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 1, 5`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 1, 1, delimiter=b"\n") == b""
-    assert read_block(f, 1, 5, delimiter=b"\n") == b"456\n"
-    assert read_block(f, 1, 8, delimiter=b"\n") == b"456\n789"
-```
-
-#### 28. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L30) (Line 30)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, 1, 8`
-- **Keywords:** `{'delimiter': "b'\\n'"}`
-
-```python
-    assert read_block(f, 1, 5, delimiter=b"\n") == b"456\n"
-    assert read_block(f, 1, 8, delimiter=b"\n") == b"456\n789"
-
-```
-
-#### 29. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L33) (Line 33)
-- **Target Call:** `read_block` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_read_block`
-- **Arguments:** `f, o, l, b'\n'`
-- **Keywords:** `{}`
-
-```python
-    for ols in [[(0, 3), (3, 3), (6, 3), (9, 2)], [(0, 4), (4, 4), (8, 4)]]:
-        out = [read_block(f, o, l, b"\n") for o, l in ols]
-        assert b"".join(filter(None, out)) == data
-```
-
-#### 30. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L41) (Line 41)
-- **Target Call:** `seek_delimiter` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_seek_delimiter_endline`
-- **Arguments:** `f, b'\n', 5`
-- **Keywords:** `{}`
-
-```python
-    # if at zero, stay at zero
-    seek_delimiter(f, b"\n", 5)
-    assert f.tell() == 0
-```
-
-#### 31. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L47) (Line 47)
-- **Target Call:** `seek_delimiter` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_seek_delimiter_endline`
-- **Arguments:** `f, b'\n'`
-- **Keywords:** `{'blocksize': 'bs'}`
-
-```python
-        f.seek(1)
-        seek_delimiter(f, b"\n", blocksize=bs)
-        assert f.tell() == 4
-```
-
-#### 32. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L54) (Line 54)
-- **Target Call:** `seek_delimiter` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_seek_delimiter_endline`
-- **Arguments:** `f, b'abc'`
-- **Keywords:** `{'blocksize': 'bs'}`
-
-```python
-        f.seek(1)
-        seek_delimiter(f, b"abc", blocksize=bs)
-        assert f.tell() == 6
-```
-
-#### 33. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L60) (Line 60)
-- **Target Call:** `seek_delimiter` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_seek_delimiter_endline`
-- **Arguments:** `f, b'\n', 5`
-- **Keywords:** `{}`
-
-```python
-    f.seek(5)
-    seek_delimiter(f, b"\n", 5)
-    assert f.tell() == 7
-```
-
-#### 34. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L65) (Line 65)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'/mnt/datasets/test.csv'`
-- **Keywords:** `{}`
-
-```python
-def test_infer_storage_options():
-    so = infer_storage_options("/mnt/datasets/test.csv")
-    assert so.pop("protocol") == "file"
-```
-
-#### 35. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L70) (Line 70)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'./test.csv'`
-- **Keywords:** `{}`
-
-```python
-
-    assert infer_storage_options("./test.csv")["path"] == "./test.csv"
-    assert infer_storage_options("../test.csv")["path"] == "../test.csv"
-```
-
-#### 36. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L71) (Line 71)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'../test.csv'`
-- **Keywords:** `{}`
-
-```python
-    assert infer_storage_options("./test.csv")["path"] == "./test.csv"
-    assert infer_storage_options("../test.csv")["path"] == "../test.csv"
-
-```
-
-#### 37. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L73) (Line 73)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'C:\\test.csv'`
-- **Keywords:** `{}`
-
-```python
-
-    so = infer_storage_options("C:\\test.csv")
-    assert so.pop("protocol") == "file"
-```
-
-#### 38. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L78) (Line 78)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'d:\\test.csv'`
-- **Keywords:** `{}`
-
-```python
-
-    assert infer_storage_options("d:\\test.csv")["path"] == "d:\\test.csv"
-    assert infer_storage_options("\\test.csv")["path"] == "\\test.csv"
-```
-
-#### 39. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L79) (Line 79)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'\\test.csv'`
-- **Keywords:** `{}`
-
-```python
-    assert infer_storage_options("d:\\test.csv")["path"] == "d:\\test.csv"
-    assert infer_storage_options("\\test.csv")["path"] == "\\test.csv"
-    assert infer_storage_options(".\\test.csv")["path"] == ".\\test.csv"
-```
-
-#### 40. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L80) (Line 80)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'.\\test.csv'`
-- **Keywords:** `{}`
-
-```python
-    assert infer_storage_options("\\test.csv")["path"] == "\\test.csv"
-    assert infer_storage_options(".\\test.csv")["path"] == ".\\test.csv"
-    assert infer_storage_options("test.csv")["path"] == "test.csv"
-```
-
-#### 41. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L81) (Line 81)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'test.csv'`
-- **Keywords:** `{}`
-
-```python
-    assert infer_storage_options(".\\test.csv")["path"] == ".\\test.csv"
-    assert infer_storage_options("test.csv")["path"] == "test.csv"
-
-```
-
-#### 42. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L83) (Line 83)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'hdfs://username:pwd@Node:123/mnt/datasets/test.csv?q=1#fragm'`
-- **Keywords:** `{'inherit_storage_options': "{'extra': 'value'}"}`
-
-```python
-
-    so = infer_storage_options(
-        "hdfs://username:pwd@Node:123/mnt/datasets/test.csv?q=1#fragm",
-        inherit_storage_options={"extra": "value"},
-    )
-    assert so.pop("protocol") == "hdfs"
-```
-
-#### 43. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L98) (Line 98)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'hdfs://User-name@Node-name.com/mnt/datasets/test.csv'`
-- **Keywords:** `{}`
-
-```python
-
-    so = infer_storage_options("hdfs://User-name@Node-name.com/mnt/datasets/test.csv")
-    assert so.pop("username") == "User-name"
-```
-
-#### 44. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L103) (Line 103)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `u`
-- **Keywords:** `{}`
-
-```python
-    u = "http://127.0.0.1:8080/test.csv"
-    assert infer_storage_options(u) == {"protocol": "http", "path": u}
-
-```
-
-#### 45. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L110) (Line 110)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `f'{protocol}://Bucket-name.com/test.csv'`
-- **Keywords:** `{}`
-
-```python
-    for protocol in ["s3", "gcs", "gs"]:
-        options = infer_storage_options(f"{protocol}://Bucket-name.com/test.csv")
-        assert options["path"] == "Bucket-name.com/test.csv"
-```
-
-#### 46. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L114) (Line 114)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'file:///bucket/file.csv', {'path': 'collide'}`
-- **Keywords:** `{}`
-
-```python
-    with pytest.raises(KeyError):
-        infer_storage_options("file:///bucket/file.csv", {"path": "collide"})
-    with pytest.raises(KeyError):
-```
-
-#### 47. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L116) (Line 116)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options`
-- **Arguments:** `'hdfs:///bucket/file.csv', {'protocol': 'collide'}`
-- **Keywords:** `{}`
-
-```python
-    with pytest.raises(KeyError):
-        infer_storage_options("hdfs:///bucket/file.csv", {"protocol": "collide"})
-
-```
-
-#### 48. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L131) (Line 131)
-- **Target Call:** `infer_storage_options` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_infer_storage_options_c`
-- **Arguments:** `urlpath`
-- **Keywords:** `{}`
-
-```python
-def test_infer_storage_options_c(urlpath, expected_path):
-    so = infer_storage_options(urlpath)
-    assert so["protocol"] == "file"
-```
-
-#### 49. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L141) (Line 141)
-- **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_stringify_path`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = pathlib.Path(test_filepath)
-    assert stringify_path(path) == test_filepath
-
-```
-
-#### 50. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L154) (Line 154)
-- **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_stringify_path`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = CustomFSPath(test_filepath)
-    assert stringify_path(path) == test_filepath
-
-```
-
-#### 51. [dask/bytes/tests/test_bytes_utils.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_bytes_utils.py#L158) (Line 158)
-- **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_stringify_path`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = (1, 2, 3)
-    assert stringify_path(path) is path
-```
-
-#### 52. [dask/bytes/tests/test_compression.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_compression.py#L11) (Line 11)
-- **Target Call:** `compr.items` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_files`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-
-@pytest.mark.parametrize("fmt,File", compr.items())
-def test_files(fmt, File):
-```
-
-#### 53. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L58) (Line 58)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_simple`
-- **Arguments:** `root + fn`
-- **Keywords:** `{}`
-
-```python
-    fn = files[0]
-    f = open_files(root + fn)[0]
-    with f as f:
-```
-
-#### 54. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L68) (Line 68)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_loc`
-- **Arguments:** `root + fn`
-- **Keywords:** `{}`
-
-```python
-    fn = files[0]
-    f = open_files(root + fn)[0]
-    with open(os.path.join(dir_server, fn), "rb") as expected:
-```
-
-#### 55. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L87) (Line 87)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fetch_range_with_headers`
-- **Arguments:** `root + fn`
-- **Keywords:** `{'headers': 'headers'}`
-
-```python
-    headers = {"Date": "Wed, 21 Oct 2015 07:28:00 GMT"}
-    f = open_files(root + fn, headers=headers)[0]
-    with f as f:
-```
-
-#### 56. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L98) (Line 98)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ops`
-- **Arguments:** `root + fn`
-- **Keywords:** `{}`
-
-```python
-    fn = files[0]
-    f = open_files(root + fn)[0]
-    with open(os.path.join(dir_server, fn), "rb") as expected:
-```
-
-#### 57. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L114) (Line 114)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ops_blocksize`
-- **Arguments:** `root + fn`
-- **Keywords:** `{'block_size': '2'}`
-
-```python
-    fn = files[0]
-    f = open_files(root + fn, block_size=2)[0]
-    with open(os.path.join(dir_server, fn), "rb") as expected:
-```
-
-#### 58. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L126) (Line 126)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ops_blocksize`
-- **Arguments:** `root + fn`
-- **Keywords:** `{'block_size': '2'}`
-
-```python
-        fn = files[1]
-        f = open_files(root + fn, block_size=2)[0]
-        with f as f:
-```
-
-#### 59. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L138) (Line 138)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_errors`
-- **Arguments:** `'http://localhost:8999/doesnotexist'`
-- **Keywords:** `{}`
-
-```python
-def test_errors(dir_server):
-    f = open_files("http://localhost:8999/doesnotexist")[0]
-    with pytest.raises(errs):
-```
-
-#### 60. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L142) (Line 142)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_errors`
-- **Arguments:** `'http://nohost/'`
-- **Keywords:** `{}`
-
-```python
-            f.read()
-    f = open_files("http://nohost/")[0]
-
-```
-
-#### 61. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L151) (Line 151)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_errors`
-- **Arguments:** `root + fn`
-- **Keywords:** `{'mode': "'wb'"}`
-
-```python
-    fn = files[0]
-    f = open_files(root + fn, mode="wb")[0]
-    with pytest.raises(NotImplementedError):
-```
-
-#### 62. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L155) (Line 155)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_errors`
-- **Arguments:** `root + fn`
-- **Keywords:** `{}`
-
-```python
-            pass
-    f = open_files(root + fn)[0]
-    with f as f:
-```
-
-#### 63. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L163) (Line 163)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_files`
-- **Arguments:** `[f'{root}{f}' for f in files]`
-- **Keywords:** `{}`
-
-```python
-    root = "http://localhost:8999/"
-    fs = open_files([f"{root}{f}" for f in files])
-    for f, f2 in zip(fs, files):
-```
-
-#### 64. [dask/bytes/tests/test_http.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_http.py#L172) (Line 172)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_glob`
-- **Arguments:** `f'{root}*'`
-- **Keywords:** `{}`
-
-```python
-    root = "http://localhost:8999/"
-    fs = open_files(f"{root}*")
-    assert fs[0].path == f"{root}a"
-```
-
-#### 65. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L225) (Line 225)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files`
-- **Arguments:** `'.test.accounts.*'`
-- **Keywords:** `{}`
-
-```python
-    with filetexts(files, mode="b"):
-        myfiles = open_files(".test.accounts.*")
-        assert len(myfiles) == len(files)
-```
-
-#### 66. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L236) (Line 236)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files_text_mode`
-- **Arguments:** `'.test.accounts.*'`
-- **Keywords:** `{'mode': "'rt'", 'encoding': 'encoding'}`
-
-```python
-    with filetexts(files, mode="b"):
-        myfiles = open_files(".test.accounts.*", mode="rt", encoding=encoding)
-        assert len(myfiles) == len(files)
-```
-
-#### 67. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L252) (Line 252)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files_compression`
-- **Arguments:** `'.test.accounts.*'`
-- **Keywords:** `{'mode': 'mode', 'compression': 'fmt'}`
-
-```python
-    with filetexts(files2, mode="b"):
-        myfiles = open_files(".test.accounts.*", mode=mode, compression=fmt)
-        data = []
-```
-
-#### 68. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L300) (Line 300)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files_write`
-- **Arguments:** `tmpdir`
-- **Keywords:** `{'num': '2', 'mode': "'wb'", 'compression': 'compression'}`
-
-```python
-    tmpdir = str(tmpdir)
-    files = open_files(tmpdir, num=2, mode="wb", compression=compression)
-    assert len(files) == 2
-```
-
-#### 69. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L318) (Line 318)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pickability_of_lazy_files`
-- **Arguments:** `'.test.accounts.*'`
-- **Keywords:** `{}`
-
-```python
-    with filetexts(files, mode="b"):
-        myfiles = open_files(".test.accounts.*")
-        myfiles2 = cloudpickle.loads(cloudpickle.dumps(myfiles))
-```
-
-#### 70. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L333) (Line 333)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_py2_local_bytes`
-- **Arguments:** `fn`
-- **Keywords:** `{'compression': "'gzip'", 'mode': "'rt'"}`
-
-```python
-
-    files = open_files(fn, compression="gzip", mode="rt")
-
-```
-
-#### 71. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L345) (Line 345)
-- **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_abs_paths`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-        f.write("hi")
-    out = LocalFileSystem().glob("*")
-    assert len(out) == 1
-```
-
-#### 72. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L350) (Line 350)
-- **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_abs_paths`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-
-    fs = LocalFileSystem()
-    os.chdir(here)
-```
-
-#### 73. [dask/bytes/tests/test_local.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_local.py#L352) (Line 352)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_abs_paths`
-- **Arguments:** `out[0], 'r'`
-- **Keywords:** `{}`
-
-```python
-    os.chdir(here)
-    with fs.open(out[0], "r") as f:
-        res = f.read()
-```
-
-#### 74. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L135) (Line 135)
-- **Target Call:** `fs.invalidate_cache` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `s3_context`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    s3fs.S3FileSystem.clear_instance_cache()
-    fs.invalidate_cache()
-    try:
-```
-
-#### 75. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L139) (Line 139)
-- **Target Call:** `fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `s3_context`
-- **Arguments:** `bucket`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-    finally:
-        fs.rm(bucket, recursive=True)
-
-```
-
-#### 76. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L247) (Line 247)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files_write`
-- **Arguments:** `paths`
-- **Keywords:** `{'mode': "'wb'"}`
-
-```python
-    paths = [f"s3://{test_bucket_name}/more/{f}" for f in files]
-    fils = open_files(paths, mode="wb", **s3so)
-    for fil, data in zip(fils, files.values()):
-```
-
-#### 77. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L415) (Line 415)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_files`
-- **Arguments:** `f's3://{test_bucket_name}/test/accounts.*'`
-- **Keywords:** `{'mode': 'mode'}`
-
-```python
-def test_open_files(s3, mode, s3so):
-    myfiles = open_files(f"s3://{test_bucket_name}/test/accounts.*", mode=mode, **s3so)
-    assert len(myfiles) == len(files)
-```
-
-#### 78. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L511) (Line 511)
-- **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_parquet`
-- **Arguments:** `url`
-- **Keywords:** `{'storage_options': 's3so'}`
-
-```python
-    # Check "open_file_func"
-    fs = get_fs_token_paths(url, storage_options=s3so)[0]
-
-```
-
-#### 79. [dask/bytes/tests/test_s3.py](https://github.com/dask/dask/blob/main/dask/bytes/tests/test_s3.py#L515) (Line 515)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `_open`
-- **Arguments:** `*args`
-- **Keywords:** `{}`
-
-```python
-        assert check
-        return fs.open(*args, **kwargs)
-
-```
-
-#### 80. [dask/dataframe/dask_expr/_collection.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/_collection.py#L5359) (Line 5359)
+#### 19. [dask/dataframe/dask_expr/_collection.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/_collection.py#L5359) (Line 5359)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_parquet`
 - **Arguments:** `path`
@@ -1024,7 +290,7 @@ def test_open_files(s3, mode, s3so):
 
 ```
 
-#### 81. [dask/dataframe/dask_expr/_collection.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/_collection.py#L5374) (Line 5374)
+#### 20. [dask/dataframe/dask_expr/_collection.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/_collection.py#L5374) (Line 5374)
 - **Target Call:** `filesystem.lower` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_parquet`
 - **Arguments:** ``
@@ -1036,7 +302,7 @@ def test_open_files(s3, mode, s3so):
     ):
 ```
 
-#### 82. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L140) (Line 140)
+#### 21. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L140) (Line 140)
 - **Target Call:** `fs.equals` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FragmentWrapper.pack`
 - **Arguments:** `self._fragment.filesystem`
@@ -1048,7 +314,7 @@ def test_open_files(s3, mode, s3so):
             if self._filesystem_pickle_cache[0] != id(fs):
 ```
 
-#### 83. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L489) (Line 489)
+#### 22. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L489) (Line 489)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `path`
@@ -1060,7 +326,7 @@ def test_open_files(s3, mode, s3so):
 
 ```
 
-#### 84. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L505) (Line 505)
+#### 23. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L505) (Line 505)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `path`
@@ -1072,7 +338,7 @@ def test_open_files(s3, mode, s3so):
             # Check for any previous parquet ops reading from a file in the
 ```
 
-#### 85. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L505) (Line 505)
+#### 24. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L505) (Line 505)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `path`
@@ -1084,7 +350,7 @@ def test_open_files(s3, mode, s3so):
             # Check for any previous parquet ops reading from a file in the
 ```
 
-#### 86. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L520) (Line 520)
+#### 25. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L520) (Line 520)
 - **Target Call:** `fs.expand_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `'.'`
@@ -1096,7 +362,7 @@ def test_open_files(s3, mode, s3so):
                 if path.rstrip("/") == working_dir.rstrip("/"):
 ```
 
-#### 87. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L527) (Line 527)
+#### 26. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L527) (Line 527)
 - **Target Call:** `fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `path`
@@ -1108,7 +374,7 @@ def test_open_files(s3, mode, s3so):
 
 ```
 
-#### 88. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L666) (Line 666)
+#### 27. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L666) (Line 666)
 - **Target Call:** `fs.invalidate_cache` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_parquet`
 - **Arguments:** `path`
@@ -1120,7 +386,7 @@ def test_open_files(s3, mode, s3so):
 
 ```
 
-#### 89. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1023) (Line 1023)
+#### 28. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1023) (Line 1023)
 - **Target Call:** `self.fs.get_file_info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ReadParquetPyarrowFS._dataset_info`
 - **Arguments:** `dataset_selector`
@@ -1132,7 +398,7 @@ def test_open_files(s3, mode, s3so):
                         if finfo.type == pa.fs.FileType.File
 ```
 
-#### 90. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1028) (Line 1028)
+#### 29. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1028) (Line 1028)
 - **Target Call:** `self.fs.get_file_info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ReadParquetPyarrowFS._dataset_info`
 - **Arguments:** `path`
@@ -1144,7 +410,7 @@ def test_open_files(s3, mode, s3so):
         # TODO: At this point we could verify if we're dealing with a very
 ```
 
-#### 91. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1394) (Line 1394)
+#### 30. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1394) (Line 1394)
 - **Target Call:** `fs.checksum` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ReadParquetFSSpec._dataset_info`
 - **Arguments:** `file`
@@ -1156,7 +422,7 @@ def test_open_files(s3, mode, s3so):
         dataset_info["checksum"] = tokenize(checksum)
 ```
 
-#### 92. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1781) (Line 1781)
+#### 31. [dask/dataframe/dask_expr/io/parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/parquet.py#L1781) (Line 1781)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_read_partition_stats`
 - **Arguments:** `path`
@@ -1168,103 +434,7 @@ def test_open_files(s3, mode, s3so):
                 md = pq.ParquetFile(f).metadata
 ```
 
-#### 93. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L115) (Line 115)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_pyarrow_filesystem(parquet_file):
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 94. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L126) (Line 126)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem_dtype_backend`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_pyarrow_filesystem_dtype_backend(parquet_file, dtype_backend):
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 95. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L139) (Line 139)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem_types_mapper`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    # anywhere
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 96. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L151) (Line 151)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem_serialize`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_pyarrow_filesystem_serialize(parquet_file):
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 97. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L167) (Line 167)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem_filters`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_pyarrow_filesystem_filters(parquet_file):
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 98. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L182) (Line 182)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_pyarrow_filesystem_list_of_files`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_pyarrow_filesystem_list_of_files(parquet_file, second_parquet_file):
-    filesystem = fs.LocalFileSystem()
-
-```
-
-#### 99. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L191) (Line 191)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_partition_pruning`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    with dask.config.set({"dataframe.parquet.minimum-partition-size": 1}):
-        filesystem = fs.LocalFileSystem()
-        df = from_pandas(
-```
-
-#### 100. [dask/dataframe/dask_expr/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/dask_expr/io/tests/test_parquet.py#L309) (Line 309)
-- **Target Call:** `fs.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_aggregate_rg_stats_to_file`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-def test_aggregate_rg_stats_to_file(tmpdir):
-    filesystem = fs.LocalFileSystem()
-    fn = str(tmpdir)
-```
-
-#### 101. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L488) (Line 488)
+#### 32. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L488) (Line 488)
 - **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_pandas`
 - **Arguments:** `urlpath`
@@ -1276,7 +446,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             2
 ```
 
-#### 102. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L497) (Line 497)
+#### 33. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L497) (Line 497)
 - **Target Call:** `infer_compression` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_pandas`
 - **Arguments:** `paths[0]`
@@ -1288,7 +458,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 103. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L911) (Line 911)
+#### 34. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L911) (Line 911)
 - **Target Call:** `open_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_csv`
 - **Arguments:** `filename`
@@ -1300,7 +470,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         value = to_csv_chunk(dfs[0], first_file, **kwargs)
 ```
 
-#### 104. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L915) (Line 915)
+#### 35. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L915) (Line 915)
 - **Target Call:** `open_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_csv`
 - **Arguments:** `filename`
@@ -1312,7 +482,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         kwargs["header"] = False
 ```
 
-#### 105. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L922) (Line 922)
+#### 36. [dask/dataframe/io/csv.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/csv.py#L922) (Line 922)
 - **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_csv`
 - **Arguments:** `filename`
@@ -1330,7 +500,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         values = [to_csv_chunk(dfs[0], files[0], **kwargs)]
 ```
 
-#### 106. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L147) (Line 147)
+#### 37. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L147) (Line 147)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_hdf`
 - **Arguments:** `path`
@@ -1342,7 +512,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 107. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L176) (Line 176)
+#### 38. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L176) (Line 176)
 - **Target Call:** `build_name_function` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_hdf`
 - **Arguments:** `df.npartitions - 1`
@@ -1354,7 +524,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 108. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L381) (Line 381)
+#### 39. [dask/dataframe/io/hdf.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/hdf.py#L381) (Line 381)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_hdf`
 - **Arguments:** `pattern`
@@ -1366,7 +536,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 109. [dask/dataframe/io/json.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/json.py#L78) (Line 78)
+#### 40. [dask/dataframe/io/json.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/json.py#L78) (Line 78)
 - **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_json`
 - **Arguments:** `url_path, 'wt'`
@@ -1387,7 +557,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
     parts = [
 ```
 
-#### 110. [dask/dataframe/io/json.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/json.py#L268) (Line 268)
+#### 41. [dask/dataframe/io/json.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/json.py#L268) (Line 268)
 - **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_json`
 - **Arguments:** `url_path, 'rt'`
@@ -1406,7 +576,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         path_dtype = pd.CategoricalDtype(path_converter(f.path) for f in files)
 ```
 
-#### 111. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L23) (Line 23)
+#### 42. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L23) (Line 23)
 - **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowORCEngine.read_metadata`
 - **Arguments:** `paths[0]`
@@ -1418,7 +588,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             paths = fs.find(paths[0])
 ```
 
-#### 112. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L24) (Line 24)
+#### 43. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L24) (Line 24)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowORCEngine.read_metadata`
 - **Arguments:** `paths[0]`
@@ -1430,7 +600,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 113. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L39) (Line 39)
+#### 44. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L39) (Line 39)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowORCEngine.read_metadata`
 - **Arguments:** `path, 'rb'`
@@ -1442,7 +612,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                     o = orc.ORCFile(f)
 ```
 
-#### 114. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L60) (Line 60)
+#### 45. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L60) (Line 60)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowORCEngine.read_metadata`
 - **Arguments:** `paths[0], 'rb'`
@@ -1454,7 +624,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                         o = orc.ORCFile(f)
 ```
 
-#### 115. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L111) (Line 111)
+#### 46. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L111) (Line 111)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowORCEngine.write_partition`
 - **Arguments:** `fs.sep.join([path, filename]), 'wb'`
@@ -1466,7 +636,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             orc.write_table(table, f)
 ```
 
-#### 116. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L122) (Line 122)
+#### 47. [dask/dataframe/io/orc/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/arrow.py#L122) (Line 122)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_read_orc_stripes`
 - **Arguments:** `path, 'rb'`
@@ -1478,7 +648,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         o = orc.ORCFile(f)
 ```
 
-#### 117. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L81) (Line 81)
+#### 48. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L81) (Line 81)
 - **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `read_orc`
 - **Arguments:** `path`
@@ -1492,7 +662,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 118. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L174) (Line 174)
+#### 49. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L174) (Line 174)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_orc`
 - **Arguments:** `path`
@@ -1504,7 +674,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
     fs, _, _ = get_fs_token_paths(path, mode="wb", storage_options=storage_options)
 ```
 
-#### 119. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L175) (Line 175)
+#### 50. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L175) (Line 175)
 - **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_orc`
 - **Arguments:** `path`
@@ -1516,7 +686,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
     # Trim any protocol information from the path before forwarding
 ```
 
-#### 120. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L177) (Line 177)
+#### 51. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L177) (Line 177)
 - **Target Call:** `fs._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_orc`
 - **Arguments:** `path`
@@ -1528,7 +698,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 121. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L184) (Line 184)
+#### 52. [dask/dataframe/io/orc/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/orc/core.py#L184) (Line 184)
 - **Target Call:** `fs.mkdirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `to_orc`
 - **Arguments:** `path`
@@ -1540,7 +710,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
     filenames = [f"part.{i}.orc" for i in range(df.npartitions)]
 ```
 
-#### 122. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L112) (Line 112)
+#### 53. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L112) (Line 112)
 - **Target Call:** `fs.mkdirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_write_partitioned`
 - **Arguments:** `root_path`
@@ -1552,7 +722,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 123. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L148) (Line 148)
+#### 54. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L148) (Line 148)
 - **Target Call:** `fs.mkdirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_write_partitioned`
 - **Arguments:** `prefix`
@@ -1564,7 +734,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         full_path = fs.sep.join([prefix, filename])
 ```
 
-#### 124. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L150) (Line 150)
+#### 55. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L150) (Line 150)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_write_partitioned`
 - **Arguments:** `full_path, 'wb'`
@@ -1576,7 +746,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             pq.write_table(
 ```
 
-#### 125. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L470) (Line 470)
+#### 56. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L470) (Line 470)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.extract_filesystem`
 - **Arguments:** `u`
@@ -1588,7 +758,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             else:
 ```
 
-#### 126. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L472) (Line 472)
+#### 57. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L472) (Line 472)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.extract_filesystem`
 - **Arguments:** `urlpath`
@@ -1600,7 +770,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 127. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L483) (Line 483)
+#### 58. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L483) (Line 483)
 - **Target Call:** `ArrowFSWrapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.extract_filesystem`
 - **Arguments:** `fs`
@@ -1612,7 +782,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             if urlpath[0].startswith("C:") and isinstance(fs, pa_fs.LocalFileSystem):
 ```
 
-#### 128. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L489) (Line 489)
+#### 59. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L489) (Line 489)
 - **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.extract_filesystem`
 - **Arguments:** ``
@@ -1624,7 +794,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             else:
 ```
 
-#### 129. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L492) (Line 492)
+#### 60. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L492) (Line 492)
 - **Target Call:** `expand_paths_if_needed` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.extract_filesystem`
 - **Arguments:** `urlpath, 'rb', 1, fsspec_fs, None`
@@ -1636,7 +806,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             return (
 ```
 
-#### 130. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L670) (Line 670)
+#### 61. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L670) (Line 670)
 - **Target Call:** `fs.mkdirs` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.initialize_write`
 - **Arguments:** `path`
@@ -1648,7 +818,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
         if append and division_info is None:
 ```
 
-#### 131. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L684) (Line 684)
+#### 62. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L684) (Line 684)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.initialize_write`
 - **Arguments:** `fs.sep.join([path, '_metadata'])`
@@ -1660,7 +830,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                         full_metadata = pq.read_metadata(fil)
 ```
 
-#### 132. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L690) (Line 690)
+#### 63. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L690) (Line 690)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.initialize_write`
 - **Arguments:** `sorted(ds.files, key=natural_sort_key)[-1]`
@@ -1674,7 +844,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                             tail_metadata = pq.read_metadata(fil)
 ```
 
-#### 133. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L851) (Line 851)
+#### 64. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L851) (Line 851)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.write_partition`
 - **Arguments:** `fs.sep.join([path, filename]), 'wb'`
@@ -1686,7 +856,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 pq.write_table(
 ```
 
-#### 134. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L882) (Line 882)
+#### 65. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L882) (Line 882)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.write_metadata`
 - **Arguments:** `common_metadata_path, 'wb'`
@@ -1698,7 +868,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                     pq.write_metadata(schema, fil, **kwargs_meta)
 ```
 
-#### 135. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L895) (Line 895)
+#### 66. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L895) (Line 895)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.write_metadata`
 - **Arguments:** `metadata_path, 'wb'`
@@ -1710,7 +880,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 _meta.write_metadata_file(fil)
 ```
 
-#### 136. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L940) (Line 940)
+#### 67. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L940) (Line 940)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine._collect_dataset_info`
 - **Arguments:** `paths[0]`
@@ -1722,7 +892,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             # Use _analyze_paths to avoid relative-path
 ```
 
-#### 137. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L947) (Line 947)
+#### 68. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L947) (Line 947)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine._collect_dataset_info`
 - **Arguments:** `meta_path`
@@ -1734,7 +904,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 # Use _metadata file
 ```
 
-#### 138. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L961) (Line 961)
+#### 69. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L961) (Line 961)
 - **Target Call:** `fs.find` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine._collect_dataset_info`
 - **Arguments:** `paths`
@@ -1746,7 +916,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                     if path.endswith(parquet_file_extension)
 ```
 
-#### 139. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L1820) (Line 1820)
+#### 70. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L1820) (Line 1820)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.collect_file_metadata`
 - **Arguments:** `path, 'rb'`
@@ -1758,7 +928,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             meta = pq.ParquetFile(f).metadata
 ```
 
-#### 140. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L1836) (Line 1836)
+#### 71. [dask/dataframe/io/parquet/arrow.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/arrow.py#L1836) (Line 1836)
 - **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ArrowDatasetEngine.aggregate_metadata`
 - **Arguments:** `metadata_path, 'wb'`
@@ -1770,7 +940,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 if not meta:
 ```
 
-#### 141. [dask/dataframe/io/parquet/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/core.py#L289) (Line 289)
+#### 72. [dask/dataframe/io/parquet/core.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/core.py#L289) (Line 289)
 - **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `create_metadata_file`
 - **Arguments:** `paths`
@@ -1784,7 +954,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
     ap_kwargs = {"root": root_dir} if root_dir else {}
 ```
 
-#### 142. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L72) (Line 72)
+#### 73. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L72) (Line 72)
 - **Target Call:** `get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Engine.extract_filesystem`
 - **Arguments:** `urlpath`
@@ -1798,7 +968,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             return fs, paths, dataset_options, open_file_options
 ```
 
-#### 143. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L95) (Line 95)
+#### 74. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L95) (Line 95)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Engine.extract_filesystem`
 - **Arguments:** `u`
@@ -1810,7 +980,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             else:
 ```
 
-#### 144. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L97) (Line 97)
+#### 75. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L97) (Line 97)
 - **Target Call:** `stringify_path` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Engine.extract_filesystem`
 - **Arguments:** `urlpath`
@@ -1822,7 +992,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 
 ```
 
-#### 145. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L99) (Line 99)
+#### 76. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L99) (Line 99)
 - **Target Call:** `expand_paths_if_needed` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Engine.extract_filesystem`
 - **Arguments:** `urlpath, 'rb', 1, fs, None`
@@ -1834,7 +1004,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             return (
 ```
 
-#### 146. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L102) (Line 102)
+#### 77. [dask/dataframe/io/parquet/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/parquet/utils.py#L102) (Line 102)
 - **Target Call:** `fs._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Engine.extract_filesystem`
 - **Arguments:** `u`
@@ -1846,55 +1016,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 dataset_options,
 ```
 
-#### 147. [dask/dataframe/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/tests/test_parquet.py#L1584) (Line 1584)
-- **Target Call:** `LocalFileSystem._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_to_parquet_calls_invalidate_cache`
-- **Arguments:** `str(tmpdir)`
-- **Keywords:** `{}`
-
-```python
-    ddf.to_parquet(tmpdir, compute=compute)
-    path = LocalFileSystem._strip_protocol(str(tmpdir))
-    assert invalidate_cache.called
-```
-
-#### 148. [dask/dataframe/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/tests/test_parquet.py#L3770) (Line 3770)
-- **Target Call:** `get_filesystem_class` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_to_parquet_filesystem_option`
-- **Arguments:** `'memory'`
-- **Keywords:** `{}`
-
-```python
-    df = pd.DataFrame({"a": range(10)})
-    fs = get_filesystem_class("memory")(use_instance_cache=False)
-    df.to_parquet(key1, filesystem=fs)
-```
-
-#### 149. [dask/dataframe/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/tests/test_parquet.py#L3782) (Line 3782)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_to_parquet_filesystem_option`
-- **Arguments:** `key2`
-- **Keywords:** `{'detail': 'False'}`
-
-```python
-    # make sure we wrote a key to memory fs
-    assert len(fs.ls(key2, detail=False)) == 1
-
-```
-
-#### 150. [dask/dataframe/io/tests/test_parquet.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/tests/test_parquet.py#L3786) (Line 3786)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_to_parquet_filesystem_option`
-- **Arguments:** `key2`
-- **Keywords:** `{'detail': 'False'}`
-
-```python
-    ddf.to_parquet(key2, append=True, filesystem=fs)
-    assert len(fs.ls(key2, detail=False)) == 2, "should have two parts"
-
-```
-
-#### 151. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L210) (Line 210)
+#### 78. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L210) (Line 210)
 - **Target Call:** `fsspec_parquet.open_parquet_file` | **Cache_Type:** `parts`
 - **Context:** `_open_input_files`
 - **Arguments:** `path`
@@ -1911,7 +1033,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
                 context_stack,
 ```
 
-#### 152. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L221) (Line 221)
+#### 79. [dask/dataframe/io/utils.py](https://github.com/dask/dask/blob/main/dask/dataframe/io/utils.py#L221) (Line 221)
 - **Target Call:** `fs.open` | **Cache_Type:** `parts`
 - **Context:** `_open_input_files`
 - **Arguments:** `path`
@@ -1924,7 +1046,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
 ```
 
 ### Intake ([intake/intake](https://github.com/intake/intake))
-- **Usages Found:** `97` in `19` files.
+- **Usages Found:** `86` in `15` files.
 
 #### 1. [intake/catalog/base.py](https://github.com/intake/intake/blob/master/intake/catalog/base.py#L341) (Line 341)
 - **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
@@ -2034,55 +1156,7 @@ def test_aggregate_rg_stats_to_file(tmpdir):
             self.path = make_path_posix(self.path)
 ```
 
-#### 10. [intake/catalog/tests/test_local.py](https://github.com/intake/intake/blob/master/intake/catalog/tests/test_local.py#L26) (Line 26)
-- **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `abspath`
-- **Arguments:** `os.path.join(os.path.dirname(__file__), filename)`
-- **Keywords:** `{}`
-
-```python
-def abspath(filename):
-    return make_path_posix(os.path.join(os.path.dirname(__file__), filename))
-
-```
-
-#### 11. [intake/catalog/tests/test_local.py](https://github.com/intake/intake/blob/master/intake/catalog/tests/test_local.py#L783) (Line 783)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_integration`
-- **Arguments:** `'memory'`
-- **Keywords:** `{}`
-
-```python
-
-    mem = fsspec.filesystem("memory")
-    with mem.open("cat.yaml", "wt") as f:
-```
-
-#### 12. [intake/catalog/tests/test_local.py](https://github.com/intake/intake/blob/master/intake/catalog/tests/test_local.py#L784) (Line 784)
-- **Target Call:** `mem.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_integration`
-- **Arguments:** `'cat.yaml', 'wt'`
-- **Keywords:** `{}`
-
-```python
-    mem = fsspec.filesystem("memory")
-    with mem.open("cat.yaml", "wt") as f:
-        f.write(
-```
-
-#### 13. [intake/catalog/tests/test_local.py](https://github.com/intake/intake/blob/master/intake/catalog/tests/test_local.py#L805) (Line 805)
-- **Target Call:** `mem.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_integration`
-- **Arguments:** `'/file.csv', 'wt'`
-- **Keywords:** `{}`
-
-```python
-        )
-    with mem.open("/file.csv", "wt") as f:
-        f.write("a,b\n0,1")
-```
-
-#### 14. [intake/catalog/zarr.py](https://github.com/intake/intake/blob/master/intake/catalog/zarr.py#L63) (Line 63)
+#### 10. [intake/catalog/zarr.py](https://github.com/intake/intake/blob/master/intake/catalog/zarr.py#L63) (Line 63)
 - **Target Call:** `get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ZarrGroupCatalog._load`
 - **Arguments:** `self._urlpath`
@@ -2094,7 +1168,7 @@ def abspath(filename):
                 else:
 ```
 
-#### 15. [intake/config.py](https://github.com/intake/intake/blob/master/intake/config.py#L26) (Line 26)
+#### 11. [intake/config.py](https://github.com/intake/intake/blob/master/intake/config.py#L26) (Line 26)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `global`
 - **Arguments:** `os.getenv('INTAKE_CONF_DIR', os.path.join(expanduser('~'), '.intake'))`
@@ -2106,7 +1180,7 @@ confdir = make_path_posix(os.getenv("INTAKE_CONF_DIR", os.path.join(expanduser("
 
 ```
 
-#### 16. [intake/config.py](https://github.com/intake/intake/blob/master/intake/config.py#L44) (Line 44)
+#### 12. [intake/config.py](https://github.com/intake/intake/blob/master/intake/config.py#L44) (Line 44)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `cfile`
 - **Arguments:** `os.getenv('INTAKE_CONF_FILE', posixpath.join(confdir, 'conf.yaml'))`
@@ -2118,7 +1192,7 @@ def cfile():
 
 ```
 
-#### 17. [intake/conftest.py](https://github.com/intake/intake/blob/master/intake/conftest.py#L42) (Line 42)
+#### 13. [intake/conftest.py](https://github.com/intake/intake/blob/master/intake/conftest.py#L42) (Line 42)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `tmp_config_path`
 - **Arguments:** `os.path.join(tmp_path, 'test_config.yml')`
@@ -2130,7 +1204,7 @@ def cfile():
     os.environ[key] = temp_config_path
 ```
 
-#### 18. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L55) (Line 55)
+#### 14. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L55) (Line 55)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileSelector.__init__`
 - **Arguments:** `'file'`
@@ -2142,7 +1216,7 @@ def cfile():
         super().__init__(**kwargs)
 ```
 
-#### 19. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L94) (Line 94)
+#### 15. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L94) (Line 94)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileSelector.go_clicked`
 - **Arguments:** `self.protocol.value`
@@ -2156,7 +1230,7 @@ def cfile():
         self.make_options()
 ```
 
-#### 20. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L109) (Line 109)
+#### 16. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L109) (Line 109)
 - **Target Call:** `self.fs._parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileSelector.move_up`
 - **Arguments:** `self.path_text.value`
@@ -2168,7 +1242,7 @@ def cfile():
         self.make_options()
 ```
 
-#### 21. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L121) (Line 121)
+#### 17. [intake/interface/catalog/add.py](https://github.com/intake/intake/blob/master/intake/interface/catalog/add.py#L121) (Line 121)
 - **Target Call:** `self.fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `FileSelector.make_options`
 - **Arguments:** `self.path, True`
@@ -2180,7 +1254,7 @@ def cfile():
                 bn = os.path.basename(f["name"].rstrip("/"))
 ```
 
-#### 22. [intake/readers/catalogs.py](https://github.com/intake/intake/blob/master/intake/readers/catalogs.py#L376) (Line 376)
+#### 18. [intake/readers/catalogs.py](https://github.com/intake/intake/blob/master/intake/readers/catalogs.py#L376) (Line 376)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `STACIndex._read`
 - **Arguments:** `'https://stacindex.org/api/catalogs'`
@@ -2192,7 +1266,7 @@ def cfile():
             data = json.load(f)
 ```
 
-#### 23. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1927) (Line 1927)
+#### 19. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1927) (Line 1927)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `recommend`
 - **Arguments:** `url2`
@@ -2204,7 +1278,7 @@ def cfile():
         except (IOError, TypeError, AttributeError, ValueError):
 ```
 
-#### 24. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1932) (Line 1932)
+#### 20. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1932) (Line 1932)
 - **Target Call:** `fs.cat_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `recommend`
 - **Arguments:** `url2[0] if isinstance(url2, list) else url2`
@@ -2216,7 +1290,7 @@ def cfile():
         except (IOError, IndexError, ValueError):
 ```
 
-#### 25. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1989) (Line 1989)
+#### 21. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1989) (Line 1989)
 - **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `recommend`
 - **Arguments:** `url`
@@ -2228,7 +1302,7 @@ def cfile():
             try:
 ```
 
-#### 26. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1991) (Line 1991)
+#### 22. [intake/readers/datatypes.py](https://github.com/intake/intake/blob/master/intake/readers/datatypes.py#L1991) (Line 1991)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `recommend`
 - **Arguments:** `url`
@@ -2240,7 +1314,7 @@ def cfile():
             except IOError:
 ```
 
-#### 27. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L420) (Line 420)
+#### 23. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L420) (Line 420)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Catalog.to_yaml_file`
 - **Arguments:** `path`
@@ -2252,7 +1326,7 @@ def cfile():
             yaml.safe_dump(self.to_dict(), stream)
 ```
 
-#### 28. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L432) (Line 432)
+#### 24. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L432) (Line 432)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Catalog.from_yaml_file`
 - **Arguments:** `path`
@@ -2264,7 +1338,7 @@ def cfile():
         with of as stream:
 ```
 
-#### 29. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L436) (Line 436)
+#### 25. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L436) (Line 436)
 - **Target Call:** `self.fs.unstrip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Catalog.from_yaml_file`
 - **Arguments:** `of.fs._parent(path)`
@@ -2276,7 +1350,7 @@ def cfile():
         cat.user_parameters["STORAGE_OPTIONS"] = storage_options
 ```
 
-#### 30. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L436) (Line 436)
+#### 26. [intake/readers/entry.py](https://github.com/intake/intake/blob/master/intake/readers/entry.py#L436) (Line 436)
 - **Target Call:** `self.fs._parent` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `Catalog.from_yaml_file`
 - **Arguments:** `path`
@@ -2288,7 +1362,7 @@ def cfile():
         cat.user_parameters["STORAGE_OPTIONS"] = storage_options
 ```
 
-#### 31. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L681) (Line 681)
+#### 27. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L681) (Line 681)
 - **Target Call:** `fs.glob` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_to_files`
 - **Arguments:** `path`
@@ -2300,7 +1374,7 @@ def cfile():
                 if not expanded:
 ```
 
-#### 32. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L684) (Line 684)
+#### 28. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L684) (Line 684)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_to_files`
 - **Arguments:** `p`
@@ -2312,7 +1386,7 @@ def cfile():
 
 ```
 
-#### 33. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L688) (Line 688)
+#### 29. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L688) (Line 688)
 - **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_to_files`
 - **Arguments:** `path`
@@ -2324,7 +1398,7 @@ def cfile():
             except FileNotFoundError:
 ```
 
-#### 34. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L699) (Line 699)
+#### 30. [intake/readers/inspect.py](https://github.com/intake/intake/blob/master/intake/readers/inspect.py#L699) (Line 699)
 - **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_resolve_to_files`
 - **Arguments:** `path.rstrip('/')`
@@ -2336,7 +1410,7 @@ def cfile():
                 files = [
 ```
 
-#### 35. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L125) (Line 125)
+#### 31. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L125) (Line 125)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NumpyToNumpyFile.run`
 - **Arguments:** `path`
@@ -2348,7 +1422,7 @@ def cfile():
                 self._func(x, f)
 ```
 
-#### 36. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L158) (Line 158)
+#### 32. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L158) (Line 158)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `MatplotlibToPNG.run`
 - **Arguments:** `url`
@@ -2360,7 +1434,7 @@ def cfile():
             x.savefig(f, format="png", **kwargs)
 ```
 
-#### 37. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L293) (Line 293)
+#### 33. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L293) (Line 293)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NumpyToPNG.run`
 - **Arguments:** `url`
@@ -2372,7 +1446,7 @@ def cfile():
             img.save(f, format="PNG", **kwargs)
 ```
 
-#### 38. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L320) (Line 320)
+#### 34. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L320) (Line 320)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NumpyToTIFF.run`
 - **Arguments:** `url`
@@ -2384,7 +1458,7 @@ def cfile():
                 tifffile.imwrite(f, x, **kwargs)
 ```
 
-#### 39. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L337) (Line 337)
+#### 35. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L337) (Line 337)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PILImageToPNG.run`
 - **Arguments:** `url`
@@ -2396,7 +1470,7 @@ def cfile():
             x.save(f, format="PNG", **kwargs)
 ```
 
-#### 40. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L353) (Line 353)
+#### 36. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L353) (Line 353)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PILImageToJPEG.run`
 - **Arguments:** `url`
@@ -2408,7 +1482,7 @@ def cfile():
             x.save(f, format="JPEG", quality=quality, **kwargs)
 ```
 
-#### 41. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L368) (Line 368)
+#### 37. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L368) (Line 368)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PILImageToTIFF.run`
 - **Arguments:** `url`
@@ -2420,7 +1494,7 @@ def cfile():
             x.save(f, format="TIFF", **kwargs)
 ```
 
-#### 42. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L402) (Line 402)
+#### 38. [intake/readers/output.py](https://github.com/intake/intake/blob/master/intake/readers/output.py#L402) (Line 402)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NumpyToWAV.run`
 - **Arguments:** `url`
@@ -2432,7 +1506,7 @@ def cfile():
                 sf.write(f, x, samplerate, **kwargs)
 ```
 
-#### 43. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L682) (Line 682)
+#### 39. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L682) (Line 682)
 - **Target Call:** `split_protocol` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `LlamaServerReader._local_model_path`
 - **Arguments:** `data.url`
@@ -2444,7 +1518,7 @@ def cfile():
         if protocol is None:
 ```
 
-#### 44. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L695) (Line 695)
+#### 40. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L695) (Line 695)
 - **Target Call:** `fs._check_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `LlamaServerReader._local_model_path`
 - **Arguments:** `path`
@@ -2456,7 +1530,7 @@ def cfile():
         if cached_fn:
 ```
 
-#### 45. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L699) (Line 699)
+#### 41. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L699) (Line 699)
 - **Target Call:** `fs._mapper` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `LlamaServerReader._local_model_path`
 - **Arguments:** `path`
@@ -2468,7 +1542,7 @@ def cfile():
         cached_fn = os.path.join(fs.storage[-1], sha)
 ```
 
-#### 46. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L702) (Line 702)
+#### 42. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L702) (Line 702)
 - **Target Call:** `self.fs.get_file` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `LlamaServerReader._local_model_path`
 - **Arguments:** `path, cached_fn`
@@ -2480,7 +1554,7 @@ def cfile():
         return cached_fn
 ```
 
-#### 47. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L736) (Line 736)
+#### 43. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L736) (Line 736)
 - **Target Call:** `fsspec.open_local` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `LlamaServerReader._read`
 - **Arguments:** `f'simplecache::{v}'`
@@ -2492,7 +1566,7 @@ def cfile():
                 cmd.extend([str(k), path])
 ```
 
-#### 48. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L923) (Line 923)
+#### 44. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L923) (Line 923)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `SKLearnModelReader._read`
 - **Arguments:** `data.url`
@@ -2504,7 +1578,7 @@ def cfile():
             return self._func(f)
 ```
 
-#### 49. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L993) (Line 993)
+#### 45. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L993) (Line 993)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `HandleToUrlReader._extract`
 - **Arguments:** `'http'`
@@ -2516,7 +1590,7 @@ def cfile():
         if "URL_ORIGINAL_DATA" in meta:
 ```
 
-#### 50. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1000) (Line 1000)
+#### 46. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1000) (Line 1000)
 - **Target Call:** `h.cat` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `HandleToUrlReader._extract`
 - **Arguments:** `[f"{base}/{u.lstrip('hdl:/')}" for u in ids]`
@@ -2528,7 +1602,7 @@ def cfile():
             rr2 = [{i["type"]: i["data"] for i in json.loads(r)["values"]} for r in rr.values()]
 ```
 
-#### 51. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1006) (Line 1006)
+#### 47. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1006) (Line 1006)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `HandleToUrlReader._read`
 - **Arguments:** `'http'`
@@ -2540,7 +1614,7 @@ def cfile():
         r = h.cat(f"{base}/{data.url.lstrip('hdl:/')}")
 ```
 
-#### 52. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1007) (Line 1007)
+#### 48. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1007) (Line 1007)
 - **Target Call:** `h.cat` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `HandleToUrlReader._read`
 - **Arguments:** `f"{base}/{data.url.lstrip('hdl:/')}"`
@@ -2552,7 +1626,7 @@ def cfile():
         j = json.loads(r)
 ```
 
-#### 53. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1044) (Line 1044)
+#### 49. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1044) (Line 1044)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PandasHDF5._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2564,7 +1638,7 @@ def cfile():
                 self._func(f, data.path, **kw)
 ```
 
-#### 54. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1286) (Line 1286)
+#### 50. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1286) (Line 1286)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PythonModule._read`
 - **Arguments:** `data.url, 'rt'`
@@ -2576,7 +1650,7 @@ def cfile():
             mod = ModuleType(module_name)
 ```
 
-#### 55. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1318) (Line 1318)
+#### 51. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1318) (Line 1318)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NumpyText._read`
 - **Arguments:** `data.url`
@@ -2588,7 +1662,7 @@ def cfile():
                 return self._func(f, **kw)
 ```
 
-#### 56. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1415) (Line 1415)
+#### 52. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1415) (Line 1415)
 - **Target Call:** `fsspec.open_local` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `XArrayDatasetReader._read`
 - **Arguments:** `data.url`
@@ -2600,7 +1674,7 @@ def cfile():
             elif (isinstance(data.url, str) and is_fsspec_url(data.url)) or is_fsspec_url(
 ```
 
-#### 57. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1419) (Line 1419)
+#### 53. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1419) (Line 1419)
 - **Target Call:** `fsspec.open_files` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `XArrayDatasetReader._read`
 - **Arguments:** `data.url`
@@ -2612,7 +1686,7 @@ def cfile():
                 ofs = [_.open() for _ in ofs0]
 ```
 
-#### 58. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1433) (Line 1433)
+#### 54. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1433) (Line 1433)
 - **Target Call:** `fsspec.open_local` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `XArrayDatasetReader._read`
 - **Arguments:** `data.url`
@@ -2624,7 +1698,7 @@ def cfile():
                     return open_dataset(f, **kw)
 ```
 
-#### 59. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1436) (Line 1436)
+#### 55. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1436) (Line 1436)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `XArrayDatasetReader._read`
 - **Arguments:** `data.url`
@@ -2636,7 +1710,7 @@ def cfile():
                     return open_dataset(f, **kw)
 ```
 
-#### 60. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1480) (Line 1480)
+#### 56. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1480) (Line 1480)
 - **Target Call:** `fsspec.get_fs_token_paths` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `XArrayPatternReader._read`
 - **Arguments:** `url`
@@ -2648,7 +1722,7 @@ def cfile():
             val_dict = reverse_formats(data.url, paths)
 ```
 
-#### 61. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1513) (Line 1513)
+#### 57. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1513) (Line 1513)
 - **Target Call:** `fsspec.open_files` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `RasterIOXarrayReader._read`
 - **Arguments:** `data.url`
@@ -2660,7 +1734,7 @@ def cfile():
         opened = [open_rasterio(of.open(), **kwargs) for of in ofs]
 ```
 
-#### 62. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1578) (Line 1578)
+#### 58. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1578) (Line 1578)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GeoPandasReader._read`
 - **Arguments:** `data.url`
@@ -2672,7 +1746,7 @@ def cfile():
                 return geopandas.read_file(f, **kwargs)
 ```
 
-#### 63. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1600) (Line 1600)
+#### 59. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1600) (Line 1600)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ScipyMatrixMarketReader._read`
 - **Arguments:** `data.url`
@@ -2684,7 +1758,7 @@ def cfile():
             return self._func(f)
 ```
 
-#### 64. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1612) (Line 1612)
+#### 60. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1612) (Line 1612)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `NibabelNiftiReader._read`
 - **Arguments:** `data.url`
@@ -2696,7 +1770,7 @@ def cfile():
             return self._func(f, **kw)
 ```
 
-#### 65. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1639) (Line 1639)
+#### 61. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1639) (Line 1639)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `ASDFReader._read`
 - **Arguments:** `data.url`
@@ -2708,7 +1782,7 @@ def cfile():
             return self._func(f, **kw)
 ```
 
-#### 66. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1653) (Line 1653)
+#### 62. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1653) (Line 1653)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `DicomReader._read`
 - **Arguments:** `data.url`
@@ -2720,7 +1794,7 @@ def cfile():
             return self._func(f, **kw)
 ```
 
-#### 67. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1683) (Line 1683)
+#### 63. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1683) (Line 1683)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PMTileReader._read`
 - **Arguments:** `data.url`
@@ -2732,7 +1806,7 @@ def cfile():
 
 ```
 
-#### 68. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1889) (Line 1889)
+#### 64. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1889) (Line 1889)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GeoPandasTabular._read`
 - **Arguments:** `data.url`
@@ -2744,7 +1818,7 @@ def cfile():
         else:
 ```
 
-#### 69. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1971) (Line 1971)
+#### 65. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1971) (Line 1971)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `MessagePackReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2756,7 +1830,7 @@ def cfile():
             return msgpack.unpack(f, **kwargs)
 ```
 
-#### 70. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1998) (Line 1998)
+#### 66. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L1998) (Line 1998)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `MarkdownReader._read`
 - **Arguments:** `data.url, 'r'`
@@ -2768,7 +1842,7 @@ def cfile():
             return f.read()
 ```
 
-#### 71. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2005) (Line 2005)
+#### 67. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2005) (Line 2005)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `MarkdownReader.discover`
 - **Arguments:** `data.url, 'rb'`
@@ -2780,7 +1854,7 @@ def cfile():
             raw = f.read(head_bytes)
 ```
 
-#### 72. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2036) (Line 2036)
+#### 68. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2036) (Line 2036)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TOMLReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2792,7 +1866,7 @@ def cfile():
             return tomllib.load(f)
 ```
 
-#### 73. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2081) (Line 2081)
+#### 69. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2081) (Line 2081)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `INIReader._read`
 - **Arguments:** `data.url, 'r'`
@@ -2804,7 +1878,7 @@ def cfile():
             cfg.read_file(f)
 ```
 
-#### 74. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2113) (Line 2113)
+#### 70. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2113) (Line 2113)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PDFTextReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2816,7 +1890,7 @@ def cfile():
             return extract_text(f, **kwargs)
 ```
 
-#### 75. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2251) (Line 2251)
+#### 71. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2251) (Line 2251)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PILImageReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2828,7 +1902,7 @@ def cfile():
             img = Image.open(f)
 ```
 
-#### 76. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2468) (Line 2468)
+#### 72. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2468) (Line 2468)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `BioPythonFASTAReader._read`
 - **Arguments:** `data.url, 'r'`
@@ -2840,7 +1914,7 @@ def cfile():
             return list(SeqIO.parse(f, fmt))
 ```
 
-#### 77. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2664) (Line 2664)
+#### 73. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2664) (Line 2664)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `GGUFMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2852,7 +1926,7 @@ def cfile():
             header = f.read(24)
 ```
 
-#### 78. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2751) (Line 2751)
+#### 74. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2751) (Line 2751)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `PMTilesMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2864,7 +1938,7 @@ def cfile():
             raw = f.read(127)
 ```
 
-#### 79. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2847) (Line 2847)
+#### 75. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2847) (Line 2847)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `OSMPBFMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2876,7 +1950,7 @@ def cfile():
             # BlobHeader: 4-byte big-endian length, then protobuf BlobHeader
 ```
 
-#### 80. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2980) (Line 2980)
+#### 76. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L2980) (Line 2980)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `SKLearnModelMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2888,7 +1962,7 @@ def cfile():
             model = pickle.load(f)
 ```
 
-#### 81. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3073) (Line 3073)
+#### 77. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3073) (Line 3073)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `TorchModelMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2900,7 +1974,7 @@ def cfile():
             with zipfile.ZipFile(raw_f) as zf:
 ```
 
-#### 82. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3135) (Line 3135)
+#### 78. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3135) (Line 3135)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `JoblibMetadataReader._read`
 - **Arguments:** `data.url, 'rb'`
@@ -2912,7 +1986,7 @@ def cfile():
             obj = joblib.load(f)
 ```
 
-#### 83. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3513) (Line 3513)
+#### 79. [intake/readers/readers.py](https://github.com/intake/intake/blob/master/intake/readers/readers.py#L3513) (Line 3513)
 - **Target Call:** `fsspec.open_local` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_as_local`
 - **Arguments:** `f'simplecache::{url}'`
@@ -2926,7 +2000,7 @@ def cfile():
     return url
 ```
 
-#### 84. [intake/readers/search.py](https://github.com/intake/intake/blob/master/intake/readers/search.py#L126) (Line 126)
+#### 80. [intake/readers/search.py](https://github.com/intake/intake/blob/master/intake/readers/search.py#L126) (Line 126)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `EnvironmentSatisfied._is_consistent`
 - **Arguments:** `env, 'rt'`
@@ -2938,31 +2012,7 @@ def cfile():
                     env = f.read()
 ```
 
-#### 85. [intake/readers/tests/test_workflows.py](https://github.com/intake/intake/blob/master/intake/readers/tests/test_workflows.py#L15) (Line 15)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `dataframe_file`
-- **Arguments:** `'memory'`
-- **Keywords:** `{}`
-
-```python
-def dataframe_file():
-    m = fsspec.filesystem("memory")
-    m.pipe("/data", bindata)
-```
-
-#### 86. [intake/readers/tests/test_workflows.py](https://github.com/intake/intake/blob/master/intake/readers/tests/test_workflows.py#L16) (Line 16)
-- **Target Call:** `m.pipe` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `dataframe_file`
-- **Arguments:** `'/data', bindata`
-- **Keywords:** `{}`
-
-```python
-    m = fsspec.filesystem("memory")
-    m.pipe("/data", bindata)
-    return "memory://data"
-```
-
-#### 87. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L52) (Line 52)
+#### 81. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L52) (Line 52)
 - **Target Call:** `compressions.values` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `JSONFileSource.__init__`
 - **Arguments:** ``
@@ -2974,7 +2024,7 @@ def dataframe_file():
 
 ```
 
-#### 88. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L74) (Line 74)
+#### 82. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L74) (Line 74)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `JSONFileSource.read`
 - **Arguments:** `urlpath`
@@ -2992,7 +2042,7 @@ def dataframe_file():
             return json.load(f)
 ```
 
-#### 89. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L132) (Line 132)
+#### 83. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L132) (Line 132)
 - **Target Call:** `compressions.values` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `JSONLinesFileSource.__init__`
 - **Arguments:** ``
@@ -3004,7 +2054,7 @@ def dataframe_file():
 
 ```
 
-#### 90. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L157) (Line 157)
+#### 84. [intake/source/jsonfiles.py](https://github.com/intake/intake/blob/master/intake/source/jsonfiles.py#L157) (Line 157)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `JSONLinesFileSource._open`
 - **Arguments:** `urlpath`
@@ -3022,67 +2072,7 @@ def dataframe_file():
             yield f
 ```
 
-#### 91. [intake/source/tests/test_json.py](https://github.com/intake/intake/blob/master/intake/source/tests/test_json.py#L19) (Line 19)
-- **Target Call:** `compressions.items` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `global`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-
-EXTENSIONS = {compression: f".{extension}" for extension, compression in compressions.items()}
-
-```
-
-#### 92. [intake/source/tests/test_json.py](https://github.com/intake/intake/blob/master/intake/source/tests/test_json.py#L27) (Line 27)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `json_file`
-- **Arguments:** `[file_path]`
-- **Keywords:** `{'mode': "'wt'", 'compression': 'request.param'}`
-
-```python
-    file_path += EXTENSIONS.get(request.param, "")
-    with open_files([file_path], mode="wt", compression=request.param)[0] as f:
-        f.write(json.dumps(data))
-```
-
-#### 93. [intake/source/tests/test_json.py](https://github.com/intake/intake/blob/master/intake/source/tests/test_json.py#L37) (Line 37)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `jsonl_file`
-- **Arguments:** `[file_path]`
-- **Keywords:** `{'mode': "'wt'", 'compression': 'request.param'}`
-
-```python
-    file_path += EXTENSIONS.get(request.param, "")
-    with open_files([file_path], mode="wt", compression=request.param)[0] as f:
-        f.write("\n".join(json.dumps(row) for row in data))
-```
-
-#### 94. [intake/source/tests/test_text.py](https://github.com/intake/intake/blob/master/intake/source/tests/test_text.py#L40) (Line 40)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_complex_text`
-- **Arguments:** `[fn]`
-- **Keywords:** `{'mode': "'wt'", 'compression': 'comp'}`
-
-```python
-        fn = os.path.join(tempdir, f)
-        with open_files([fn], mode="wt", compression=comp)[0] as fo:
-            if read:
-```
-
-#### 95. [intake/source/tests/test_text.py](https://github.com/intake/intake/blob/master/intake/source/tests/test_text.py#L74) (Line 74)
-- **Target Call:** `open_files` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_complex_bytes`
-- **Arguments:** `[fn]`
-- **Keywords:** `{'mode': "'wb'", 'compression': 'comp'}`
-
-```python
-        fn = os.path.join(tempdir, f)
-        with open_files([fn], mode="wb", compression=comp)[0] as fo:
-            if read:
-```
-
-#### 96. [intake/source/utils.py](https://github.com/intake/intake/blob/master/intake/source/utils.py#L119) (Line 119)
+#### 85. [intake/source/utils.py](https://github.com/intake/intake/blob/master/intake/source/utils.py#L119) (Line 119)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `reverse_format`
 - **Arguments:** `format_string`
@@ -3094,7 +2084,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 97. [intake/source/utils.py](https://github.com/intake/intake/blob/master/intake/source/utils.py#L131) (Line 131)
+#### 86. [intake/source/utils.py](https://github.com/intake/intake/blob/master/intake/source/utils.py#L131) (Line 131)
 - **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `reverse_format`
 - **Arguments:** `resolved_string`
@@ -3107,7 +2097,7 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 ```
 
 ### pandas ([pandas-dev/pandas](https://github.com/pandas-dev/pandas))
-- **Usages Found:** `13` in `7` files.
+- **Usages Found:** `4` in `2` files.
 
 #### 1. [pandas/io/common.py](https://github.com/pandas-dev/pandas/blob/main/pandas/io/common.py#L452) (Line 452)
 - **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
@@ -3163,116 +2153,8 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
         elif isinstance(path, str) and not os.path.isdir(path):
 ```
 
-#### 5. [pandas/tests/io/test_common.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_common.py#L91) (Line 91)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestCommonIOCapabilities.test_stringify_file_and_path_like`
-- **Arguments:** `f'file://{temp_file}'`
-- **Keywords:** `{'mode': "'wb'"}`
-
-```python
-        fsspec = pytest.importorskip("fsspec")
-        with fsspec.open(f"file://{temp_file}", mode="wb") as fsspec_obj:
-            assert fsspec_obj == icom.stringify_path(fsspec_obj)
-```
-
-#### 6. [pandas/tests/io/test_fsspec.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_fsspec.py#L47) (Line 47)
-- **Target Call:** `register_implementation` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `fsspectest`
-- **Arguments:** `'testmem', TestMemoryFS`
-- **Keywords:** `{'clobber': 'True'}`
-
-```python
-
-    register_implementation("testmem", TestMemoryFS, clobber=True)
-    yield TestMemoryFS()
-```
-
-#### 7. [pandas/tests/io/test_fsspec.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_fsspec.py#L49) (Line 49)
-- **Target Call:** `registry.pop` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `fsspectest`
-- **Arguments:** `'testmem', None`
-- **Keywords:** `{}`
-
-```python
-    yield TestMemoryFS()
-    registry.pop("testmem", None)
-    TestMemoryFS.test[0] = None
-```
-
-#### 8. [pandas/tests/io/test_fsspec.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_fsspec.py#L70) (Line 70)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `cleared_fs`
-- **Arguments:** `'memory'`
-- **Keywords:** `{}`
-
-```python
-
-    memfs = fsspec.filesystem("memory")
-    yield memfs
-```
-
-#### 9. [pandas/tests/io/test_fsspec.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_fsspec.py#L133) (Line 133)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_to_csv_fsspec_object`
-- **Arguments:** `path`
-- **Keywords:** `{'mode': 'mode'}`
-
-```python
-    mode = "wb" if binary_mode else "w"
-    with fsspec.open(path, mode=mode).open() as fsspec_object:
-        df1.to_csv(fsspec_object, index=True)
-```
-
-#### 10. [pandas/tests/io/test_fsspec.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_fsspec.py#L138) (Line 138)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_to_csv_fsspec_object`
-- **Arguments:** `path`
-- **Keywords:** `{'mode': 'mode'}`
-
-```python
-    mode = mode.replace("w", "r")
-    with fsspec.open(path, mode=mode) as fsspec_object:
-        df2 = read_csv(
-```
-
-#### 11. [pandas/tests/io/test_gcs.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_gcs.py#L50) (Line 50)
-- **Target Call:** `fsspec.register_implementation` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `gcs_buffer`
-- **Arguments:** `'gs', MockGCSFileSystem`
-- **Keywords:** `{'clobber': 'True'}`
-
-```python
-    # Overwrites the default implementation from gcsfs to our mock class
-    fsspec.register_implementation("gs", MockGCSFileSystem, clobber=True)
-
-```
-
-#### 12. [pandas/tests/io/test_http_headers.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/test_http_headers.py#L76) (Line 76)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `parquetfastparquet_responder`
-- **Arguments:** `'memory://fastparquet_user_agent.parquet', 'rb'`
-- **Keywords:** `{}`
-
-```python
-    )
-    with fsspec.open("memory://fastparquet_user_agent.parquet", "rb") as f:
-        return f.read()
-```
-
-#### 13. [pandas/tests/io/xml/test_to_xml.py](https://github.com/pandas-dev/pandas/blob/main/pandas/tests/io/xml/test_to_xml.py#L1353) (Line 1353)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_s3_permission_output`
-- **Arguments:** `s3_bucket_public.name`
-- **Keywords:** `{}`
-
-```python
-        fs = s3fs.S3FileSystem(anon=True)
-        fs.ls(s3_bucket_public.name)
-
-```
-
 ### xarray ([pydata/xarray](https://github.com/pydata/xarray))
-- **Usages Found:** `12` in `2` files.
+- **Usages Found:** `5` in `1` files.
 
 #### 1. [xarray/backends/common.py](https://github.com/pydata/xarray/blob/main/xarray/backends/common.py#L174) (Line 174)
 - **Target Call:** `fs.glob` | **Cache_Type:** `NOT_EXPLICIT`
@@ -3336,92 +2218,8 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 6. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L5114) (Line 5114)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestH5NetCDFFileObject.test_fsspec`
-- **Arguments:** `tmp_file, 'rb'`
-- **Keywords:** `{}`
-
-```python
-
-            with fsspec.open(tmp_file, "rb") as f:
-                with open_dataset(f, engine="h5netcdf") as actual:
-```
-
-#### 7. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L6866) (Line 6866)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_source_encoding_always_present_with_fsspec`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-
-        fs = fsspec.filesystem("file")
-        with fs.open(tmp) as f, open_dataset(f) as ds:
-```
-
-#### 8. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L6867) (Line 6867)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_source_encoding_always_present_with_fsspec`
-- **Arguments:** `tmp`
-- **Keywords:** `{}`
-
-```python
-        fs = fsspec.filesystem("file")
-        with fs.open(tmp) as f, open_dataset(f) as ds:
-            assert ds.encoding["source"] == tmp
-```
-
-#### 9. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L6869) (Line 6869)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_source_encoding_always_present_with_fsspec`
-- **Arguments:** `tmp`
-- **Keywords:** `{}`
-
-```python
-            assert ds.encoding["source"] == tmp
-        with fs.open(tmp) as f, open_mfdataset([f]) as ds:
-            assert "foo" in ds
-```
-
-#### 10. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L7146) (Line 7146)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsspec`
-- **Arguments:** `'memory'`
-- **Keywords:** `{}`
-
-```python
-
-    m = fsspec.filesystem("memory")
-    mm = m.get_mapper("out1.zarr")
-```
-
-#### 11. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L7147) (Line 7147)
-- **Target Call:** `m.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsspec`
-- **Arguments:** `'out1.zarr'`
-- **Keywords:** `{}`
-
-```python
-    m = fsspec.filesystem("memory")
-    mm = m.get_mapper("out1.zarr")
-    ds.to_zarr(mm)  # old interface
-```
-
-#### 12. [xarray/tests/test_backends.py](https://github.com/pydata/xarray/blob/main/xarray/tests/test_backends.py#L7153) (Line 7153)
-- **Target Call:** `m.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsspec`
-- **Arguments:** `'out2.zarr'`
-- **Keywords:** `{}`
-
-```python
-    ds0["time"] = ds.time + np.timedelta64(1, "D")
-    mm = m.get_mapper("out2.zarr")
-    ds0.to_zarr(mm)  # old interface
-```
-
 ### zarr ([zarr-developers/zarr-python](https://github.com/zarr-developers/zarr-python))
-- **Usages Found:** `38` in `4` files.
+- **Usages Found:** `18` in `1` files.
 
 #### 1. [src/zarr/storage/_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/src/zarr/storage/_fsspec.py#L55) (Line 55)
 - **Target Call:** `fs.to_json` | **Cache_Type:** `NOT_EXPLICIT`
@@ -3645,262 +2443,8 @@ EXTENSIONS = {compression: f".{extension}" for extension, compression in compres
 
 ```
 
-#### 19. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L154) (Line 154)
-- **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.store_kwargs`
-- **Arguments:** `f's3://{test_bucket_name}'`
-- **Keywords:** `{'endpoint_url': 'endpoint_url', 'anon': 'False', 'asynchronous': 'True'}`
-
-```python
-            from fsspec.core import url_to_fs
-        fs, path = url_to_fs(
-            f"s3://{test_bucket_name}", endpoint_url=endpoint_url, anon=False, asynchronous=True
-        )
-        return {"fs": fs, "path": path}
-```
-
-#### 20. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L165) (Line 165)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.get`
-- **Arguments:** `'s3'`
-- **Keywords:** `{'endpoint_url': 'store.fs.endpoint_url', 'anon': 'store.fs.anon', 'asynchronous': 'False'}`
-
-```python
-        #  make a new, synchronous instance of the filesystem because this test is run in sync code
-        new_fs = fsspec.filesystem(
-            "s3", endpoint_url=store.fs.endpoint_url, anon=store.fs.anon, asynchronous=False
-        )
-        return self.buffer_cls.from_bytes(new_fs.cat(f"{store.path}/{key}"))
-```
-
-#### 21. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L168) (Line 168)
-- **Target Call:** `new_fs.cat` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.get`
-- **Arguments:** `f'{store.path}/{key}'`
-- **Keywords:** `{}`
-
-```python
-        )
-        return self.buffer_cls.from_bytes(new_fs.cat(f"{store.path}/{key}"))
-
-```
-
-#### 22. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L172) (Line 172)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.set`
-- **Arguments:** `'s3'`
-- **Keywords:** `{'endpoint_url': 'store.fs.endpoint_url', 'anon': 'store.fs.anon', 'asynchronous': 'False'}`
-
-```python
-        #  make a new, synchronous instance of the filesystem because this test is run in sync code
-        new_fs = fsspec.filesystem(
-            "s3", endpoint_url=store.fs.endpoint_url, anon=store.fs.anon, asynchronous=False
-        )
-        new_fs.write_bytes(f"{store.path}/{key}", value.to_bytes())
-```
-
-#### 23. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L175) (Line 175)
-- **Target Call:** `new_fs.write_bytes` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.set`
-- **Arguments:** `f'{store.path}/{key}', value.to_bytes()`
-- **Keywords:** `{}`
-
-```python
-        )
-        new_fs.write_bytes(f"{store.path}/{key}", value.to_bytes())
-
-```
-
-#### 24. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L258) (Line 258)
-- **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestFsspecStoreS3.test_init_warns_if_fs_asynchronous_is_false`
-- **Arguments:** `f's3://{test_bucket_name}'`
-- **Keywords:** `{'endpoint_url': 'endpoint_url', 'anon': 'False', 'asynchronous': 'False'}`
-
-```python
-            from fsspec.core import url_to_fs
-        fs, path = url_to_fs(
-            f"s3://{test_bucket_name}", endpoint_url=endpoint_url, anon=False, asynchronous=False
-        )
-        store_kwargs = {"fs": fs, "path": path}
-```
-
-#### 25. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L361) (Line 361)
-- **Target Call:** `ReferenceFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_store_open_group_via_reference_filesystem`
-- **Arguments:** ``
-- **Keywords:** `{'fo': "{'version': 1, 'refs': {'zarr.json': group_json}}", 'asynchronous': 'True'}`
-
-```python
-    group_json = json.dumps({"zarr_format": 3, "node_type": "group", "attributes": {}})
-    fs = ReferenceFileSystem(
-        fo={"version": 1, "refs": {"zarr.json": group_json}},
-        asynchronous=True,
-    )
-    store = FsspecStore(fs=fs, path="/", read_only=True)
-```
-
-#### 26. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L410) (Line 410)
-- **Target Call:** `ReferenceFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsspec_store_read_array_chunk_via_reference_filesystem`
-- **Arguments:** ``
-- **Keywords:** `{'fo': "{'version': 1, 'refs': refs}", 'asynchronous': 'True'}`
-
-```python
-
-    fs = ReferenceFileSystem(
-        fo={"version": 1, "refs": refs},
-        asynchronous=True,
-    )
-    store = FsspecStore(fs=fs, path="/", read_only=True)
-```
-
-#### 27. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L470) (Line 470)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsmap_file`
-- **Arguments:** `'file'`
-- **Keywords:** `{'auto_mkdir': 'True'}`
-
-```python
-
-    fs = fsspec.filesystem("file", auto_mkdir=True)
-    mapper = fs.get_mapper(tmp_path)
-```
-
-#### 28. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L471) (Line 471)
-- **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsmap_file`
-- **Arguments:** `tmp_path`
-- **Keywords:** `{}`
-
-```python
-    fs = fsspec.filesystem("file", auto_mkdir=True)
-    mapper = fs.get_mapper(tmp_path)
-
-```
-
-#### 29. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L491) (Line 491)
-- **Target Call:** `fsspec.LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsmap_file_raises`
-- **Arguments:** ``
-- **Keywords:** `{'auto_mkdir': 'False'}`
-
-```python
-    fsspec = pytest.importorskip("fsspec.implementations.local")
-    fs = fsspec.LocalFileSystem(auto_mkdir=False)
-    mapper = fs.get_mapper(tmp_path)
-```
-
-#### 30. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L492) (Line 492)
-- **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_fsmap_file_raises`
-- **Arguments:** `tmp_path`
-- **Keywords:** `{}`
-
-```python
-    fs = fsspec.LocalFileSystem(auto_mkdir=False)
-    mapper = fs.get_mapper(tmp_path)
-    with pytest.raises(FileNotFoundError, match="No such file or directory: .*"):
-```
-
-#### 31. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L533) (Line 533)
-- **Target Call:** `self.fs.set_session` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_close_does_not_close_filesystem_session`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    store = FsspecStore.from_url("http://example.com/a")
-    session = await store.fs.set_session()
-
-```
-
-#### 32. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L550) (Line 550)
-- **Target Call:** `self.fs.set_session` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_close_does_not_break_a_sibling_store`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    s2 = FsspecStore.from_url("http://example.com/b")
-    session = await s2.fs.set_session()
-
-```
-
-#### 33. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L566) (Line 566)
-- **Target Call:** `_fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_from_mapper_wraps_sync_filesystem`
-- **Arguments:** `'file'`
-- **Keywords:** `{'auto_mkdir': 'True'}`
-
-```python
-
-    fs = _fsspec.filesystem("file", auto_mkdir=True)
-    mapper = fs.get_mapper(str(tmp_path))
-```
-
-#### 34. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L567) (Line 567)
-- **Target Call:** `fs.get_mapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_from_mapper_wraps_sync_filesystem`
-- **Arguments:** `str(tmp_path)`
-- **Keywords:** `{}`
-
-```python
-    fs = _fsspec.filesystem("file", auto_mkdir=True)
-    mapper = fs.get_mapper(str(tmp_path))
-    store = FsspecStore.from_mapper(mapper)
-```
-
-#### 35. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
-- **Target Call:** `AsyncFileSystemWrapper` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_delete_dir_wrapped_filesystem`
-- **Arguments:** `LocalFileSystem(auto_mkdir=True)`
-- **Keywords:** `{}`
-
-```python
-
-    wrapped_fs = AsyncFileSystemWrapper(LocalFileSystem(auto_mkdir=True))
-    store = FsspecStore(wrapped_fs, read_only=False, path=f"{tmp_path}/test/path")
-```
-
-#### 36. [tests/test_store/test_fsspec.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec.py#L604) (Line 604)
-- **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_delete_dir_wrapped_filesystem`
-- **Arguments:** ``
-- **Keywords:** `{'auto_mkdir': 'True'}`
-
-```python
-
-    wrapped_fs = AsyncFileSystemWrapper(LocalFileSystem(auto_mkdir=True))
-    store = FsspecStore(wrapped_fs, read_only=False, path=f"{tmp_path}/test/path")
-```
-
-#### 37. [tests/test_store/test_fsspec_get_ranges.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_fsspec_get_ranges.py#L35) (Line 35)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `memory_store`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    # so clear state explicitly.
-    fs: MemoryFileSystem = MemoryFileSystem()
-    fs.store.clear()
-```
-
-#### 38. [tests/test_store/test_zip.py](https://github.com/zarr-developers/zarr-python/blob/main/tests/test_store/test_zip.py#L271) (Line 271)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestZipStoreFileObj.test_fsspec_file`
-- **Arguments:** `f'local://{path}', 'rb'`
-- **Keywords:** `{}`
-
-```python
-        path.write_bytes(zip_bytes)
-        with fsspec.open(f"local://{path}", "rb") as fileobj:
-            store = ZipStore(fileobj, mode="r")
-```
-
 ### DVC ([iterative/dvc](https://github.com/iterative/dvc))
-- **Usages Found:** `547` in `71` files.
+- **Usages Found:** `326` in `55` files.
 
 #### 1. [dvc/api/artifacts.py](https://github.com/iterative/dvc/blob/main/dvc/api/artifacts.py#L53) (Line 53)
 - **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
@@ -7813,668 +6357,7 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 325. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L50) (Line 50)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_new_simple`
-- **Arguments:** `'metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-    fs = scm.get_fs(exp)
-    with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "foo: 2"
-```
-
-#### 326. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L89) (Line 89)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_experiment_exists`
-- **Arguments:** `'metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-    fs = scm.get_fs(exp)
-    with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "foo: 3"
-```
-
-#### 327. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L109) (Line 109)
-- **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_failed_exp_workspace`
-- **Arguments:** `os.path.join(dvc.experiments.workspace_queue.pid_dir, 'workspace')`
-- **Keywords:** `{}`
-
-```python
-        dvc.experiments.run(failed_exp_stage.addressing)
-    assert not dvc.fs.exists(
-        os.path.join(dvc.experiments.workspace_queue.pid_dir, "workspace")
-    )
-
-```
-
-#### 328. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L156) (Line 156)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_update_py_params`
-- **Arguments:** `'params.py'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-    fs = scm.get_fs(exp_a)
-    with fs.open("params.py", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "INT = 2"
-```
-
-#### 329. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L158) (Line 158)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_update_py_params`
-- **Arguments:** `'metrics.py'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-        assert fobj.read().strip() == "INT = 2"
-    with fs.open("metrics.py", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "INT = 2"
-```
-
-#### 330. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L204) (Line 204)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_update_py_params`
-- **Arguments:** `'params.py'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-    fs = scm.get_fs(exp_a)
-    with fs.open("params.py", mode="r", encoding="utf-8") as fobj:
-        assert _dos2unix(fobj.read().strip()) == result
-```
-
-#### 331. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L206) (Line 206)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_update_py_params`
-- **Arguments:** `'metrics.py'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-        assert _dos2unix(fobj.read().strip()) == result
-    with fs.open("metrics.py", mode="r", encoding="utf-8") as fobj:
-        assert _dos2unix(fobj.read().strip()) == result
-```
-
-#### 332. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L323) (Line 323)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked`
-- **Arguments:** `'dvc.yaml'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert fs.exists("dvc.yaml")
-    assert fs.exists("dvc.lock")
-```
-
-#### 333. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L324) (Line 324)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked`
-- **Arguments:** `'dvc.lock'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("dvc.yaml")
-    assert fs.exists("dvc.lock")
-    assert fs.exists("copy.py")
-```
-
-#### 334. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L325) (Line 325)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked`
-- **Arguments:** `'copy.py'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("dvc.lock")
-    assert fs.exists("copy.py")
-    with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
-```
-
-#### 335. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L326) (Line 326)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked`
-- **Arguments:** `'metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-    assert fs.exists("copy.py")
-    with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "foo: 2"
-```
-
-#### 336. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L417) (Line 417)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subdir`
-- **Arguments:** `f'dir/{fname}'`
-- **Keywords:** `{}`
-
-```python
-    for fname in ["metrics.yaml", "dvc.lock"]:
-        assert fs.exists(f"dir/{fname}")
-    with fs.open("dir/metrics.yaml", mode="r", encoding="utf-8") as fobj:
-```
-
-#### 337. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L418) (Line 418)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subdir`
-- **Arguments:** `'dir/metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-        assert fs.exists(f"dir/{fname}")
-    with fs.open("dir/metrics.yaml", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "foo: 2"
-```
-
-#### 338. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L456) (Line 456)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepo`
-- **Arguments:** `f'dir/repo/{fname}'`
-- **Keywords:** `{}`
-
-```python
-    for fname in ["metrics.yaml", "dvc.lock"]:
-        assert fs.exists(f"dir/repo/{fname}")
-    with fs.open("dir/repo/metrics.yaml", mode="r", encoding="utf-8") as fobj:
-```
-
-#### 339. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L457) (Line 457)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepo`
-- **Arguments:** `'dir/repo/metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-        assert fs.exists(f"dir/repo/{fname}")
-    with fs.open("dir/repo/metrics.yaml", mode="r", encoding="utf-8") as fobj:
-        assert fobj.read().strip() == "foo: 2"
-```
-
-#### 340. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L479) (Line 479)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_run_celery`
-- **Arguments:** `'metrics.yaml'`
-- **Keywords:** `{'mode': "'r'", 'encoding': "'utf-8'"}`
-
-```python
-        fs = scm.get_fs(exp)
-        with fs.open("metrics.yaml", mode="r", encoding="utf-8") as fobj:
-            metrics.add(fobj.read().strip())
-```
-
-#### 341. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L705) (Line 705)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_local_config_is_propagated_to_tmp`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-
-    with fs.open("file") as fobj:
-        conf_obj = ConfigObj(fobj)
-```
-
-#### 342. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L724) (Line 724)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked_top_level_files_are_included_in_exp`
-- **Arguments:** `file`
-- **Keywords:** `{}`
-
-```python
-    for file in ["metrics.json", "params.yaml", "plots.csv"]:
-        assert fs.exists(file)
-
-```
-
-#### 343. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L743) (Line 743)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_copy_paths`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert not fs.exists("dir")
-    assert not fs.exists("file")
-```
-
-#### 344. [tests/func/experiments/test_experiments.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_experiments.py#L744) (Line 744)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_copy_paths`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.exists("dir")
-    assert not fs.exists("file")
-
-```
-
-#### 345. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L53) (Line 53)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_copy_paths_queue`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert not fs.exists("dir")
-    assert not fs.exists("file")
-```
-
-#### 346. [tests/func/experiments/test_queue.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_queue.py#L54) (Line 54)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_copy_paths_queue`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.exists("dir")
-    assert not fs.exists("file")
-
-```
-
-#### 347. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L135) (Line 135)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked_top_level_files_are_included_in_exp`
-- **Arguments:** `file`
-- **Keywords:** `{}`
-
-```python
-    for file in ["metrics.json", "params.yaml", "plots.csv", "dvc.lock"]:
-        assert fs.exists(file)
-
-```
-
-#### 348. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L149) (Line 149)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_untracked_dvclock_is_included_in_exp`
-- **Arguments:** `'dvc.lock'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert fs.exists("dvc.lock")
-
-```
-
-#### 349. [tests/func/experiments/test_save.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_save.py#L161) (Line 161)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exp_save_include_untracked_force`
-- **Arguments:** `'new_file'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert fs.exists("new_file")
-
-```
-
-#### 350. [tests/func/experiments/test_stash_exp.py](https://github.com/iterative/dvc/blob/main/tests/func/experiments/test_stash_exp.py#L57) (Line 57)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_staged_new_file`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    fs = scm.get_fs(exp)
-    assert fs.exists("file")
-```
-
-#### 351. [tests/func/test_data_cloud.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_cloud.py#L478) (Line 478)
-- **Target Call:** `fs.keys` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fetch_stats`
-- **Arguments:** ``
-- **Keywords:** `{}`
-
-```python
-    dvc.push()
-    clean(list(fs.keys()), dvc)
-
-```
-
-#### 352. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L346) (Line 346)
-- **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_partial_missing_cache`
-- **Arguments:** `odb.oid_to_path('acbd18db4cc2f85cedef654fccc4a4d8')`
-- **Keywords:** `{}`
-
-```python
-    odb = dvc.cache.repo
-    odb.fs.rm(odb.oid_to_path("acbd18db4cc2f85cedef654fccc4a4d8"))
-
-```
-
-#### 353. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L370) (Line 370)
-- **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_missing_dir_object_from_head`
-- **Arguments:** `odb.oid_to_path(stage.outs[0].hash_info.value)`
-- **Keywords:** `{}`
-
-```python
-    odb = dvc.cache.repo
-    odb.fs.rm(odb.oid_to_path(stage.outs[0].hash_info.value))
-
-```
-
-#### 354. [tests/func/test_data_status.py](https://github.com/iterative/dvc/blob/main/tests/func/test_data_status.py#L392) (Line 392)
-- **Target Call:** `self.fs.rm` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_missing_dir_object_from_index`
-- **Arguments:** `odb.oid_to_path(stage.outs[0].hash_info.value)`
-- **Keywords:** `{}`
-
-```python
-    odb = dvc.cache.repo
-    odb.fs.rm(odb.oid_to_path(stage.outs[0].hash_info.value))
-
-```
-
-#### 355. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
-- **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `dvc.fs.join(path, 'foo')`
-- **Keywords:** `{}`
-
-```python
-
-    assert dvc.fs.exists(dvc.fs.join(path, "foo"))
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-```
-
-#### 356. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L16) (Line 16)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'foo'`
-- **Keywords:** `{}`
-
-```python
-
-    assert dvc.fs.exists(dvc.fs.join(path, "foo"))
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-```
-
-#### 357. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
-- **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `dvc.fs.join(path, 'foo')`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.exists(dvc.fs.join(path, "foo"))
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-```
-
-#### 358. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L17) (Line 17)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'foo'`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.exists(dvc.fs.join(path, "foo"))
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-```
-
-#### 359. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
-- **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `dvc.fs.join(path, 'dir')`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-    assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
-```
-
-#### 360. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L18) (Line 18)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.isfile(dvc.fs.join(path, "foo"))
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-    assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
-```
-
-#### 361. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
-- **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `dvc.fs.join(path, 'dir')`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-    assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
-
-```
-
-#### 362. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L19) (Line 19)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert dvc.fs.exists(dvc.fs.join(path, "dir"))
-    assert dvc.fs.isdir(dvc.fs.join(path, "dir"))
-
-```
-
-#### 363. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
-- **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `subrepo.fs.join(path, 'foo')`
-- **Keywords:** `{}`
-
-```python
-
-    assert subrepo.fs.exists(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-```
-
-#### 364. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L21) (Line 21)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'foo'`
-- **Keywords:** `{}`
-
-```python
-
-    assert subrepo.fs.exists(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-```
-
-#### 365. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
-- **Target Call:** `self.fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `subrepo.fs.join(path, 'foo')`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.exists(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-```
-
-#### 366. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L22) (Line 22)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'foo'`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.exists(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-```
-
-#### 367. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
-- **Target Call:** `self.fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `subrepo.fs.join(path, 'dir')`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-    assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
-```
-
-#### 368. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L23) (Line 23)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.isfile(subrepo.fs.join(path, "foo"))
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-    assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
-```
-
-#### 369. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
-- **Target Call:** `self.fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `subrepo.fs.join(path, 'dir')`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-    assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
-
-```
-
-#### 370. [tests/func/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/func/test_fs.py#L24) (Line 24)
-- **Target Call:** `self.fs.join` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_cleanfs_subrepo`
-- **Arguments:** `path, 'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert subrepo.fs.exists(subrepo.fs.join(path, "dir"))
-    assert subrepo.fs.isdir(subrepo.fs.join(path, "dir"))
-
-```
-
-#### 371. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L66) (Line 66)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / 'dir')`
-- **Keywords:** `{}`
-
-```python
-            str(tmp_dir),
-            {"dir": dvc.fs.info(str(tmp_dir / "dir"))},
-            {
-```
-
-#### 372. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L68) (Line 68)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / 'bar')`
-- **Keywords:** `{}`
-
-```python
-            {
-                "bar": dvc.fs.info(str(tmp_dir / "bar")),
-                ".dvcignore": dvc.fs.info(str(tmp_dir / ".dvcignore")),
-```
-
-#### 373. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L69) (Line 69)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / '.dvcignore')`
-- **Keywords:** `{}`
-
-```python
-                "bar": dvc.fs.info(str(tmp_dir / "bar")),
-                ".dvcignore": dvc.fs.info(str(tmp_dir / ".dvcignore")),
-            },
-```
-
-#### 374. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L75) (Line 75)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / 'dir' / 'subdir')`
-- **Keywords:** `{}`
-
-```python
-            {
-                "subdir": dvc.fs.info(str(tmp_dir / "dir" / "subdir")),
-            },
-```
-
-#### 375. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L78) (Line 78)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / 'dir' / 'baz')`
-- **Keywords:** `{}`
-
-```python
-            {
-                "baz": dvc.fs.info(str(tmp_dir / "dir" / "baz")),
-            },
-```
-
-#### 376. [tests/func/test_ignore.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ignore.py#L84) (Line 84)
-- **Target Call:** `self.fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `str(tmp_dir / 'dir' / 'subdir' / 'qux')`
-- **Keywords:** `{}`
-
-```python
-            {},
-            {"qux": dvc.fs.info(str(tmp_dir / "dir" / "subdir" / "qux"))},
-        ),
-```
-
-#### 377. [tests/func/test_ls.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1007) (Line 1007)
-- **Target Call:** `fs.pipe` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fs_ls_tree`
-- **Arguments:** `{f: content.encode() for f, content in FS_STRUCTURE.items()}`
-- **Keywords:** `{}`
-
-```python
-    fs = MemoryFileSystem(global_store=False)
-    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})
-    root = fs.root_marker
-```
-
-#### 378. [tests/func/test_ls.py](https://github.com/iterative/dvc/blob/main/tests/func/test_ls.py#L1036) (Line 1036)
-- **Target Call:** `fs.pipe` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fs_ls_tree_maxdepth`
-- **Arguments:** `{f: content.encode() for f, content in FS_STRUCTURE.items()}`
-- **Keywords:** `{}`
-
-```python
-    fs = MemoryFileSystem(global_store=False)
-    fs.pipe({f: content.encode() for f, content in FS_STRUCTURE.items()})
-
-```
-
-#### 379. [tests/func/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/func/test_remote.py#L161) (Line 161)
-- **Target Call:** `self.fs.remove` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dir_hash_should_be_key_order_agnostic`
-- **Arguments:** `dvc.cache.local.oid_to_path(hash1.as_raw().value)`
-- **Keywords:** `{}`
-
-```python
-    # remove the raw dir obj to force building the tree on the next build call
-    dvc.cache.local.fs.remove(dvc.cache.local.oid_to_path(hash1.as_raw().value))
-
-```
-
-#### 380. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L34) (Line 34)
+#### 325. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L34) (Line 34)
 - **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_check`
 - **Arguments:** `'/'`
@@ -8486,7 +6369,7 @@ def load_path(fs_path, fs, **kwargs):
             fs.execute("git --version")
 ```
 
-#### 381. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L35) (Line 35)
+#### 326. [tests/remotes/git_server.py](https://github.com/iterative/dvc/blob/main/tests/remotes/git_server.py#L35) (Line 35)
 - **Target Call:** `fs.execute` | **Cache_Type:** `NOT_EXPLICIT`
 - **Context:** `_check`
 - **Arguments:** `'git --version'`
@@ -8498,2008 +6381,8 @@ def load_path(fs_path, fs, **kwargs):
         except asyncssh.Error:
 ```
 
-#### 382. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L106) (Line 106)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_staging_file`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = local_odb.oid_to_path(obj.hash_info.value)
-    assert fs.exists(path)
-
-```
-
-#### 383. [tests/unit/data/db/test_local.py](https://github.com/iterative/dvc/blob/main/tests/unit/data/db/test_local.py#L132) (Line 132)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_staging_dir`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = local_odb.oid_to_path(obj.hash_info.value)
-    assert fs.exists(path)
-```
-
-#### 384. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L26) (Line 26)
-- **Target Call:** `self.fs._get_key` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_key`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert fs.fs._get_key(path) == key
-
-```
-
-#### 385. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L35) (Line 35)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert fs.exists("foo")
-
-```
-
-#### 386. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L44) (Line 44)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open`
-- **Arguments:** `'foo', 'r'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    with fs.open("foo", "r") as fobj:
-        assert fobj.read() == "foo"
-```
-
-#### 387. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L53) (Line 53)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_dirty_hash`
-- **Arguments:** `'file', 'r'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    with fs.open("file", "r") as fobj:
-        # NOTE: Unlike DVCFileSystem, DataFileSystem should not
-```
-
-#### 388. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L66) (Line 66)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_no_remote`
-- **Arguments:** `'file', 'r'`
-- **Keywords:** `{}`
-
-```python
-    with pytest.raises(FileNotFoundError):
-        with fs.open("file", "r"):
-            pass
-```
-
-#### 389. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L78) (Line 78)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_dirty_no_hash`
-- **Arguments:** `'file', 'r'`
-- **Keywords:** `{}`
-
-```python
-    with pytest.raises(FileNotFoundError):
-        with fs.open("file", "r"):
-            pass
-```
-
-#### 390. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L95) (Line 95)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_in_history`
-- **Arguments:** `'foo', 'r'`
-- **Keywords:** `{}`
-
-```python
-        fs = DataFileSystem(index=dvc.index.data["repo"])
-        with fs.open("foo", "r") as fobj:
-            assert fobj.read() == "foo"
-```
-
-#### 391. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L103) (Line 103)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert not fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-```
-
-#### 392. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L104) (Line 104)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-    assert not fs.isdir("datafile")
-```
-
-#### 393. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L105) (Line 105)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir")
-    assert not fs.isdir("datafile")
-    assert not fs.isfile("datafile")
-```
-
-#### 394. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L106) (Line 106)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datafile")
-    assert not fs.isfile("datafile")
-
-```
-
-#### 395. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L113) (Line 113)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-```
-
-#### 396. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L114) (Line 114)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-    assert not fs.isdir("datafile")
-```
-
-#### 397. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L115) (Line 115)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir")
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-```
-
-#### 398. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L116) (Line 116)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-
-```
-
-#### 399. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L125) (Line 125)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_mixed`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert fs.isdir("dir")
-    assert not fs.isfile("dir")
-```
-
-#### 400. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L126) (Line 126)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_mixed`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir")
-    assert not fs.isfile("dir")
-
-```
-
-#### 401. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L155) (Line 155)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir"):
-        for entry in dirs + files:
-```
-
-#### 402. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L189) (Line 189)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir"):
-        for entry in dirs + files:
-```
-
-#### 403. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L200) (Line 200)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_missing`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-
-    for _ in fs.walk("dir"):
-        pass
-```
-
-#### 404. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L208) (Line 208)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_not_a_dir`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-
-    for _ in fs.walk("foo"):
-        pass
-```
-
-#### 405. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L215) (Line 215)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_file`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    fs = DataFileSystem(index=dvc.index.data["repo"])
-    assert fs.info("foo")["md5"] == "acbd18db4cc2f85cedef654fccc4a4d8"
-
-```
-
-#### 406. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L222) (Line 222)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    hash_file_spy = mocker.spy(dvc_data.hashfile.hash, "hash_file")
-    assert fs.info("dir")["md5"] == "8761c4e9acad696bee718615e23e22db.dir"
-    assert not hash_file_spy.called
-```
-
-#### 407. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L230) (Line 230)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_granular`
-- **Arguments:** `subdir`
-- **Keywords:** `{}`
-
-```python
-    subdir = "dir/subdir"
-    assert fs.info(subdir).get("md5") is None
-    _, _, obj = build(dvc.cache.local, subdir, fs, "md5", dry_run=True)
-```
-
-#### 408. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L234) (Line 234)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_granular`
-- **Arguments:** `data`
-- **Keywords:** `{}`
-
-```python
-    data = posixpath.join(subdir, "data")
-    assert fs.info(data)["md5"] == "8d777f385d3dfec8815d20f7496026dc"
-    _, _, obj = build(dvc.cache.local, data, fs, "md5", dry_run=True)
-```
-
-#### 409. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L245) (Line 245)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_dirty_file`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    expected = "8c7dd922ad47494fc02c388e12c00eac"
-    assert fs.info("file").get("md5") == expected
-    _, _, obj = build(dvc.cache.local, "file", fs, "md5", dry_run=True)
-```
-
-#### 410. [tests/unit/fs/test_data.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_data.py#L256) (Line 256)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_dirty_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    expected = "5ea40360f5b4ec688df672a4db9c17d1.dir"
-    assert fs.info("dir").get("md5") == expected
-    _, _, obj = build(dvc.cache.local, "dir", fs, "md5", dry_run=True)
-```
-
-#### 411. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L21) (Line 21)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.exists("foo")
-
-```
-
-#### 412. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L30) (Line 30)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open`
-- **Arguments:** `'foo', 'r'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    with fs.open("foo", "r") as fobj:
-        assert fobj.read() == "foo"
-```
-
-#### 413. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L39) (Line 39)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_dirty_hash`
-- **Arguments:** `'file', 'r'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    with fs.open("file", "r") as fobj:
-        assert fobj.read() == "something"
-```
-
-#### 414. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L48) (Line 48)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_dirty_no_hash`
-- **Arguments:** `'file', 'r'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    with fs.open("file", "r") as fobj:
-        assert fobj.read() == "file"
-```
-
-#### 415. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L65) (Line 65)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_open_in_history`
-- **Arguments:** `'foo', 'r'`
-- **Keywords:** `{}`
-
-```python
-        fs = DVCFileSystem(repo=dvc)
-        with fs.open("foo", "r") as fobj:
-            assert fobj.read() == "foo"
-```
-
-#### 416. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L88) (Line 88)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-```
-
-#### 417. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L89) (Line 89)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-    assert not fs.isdvc("datadir")
-```
-
-#### 418. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L90) (Line 90)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir")
-    assert not fs.isdvc("datadir")
-    assert not fs.isdir("datafile")
-```
-
-#### 419. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L91) (Line 91)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdvc("datadir")
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-```
-
-#### 420. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L92) (Line 92)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-    assert not fs.isdvc("datafile")
-```
-
-#### 421. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L93) (Line 93)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datafile")
-    assert not fs.isdvc("datafile")
-
-```
-
-#### 422. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L109) (Line 109)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-```
-
-#### 423. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L110) (Line 110)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("datadir")
-    assert not fs.isfile("datadir")
-    assert fs.isdvc("datadir")
-```
-
-#### 424. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L111) (Line 111)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir")
-    assert fs.isdvc("datadir")
-    assert not fs.isdir("datafile")
-```
-
-#### 425. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L112) (Line 112)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdvc("datadir")
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-```
-
-#### 426. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L113) (Line 113)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datafile")
-    assert fs.isfile("datafile")
-    assert fs.isdvc("datafile")
-```
-
-#### 427. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L114) (Line 114)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datafile")
-    assert fs.isdvc("datafile")
-
-```
-
-#### 428. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L116) (Line 116)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'subdir'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isdir("subdir")
-    assert not fs.isfile("subdir")
-```
-
-#### 429. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L117) (Line 117)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'subdir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("subdir")
-    assert not fs.isfile("subdir")
-    assert not fs.isdvc("subdir")
-```
-
-#### 430. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L118) (Line 118)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'subdir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("subdir")
-    assert not fs.isdvc("subdir")
-    assert fs.isfile("subdir/baz")
-```
-
-#### 431. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L119) (Line 119)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'subdir/baz'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdvc("subdir")
-    assert fs.isfile("subdir/baz")
-    assert fs.isdir("subdir/data")
-```
-
-#### 432. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L120) (Line 120)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_isfile`
-- **Arguments:** `'subdir/data'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("subdir/baz")
-    assert fs.isdir("subdir/data")
-
-```
-
-#### 433. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L130) (Line 130)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.exists("datafile")
-    assert fs.exists("datadir")
-```
-
-#### 434. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L131) (Line 131)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datafile")
-    assert fs.exists("datadir")
-    assert fs.exists("datadir/foo")
-```
-
-#### 435. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L132) (Line 132)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datadir")
-    assert fs.exists("datadir/foo")
-    assert fs.isfile("datafile")
-```
-
-#### 436. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L133) (Line 133)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datadir/foo")
-    assert fs.isfile("datafile")
-    assert not fs.isfile("datadir")
-```
-
-#### 437. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L134) (Line 134)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datafile")
-    assert not fs.isfile("datadir")
-    assert fs.isfile("datadir/foo")
-```
-
-#### 438. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L135) (Line 135)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir")
-    assert fs.isfile("datadir/foo")
-    assert not fs.isdir("datafile")
-```
-
-#### 439. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L136) (Line 136)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datadir/foo")
-    assert not fs.isdir("datafile")
-    assert fs.isdir("datadir")
-```
-
-#### 440. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L137) (Line 137)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datafile")
-    assert fs.isdir("datadir")
-    assert not fs.isdir("datadir/foo")
-```
-
-#### 441. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L138) (Line 138)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("datadir")
-    assert not fs.isdir("datadir/foo")
-
-```
-
-#### 442. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L142) (Line 142)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    tmp_dir.gen({"datadir": "data", "datafile": {"foo": "foo", "bar": "bar"}})
-    assert fs.exists("datafile")
-    assert fs.exists("datadir")
-```
-
-#### 443. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L143) (Line 143)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datafile")
-    assert fs.exists("datadir")
-    assert not fs.exists("datadir/foo")
-```
-
-#### 444. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L144) (Line 144)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datadir")
-    assert not fs.exists("datadir/foo")
-    assert fs.exists("datafile/foo")
-```
-
-#### 445. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L145) (Line 145)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.exists("datadir/foo")
-    assert fs.exists("datafile/foo")
-    assert not fs.isfile("datafile")
-```
-
-#### 446. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L146) (Line 146)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("datafile/foo")
-    assert not fs.isfile("datafile")
-    assert fs.isfile("datadir")
-```
-
-#### 447. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L147) (Line 147)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datafile")
-    assert fs.isfile("datadir")
-    assert not fs.isfile("datadir/foo")
-```
-
-#### 448. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L148) (Line 148)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datadir")
-    assert not fs.isfile("datadir/foo")
-    assert fs.isfile("datafile/foo")
-```
-
-#### 449. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L149) (Line 149)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isfile("datadir/foo")
-    assert fs.isfile("datafile/foo")
-    assert fs.isdir("datafile")
-```
-
-#### 450. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L150) (Line 150)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("datafile/foo")
-    assert fs.isdir("datafile")
-    assert not fs.isdir("datadir")
-```
-
-#### 451. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L151) (Line 151)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("datafile")
-    assert not fs.isdir("datadir")
-    assert not fs.isdir("datadir/foo")
-```
-
-#### 452. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L152) (Line 152)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datadir/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datadir")
-    assert not fs.isdir("datadir/foo")
-    assert not fs.isdir("datafile/foo")
-```
-
-#### 453. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L153) (Line 153)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_exists_isdir_isfile_dirty`
-- **Arguments:** `'datafile/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdir("datadir/foo")
-    assert not fs.isdir("datafile/foo")
-
-```
-
-#### 454. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L162) (Line 162)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_mixed`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.isdir("dir")
-    assert not fs.isfile("dir")
-```
-
-#### 455. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L163) (Line 163)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdir_mixed`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir")
-    assert not fs.isfile("dir")
-
-```
-
-#### 456. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L173) (Line 173)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ls_dirty`
-- **Arguments:** `'data'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert set(fs.ls("data")) == {"data/foo", "data/bar"}
-
-```
-
-#### 457. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L181) (Line 181)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ls_file_not_found`
-- **Arguments:** `'missing'`
-- **Keywords:** `{}`
-
-```python
-    with pytest.raises(FileNotFoundError):
-        fs.ls("missing")
-
-```
-
-#### 458. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L190) (Line 190)
-- **Target Call:** `fs.ls` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_ls_dir_empty`
-- **Arguments:** `'empty'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert set(fs.ls("empty")) == set()
-
-```
-
-#### 459. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L231) (Line 231)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk`
-- **Arguments:** `'dir'`
-- **Keywords:** `{'dvcfiles': 'dvcfiles'}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir", dvcfiles=dvcfiles):
-        for entry in dirs + files:
-```
-
-#### 460. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L267) (Line 267)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_dirty`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir"):
-        for entry in dirs + files:
-```
-
-#### 461. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L282) (Line 282)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_dirty_cached_dir`
-- **Arguments:** `'data'`
-- **Keywords:** `{}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("data"):
-        for entry in dirs + files:
-```
-
-#### 462. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L307) (Line 307)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_mixed_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir"):
-        for entry in dirs + files:
-```
-
-#### 463. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L318) (Line 318)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_missing`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-
-    for _ in fs.walk("dir"):
-        pass
-```
-
-#### 464. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L326) (Line 326)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_not_a_dir`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-
-    for _ in fs.walk("foo"):
-        pass
-```
-
-#### 465. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L335) (Line 335)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdvc`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.isdvc("foo")
-    assert not fs.isdvc("bar")
-```
-
-#### 466. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L336) (Line 336)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdvc`
-- **Arguments:** `'bar'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdvc("foo")
-    assert not fs.isdvc("bar")
-    assert fs.isdvc("dir")
-```
-
-#### 467. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L337) (Line 337)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdvc`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert not fs.isdvc("bar")
-    assert fs.isdvc("dir")
-    assert fs.isdvc("dir/baz")
-```
-
-#### 468. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L338) (Line 338)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdvc`
-- **Arguments:** `'dir/baz'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdvc("dir")
-    assert fs.isdvc("dir/baz")
-    assert fs.isdvc("dir/baz", recursive=True)
-```
-
-#### 469. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L339) (Line 339)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_isdvc`
-- **Arguments:** `'dir/baz'`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-    assert fs.isdvc("dir/baz")
-    assert fs.isdvc("dir/baz", recursive=True)
-
-```
-
-#### 470. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L375) (Line 375)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/foo'`
-- **Keywords:** `{}`
-
-```python
-    )
-    assert fs.exists("dir/repo/foo") is True
-    assert fs.exists("dir/repo/bar") is False
-```
-
-#### 471. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L376) (Line 376)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/bar'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("dir/repo/foo") is True
-    assert fs.exists("dir/repo/bar") is False
-
-```
-
-#### 472. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L378) (Line 378)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/foo'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isfile("dir/repo/foo") is True
-    assert fs.isfile("dir/repo/dir1/bar") is True
-```
-
-#### 473. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L379) (Line 379)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/dir1/bar'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("dir/repo/foo") is True
-    assert fs.isfile("dir/repo/dir1/bar") is True
-    assert fs.isfile("dir/repo/dir1") is False
-```
-
-#### 474. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L380) (Line 380)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/dir1'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("dir/repo/dir1/bar") is True
-    assert fs.isfile("dir/repo/dir1") is False
-
-```
-
-#### 475. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L382) (Line 382)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/dir1'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isdir("dir/repo/dir1") is True
-    assert fs.isdir("dir/repo/dir1/bar") is False
-```
-
-#### 476. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L383) (Line 383)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/dir1/bar'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir/repo/dir1") is True
-    assert fs.isdir("dir/repo/dir1/bar") is False
-    assert fs.isdvc("dir/repo/foo") is True
-```
-
-#### 477. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L384) (Line 384)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir/repo/dir1/bar") is False
-    assert fs.isdvc("dir/repo/foo") is True
-    mocker.stop(mock_subrepo1)
-```
-
-#### 478. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L390) (Line 390)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/lorem'`
-- **Keywords:** `{}`
-
-```python
-    )
-    assert fs.exists("dir/repo2/lorem") is True
-    assert fs.exists("dir/repo2/ipsum") is False
-```
-
-#### 479. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L391) (Line 391)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/ipsum'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("dir/repo2/lorem") is True
-    assert fs.exists("dir/repo2/ipsum") is False
-
-```
-
-#### 480. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L393) (Line 393)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/lorem'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isfile("dir/repo2/lorem") is True
-    assert fs.isfile("dir/repo2/dir2/ipsum") is True
-```
-
-#### 481. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L394) (Line 394)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/dir2/ipsum'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("dir/repo2/lorem") is True
-    assert fs.isfile("dir/repo2/dir2/ipsum") is True
-    assert fs.isfile("dir/repo2/dir2") is False
-```
-
-#### 482. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L395) (Line 395)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/dir2'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("dir/repo2/dir2/ipsum") is True
-    assert fs.isfile("dir/repo2/dir2") is False
-
-```
-
-#### 483. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L397) (Line 397)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/dir2'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isdir("dir/repo2/dir2") is True
-    assert fs.isdir("dir/repo2/dir2/ipsum") is False
-```
-
-#### 484. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L398) (Line 398)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/dir2/ipsum'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir/repo2/dir2") is True
-    assert fs.isdir("dir/repo2/dir2/ipsum") is False
-    assert fs.isdvc("dir/repo2/lorem") is True
-```
-
-#### 485. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L399) (Line 399)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepos`
-- **Arguments:** `'dir/repo2/lorem'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir/repo2/dir2/ipsum") is False
-    assert fs.isdvc("dir/repo2/lorem") is True
-    mocker.stop(mock_subrepo2)
-```
-
-#### 486. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L456) (Line 456)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_subrepo_walk`
-- **Arguments:** `'dir'`
-- **Keywords:** `{'dvcfiles': 'dvcfiles', 'ignore_subrepos': 'False'}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("dir", dvcfiles=dvcfiles, ignore_subrepos=False):
-        for entry in dirs + files:
-```
-
-#### 487. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L491) (Line 491)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'/'`
-- **Keywords:** `{'dvcfiles': 'True'}`
-
-```python
-    actual = []
-    for root, dirs, files in fs.walk("/", dvcfiles=True):
-        for entry in dirs + files:
-```
-
-#### 488. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L498) (Line 498)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'lorem'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isfile("lorem") is True
-    assert fs.isfile("dir/repo/foo") is False
-```
-
-#### 489. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L499) (Line 499)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'dir/repo/foo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("lorem") is True
-    assert fs.isfile("dir/repo/foo") is False
-    assert fs.isdir("dir/repo") is False
-```
-
-#### 490. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L500) (Line 500)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'dir/repo'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile("dir/repo/foo") is False
-    assert fs.isdir("dir/repo") is False
-    assert fs.isdir("dir") is True
-```
-
-#### 491. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L501) (Line 501)
-- **Target Call:** `fs.isdir` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdir("dir/repo") is False
-    assert fs.isdir("dir") is True
-
-```
-
-#### 492. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L503) (Line 503)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'lorem'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.isdvc("lorem") is True
-    assert fs.isdvc("dir/repo/dir1") is False
-```
-
-#### 493. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L504) (Line 504)
-- **Target Call:** `fs.isdvc` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'dir/repo/dir1'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isdvc("lorem") is True
-    assert fs.isdvc("dir/repo/dir1") is False
-
-```
-
-#### 494. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L506) (Line 506)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'dir/repo.txt'`
-- **Keywords:** `{}`
-
-```python
-
-    assert fs.exists("dir/repo.txt") is True
-    assert fs.exists("repo/ipsum") is False
-```
-
-#### 495. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L507) (Line 507)
-- **Target Call:** `fs.exists` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dvcfs_no_subrepos`
-- **Arguments:** `'repo/ipsum'`
-- **Keywords:** `{}`
-
-```python
-    assert fs.exists("dir/repo.txt") is True
-    assert fs.exists("repo/ipsum") is False
-
-```
-
-#### 496. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L514) (Line 514)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_file`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    expected = "acbd18db4cc2f85cedef654fccc4a4d8"
-    assert fs.info("foo").get("md5") is None
-    _, _, obj = build(dvc.cache.local, "foo", fs, "md5")
-```
-
-#### 497. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L518) (Line 518)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_file`
-- **Arguments:** `'foo'`
-- **Keywords:** `{}`
-
-```python
-    (tmp_dir / "foo").unlink()
-    assert fs.info("foo")["md5"] == expected
-
-```
-
-#### 498. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L525) (Line 525)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    expected = "8761c4e9acad696bee718615e23e22db.dir"
-    assert fs.info("dir").get("md5") is None
-    _, _, obj = build(dvc.cache.local, "dir", fs, "md5")
-```
-
-#### 499. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L530) (Line 530)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_dir`
-- **Arguments:** `'dir'`
-- **Keywords:** `{}`
-
-```python
-    shutil.rmtree(tmp_dir / "dir")
-    assert fs.info("dir")["md5"] == expected
-    _, _, obj = build(dvc.cache.local, "dir", fs, "md5")
-```
-
-#### 500. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L539) (Line 539)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_granular`
-- **Arguments:** `subdir`
-- **Keywords:** `{}`
-
-```python
-    subdir = "dir/subdir"
-    assert fs.info(subdir).get("md5") is None
-    _, _, obj = build(dvc.cache.local, subdir, fs, "md5")
-```
-
-#### 501. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L542) (Line 542)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_granular`
-- **Arguments:** `posixpath.join(subdir, 'data')`
-- **Keywords:** `{}`
-
-```python
-    assert obj.hash_info == HashInfo("md5", "af314506f1622d107e0ed3f14ec1a3b5.dir")
-    assert fs.info(posixpath.join(subdir, "data")).get("md5") is None
-    _, _, obj = build(dvc.cache.local, posixpath.join(subdir, "data"), fs, "md5")
-```
-
-#### 502. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L547) (Line 547)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_cached_granular`
-- **Arguments:** `posixpath.join(subdir, 'data')`
-- **Keywords:** `{}`
-
-```python
-    assert (
-        fs.info(posixpath.join(subdir, "data"))["md5"]
-        == "8d777f385d3dfec8815d20f7496026dc"
-```
-
-#### 503. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L586) (Line 586)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_dirty_file`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.info("file").get("md5") is None
-    staging, _, obj = build(dvc.cache.local, "file", fs, "md5")
-```
-
-#### 504. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L593) (Line 593)
-- **Target Call:** `fs.info` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_hash_dirty_file`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-    (tmp_dir / "file").unlink()
-    assert fs.info("file")["md5"] == file_hash_info.value
-    _, hash_info = hash_file("file", fs, "md5", state=dvc.state)
-```
-
-#### 505. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L662) (Line 662)
-- **Target Call:** `fs.walk` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_walk_nested_subrepos`
-- **Arguments:** `'/'`
-- **Keywords:** `{'ignore_subrepos': 'not traverse_subrepos'}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    for root, dirs, files in fs.walk("/", ignore_subrepos=not traverse_subrepos):
-        actual[root] = set(dirs + files)
-```
-
-#### 506. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L669) (Line 669)
-- **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsid_noscm`
-- **Arguments:** `dvc.root_dir, None`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.fsid == "dvcfs_" + tokenize(dvc.root_dir, None)
-
-```
-
-#### 507. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L674) (Line 674)
-- **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsid`
-- **Arguments:** `dvc.root_dir, scm.get_rev()`
-- **Keywords:** `{}`
-
-```python
-    fs = DVCFileSystem(repo=dvc)
-    assert fs.fsid == "dvcfs_" + tokenize(dvc.root_dir, scm.get_rev())
-    old_fsid = fs.fsid
-```
-
-#### 508. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L680) (Line 680)
-- **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsid`
-- **Arguments:** `dvc.root_dir, scm.get_rev()`
-- **Keywords:** `{}`
-
-```python
-    assert fs.fsid != old_fsid
-    assert fs.fsid == "dvcfs_" + tokenize(dvc.root_dir, scm.get_rev())
-
-```
-
-#### 509. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L689) (Line 689)
-- **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsid_url`
-- **Arguments:** `url, erepo_dir.scm.get_rev()`
-- **Keywords:** `{}`
-
-```python
-        fs = DVCFileSystem(repo=dvc)
-        assert fs.fsid == "dvcfs_" + tokenize(url, erepo_dir.scm.get_rev())
-        old_fsid = fs.fsid
-```
-
-#### 510. [tests/unit/fs/test_dvc.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvc.py#L698) (Line 698)
-- **Target Call:** `tokenize` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fsid_url`
-- **Arguments:** `url, erepo_dir.scm.get_rev()`
-- **Keywords:** `{}`
-
-```python
-        assert fs.fsid != old_fsid
-        assert fs.fsid == "dvcfs_" + tokenize(url, erepo_dir.scm.get_rev())
-
-```
-
-#### 511. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L164) (Line 164)
-- **Target Call:** `LocalFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `DVCFixtures.local_fs`
-- **Arguments:** ``
-- **Keywords:** `{'auto_mkdir': 'True'}`
-
-```python
-        # for certain implementations.
-        return LocalFileSystem(auto_mkdir=True)
-
-```
-
-#### 512. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L217) (Line 217)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
-- **Arguments:** `fs_join(source, 'file2'), target`
-- **Keywords:** `{}`
-
-```python
-        # Copy from source directory
-        fs.get(fs_join(source, "file2"), target)
-        assert local_fs.isfile(target_file2)
-```
-
-#### 513. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L221) (Line 221)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', 'subfile1'), target`
-- **Keywords:** `{}`
-
-```python
-        # Copy from sub directory
-        fs.get(fs_join(source, "subdir", "subfile1"), target)
-        assert local_fs.isfile(target_subfile1)
-```
-
-#### 514. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L230) (Line 230)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
-- **Arguments:** `fs_join(source, 'file2'), target + '/'`
-- **Keywords:** `{}`
-
-```python
-        # Repeat with trailing slash on target
-        fs.get(fs_join(source, "file2"), target + "/")
-        assert local_fs.isdir(target)
-```
-
-#### 515. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L234) (Line 234)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', 'subfile1'), target + '/'`
-- **Keywords:** `{}`
-
-```python
-
-        fs.get(fs_join(source, "subdir", "subfile1"), target + "/")
-        assert local_fs.isfile(target_subfile1)
-```
-
-#### 516. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L252) (Line 252)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_new_directory`
-- **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newdir/')`
-- **Keywords:** `{}`
-
-```python
-
-        fs.get(
-            fs_join(source, "subdir", "subfile1"), local_join(target, "newdir/")
-        )  # Note trailing slash
-
-```
-
-#### 517. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L275) (Line 275)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_file_in_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newfile')`
-- **Keywords:** `{}`
-
-```python
-
-        fs.get(fs_join(source, "subdir", "subfile1"), local_join(target, "newfile"))
-        assert local_fs.isfile(local_join(target, "newfile"))
-```
-
-#### 518. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L293) (Line 293)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_file_to_file_in_new_directory`
-- **Arguments:** `fs_join(source, 'subdir', 'subfile1'), local_join(target, 'newdir', 'newfile')`
-- **Keywords:** `{}`
-
-```python
-
-        fs.get(
-            fs_join(source, "subdir", "subfile1"),
-            local_join(target, "newdir", "newfile"),
-        )
-        assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 519. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L323) (Line 323)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{}`
-
-```python
-            # Without recursive does nothing
-            fs.get(s, t)
-            assert local_fs.ls(target) == []
-```
-
-#### 520. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L327) (Line 327)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-            # With recursive
-            fs.get(s, t, recursive=True)
-            if source_slash:
-```
-
-#### 521. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L356) (Line 356)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_existing_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '1'}`
-
-```python
-            # Limit recursive by maxdepth
-            fs.get(s, t, recursive=True, maxdepth=1)
-            if source_slash:
-```
-
-#### 522. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L403) (Line 403)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{}`
-
-```python
-            # Without recursive does nothing
-            fs.get(s, t)
-            assert local_fs.ls(target) == []
-```
-
-#### 523. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L407) (Line 407)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-            # With recursive
-            fs.get(s, t, recursive=True)
-            assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 524. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L421) (Line 421)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_to_new_directory`
-- **Arguments:** `s, t`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '1'}`
-
-```python
-            # Limit recursive by maxdepth
-            fs.get(s, t, recursive=True, maxdepth=1)
-            assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 525. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L450) (Line 450)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', '*'), t`
-- **Keywords:** `{}`
-
-```python
-            # Without recursive
-            fs.get(fs_join(source, "subdir", "*"), t)
-            assert local_fs.isfile(local_join(target, "subfile1"))
-```
-
-#### 526. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L468) (Line 468)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', glob), t`
-- **Keywords:** `{'recursive': 'recursive'}`
-
-```python
-            for glob, recursive in zip(["*", "**"], [True, False]):
-                fs.get(fs_join(source, "subdir", glob), t, recursive=recursive)
-                assert local_fs.isfile(local_join(target, "subfile1"))
-```
-
-#### 527. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L486) (Line 486)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_existing_directory`
-- **Arguments:** `fs_join(source, 'subdir', glob), t`
-- **Keywords:** `{'recursive': 'recursive', 'maxdepth': '1'}`
-
-```python
-                # Limit recursive by maxdepth
-                fs.get(
-                    fs_join(source, "subdir", glob), t, recursive=recursive, maxdepth=1
-                )
-                assert local_fs.isfile(local_join(target, "subfile1"))
-```
-
-#### 528. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L524) (Line 524)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
-- **Arguments:** `fs_join(source, 'subdir', '*'), t`
-- **Keywords:** `{}`
-
-```python
-            # Without recursive
-            fs.get(fs_join(source, "subdir", "*"), t)
-            assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 529. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L540) (Line 540)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
-- **Arguments:** `fs_join(source, 'subdir', glob), t`
-- **Keywords:** `{'recursive': 'recursive'}`
-
-```python
-            for glob, recursive in zip(["*", "**"], [True, False]):
-                fs.get(fs_join(source, "subdir", glob), t, recursive=recursive)
-                assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 530. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L555) (Line 555)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_to_new_directory`
-- **Arguments:** `fs_join(source, 'subdir', glob), t`
-- **Keywords:** `{'recursive': 'recursive', 'maxdepth': '1'}`
-
-```python
-                # Limit recursive by maxdepth
-                fs.get(
-                    fs_join(source, "subdir", glob), t, recursive=recursive, maxdepth=1
-                )
-                assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 531. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L596) (Line 596)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
-- **Arguments:** `fs_join(source, path), t`
-- **Keywords:** `{'recursive': 'recursive', 'maxdepth': 'maxdepth'}`
-
-```python
-
-            fs.get(fs_join(source, path), t, recursive=recursive, maxdepth=maxdepth)
-
-```
-
-#### 532. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L601) (Line 601)
-- **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
-- **Arguments:** `local_join(target, 'newdir', p)`
-- **Keywords:** `{}`
-
-```python
-                prefixed_expected = [
-                    make_path_posix(local_join(target, "newdir", p)) for p in expected
-                ]
-```
-
-#### 533. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L605) (Line 605)
-- **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_glob_edge_cases`
-- **Arguments:** `local_join(target, p)`
-- **Keywords:** `{}`
-
-```python
-                prefixed_expected = [
-                    make_path_posix(local_join(target, p)) for p in expected
-                ]
-```
-
-#### 534. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L638) (Line 638)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_list_of_files_to_existing_directory`
-- **Arguments:** `source_files, t`
-- **Keywords:** `{}`
-
-```python
-
-            fs.get(source_files, t)
-            assert local_fs.isfile(local_join(target, "file1"))
-```
-
-#### 535. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L674) (Line 674)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_list_of_files_to_new_directory`
-- **Arguments:** `source_files, local_join(target, 'newdir') + '/'`
-- **Keywords:** `{}`
-
-```python
-
-        fs.get(source_files, local_join(target, "newdir") + "/")  # Note trailing slash
-        assert local_fs.isdir(local_join(target, "newdir"))
-```
-
-#### 536. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L689) (Line 689)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_recursive`
-- **Arguments:** `src, target`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-        for loop in range(2):
-            fs.get(src, target, recursive=True)
-            assert local_fs.isdir(target)
-```
-
-#### 537. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L705) (Line 705)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_recursive`
-- **Arguments:** `src + '/', target`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-        for _ in range(2):
-            fs.get(src + "/", target, recursive=True)
-            assert local_fs.isdir(target)
-```
-
-#### 538. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L724) (Line 724)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_without_files_with_same_name_prefix`
-- **Arguments:** `fs_join(source, 'subdir'), target`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-        # Test without glob
-        fs.get(fs_join(source, "subdir"), target, recursive=True)
-
-```
-
-#### 539. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L733) (Line 733)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_directory_without_files_with_same_name_prefix`
-- **Arguments:** `fs_join(source, 'subdir*'), target`
-- **Keywords:** `{'recursive': 'True'}`
-
-```python
-        # Test with glob
-        fs.get(fs_join(source, "subdir*"), target, recursive=True)
-
-```
-
-#### 540. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L759) (Line 759)
-- **Target Call:** `make_path_posix` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_with_source_and_destination_as_list`
-- **Arguments:** `local_join(target, f'{hashed_i}.txt')`
-- **Keywords:** `{}`
-
-```python
-            destination_files.append(
-                make_path_posix(local_join(target, f"{hashed_i}.txt"))
-            )
-```
-
-#### 541. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L763) (Line 763)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDVCFileSystemGet.test_get_with_source_and_destination_as_list`
-- **Arguments:** ``
-- **Keywords:** `{'rpath': 'source_files', 'lpath': 'destination_files'}`
-
-```python
-        # Copy and assert order was kept
-        fs.get(rpath=source_files, lpath=destination_files)
-
-```
-
-#### 542. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L785) (Line 785)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_maxdepth`
-- **Arguments:** `'dir', 'dir1'`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '1'}`
-
-```python
-    fs = DVCFileSystem(tmp_dir)
-    fs.get("dir", "dir1", recursive=True, maxdepth=1)
-    assert (tmp_dir / "dir1").read_text() == {"file1": "file1"}
-```
-
-#### 543. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L788) (Line 788)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_maxdepth`
-- **Arguments:** `'dir', 'dir2'`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '2'}`
-
-```python
-
-    fs.get("dir", "dir2", recursive=True, maxdepth=2)
-    assert (tmp_dir / "dir2").read_text() == {
-```
-
-#### 544. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L794) (Line 794)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_maxdepth`
-- **Arguments:** `'dir', 'dir3'`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '3'}`
-
-```python
-
-    fs.get("dir", "dir3", recursive=True, maxdepth=3)
-    assert (tmp_dir / "dir3").read_text() == {
-```
-
-#### 545. [tests/unit/fs/test_dvcfs.py](https://github.com/iterative/dvc/blob/main/tests/unit/fs/test_dvcfs.py#L800) (Line 800)
-- **Target Call:** `fs.get` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_maxdepth`
-- **Arguments:** `'dir', 'dir4'`
-- **Keywords:** `{'recursive': 'True', 'maxdepth': '4'}`
-
-```python
-
-    fs.get("dir", "dir4", recursive=True, maxdepth=4)
-    assert (tmp_dir / "dir4").read_text() == {
-```
-
-#### 546. [tests/unit/remote/test_remote.py](https://github.com/iterative/dvc/blob/main/tests/unit/remote/test_remote.py#L52) (Line 52)
-- **Target Call:** `fs.makedirs` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_makedirs_not_create_for_top_level_path`
-- **Arguments:** `url`
-- **Keywords:** `{}`
-
-```python
-
-    fs.makedirs(url)
-    assert not mocked_client.called
-```
-
-#### 547. [tests/unit/utils/test_fs.py](https://github.com/iterative/dvc/blob/main/tests/unit/utils/test_fs.py#L70) (Line 70)
-- **Target Call:** `self.fs.contains_symlink_up_to` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_should_call_recursive_on_no_condition_matched`
-- **Arguments:** `os.path.join('foo', 'path'), 'foo'`
-- **Keywords:** `{}`
-
-```python
-    # call from full path to match contains_symlink_spy patch path
-    assert not dvc.utils.fs.contains_symlink_up_to(os.path.join("foo", "path"), "foo")
-    assert contains_symlink_spy.mock.call_count == 2
-```
-
 ### Kedro ([kedro-org/kedro](https://github.com/kedro-org/kedro))
-- **Usages Found:** `9` in `3` files.
+- **Usages Found:** `4` in `1` files.
 
 #### 1. [kedro/config/omegaconf_config.py](https://github.com/kedro-org/kedro/blob/main/kedro/config/omegaconf_config.py#L397) (Line 397)
 - **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
@@ -10549,70 +6432,8 @@ def load_path(fs_path, fs, **kwargs):
 
 ```
 
-#### 5. [tests/io/test_core.py](https://github.com/kedro-org/kedro/blob/main/tests/io/test_core.py#L86) (Line 86)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `MyVersionedDataset.__init__`
-- **Arguments:** `self._protocol`
-- **Keywords:** `{}`
-
-```python
-        self._protocol = protocol
-        self._fs = fsspec.filesystem(self._protocol, **_fs_args)
-
-```
-
-#### 6. [tests/io/test_core.py](https://github.com/kedro-org/kedro/blob/main/tests/io/test_core.py#L130) (Line 130)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `MyLocalVersionedDataset.__init__`
-- **Arguments:** `self._protocol`
-- **Keywords:** `{}`
-
-```python
-        self._protocol = protocol
-        self._fs = fsspec.filesystem(self._protocol, **_fs_args)
-
-```
-
-#### 7. [tests/io/test_core.py](https://github.com/kedro-org/kedro/blob/main/tests/io/test_core.py#L827) (Line 827)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `MyLegacyVersionedDataset.__init__`
-- **Arguments:** `self._protocol`
-- **Keywords:** `{}`
-
-```python
-        self._protocol = protocol
-        self._fs = fsspec.filesystem(self._protocol, **_fs_args)
-
-```
-
-#### 8. [tests/io/test_data_catalog.py](https://github.com/kedro-org/kedro/blob/main/tests/io/test_data_catalog.py#L580) (Line 580)
-- **Target Call:** `self.filesystem.assert_called_with` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDataCatalogFromConfig.test_link_credentials`
-- **Arguments:** `'s3'`
-- **Keywords:** `{}`
-
-```python
-            expected_client_kwargs = correct_config["credentials"]["s3_credentials"]
-            mock_client.filesystem.assert_called_with("s3", **expected_client_kwargs)
-
-```
-
-#### 9. [tests/io/test_data_catalog.py](https://github.com/kedro-org/kedro/blob/main/tests/io/test_data_catalog.py#L599) (Line 599)
-- **Target Call:** `self.filesystem.assert_called_once_with` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestDataCatalogFromConfig.test_nested_credentials`
-- **Arguments:** `'s3'`
-- **Keywords:** `{}`
-
-```python
-            }
-            mock_client.filesystem.assert_called_once_with(
-                "s3", **expected_client_kwargs
-            )
-
-```
-
 ### Hugging Face Datasets ([huggingface/datasets](https://github.com/huggingface/datasets))
-- **Usages Found:** `118` in `25` files.
+- **Usages Found:** `88` in `17` files.
 
 #### 1. [src/datasets/arrow_dataset.py](https://github.com/huggingface/datasets/blob/main/src/datasets/arrow_dataset.py#L1851) (Line 1851)
 - **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
@@ -11683,363 +7504,4 @@ def load_path(fs_path, fs, **kwargs):
     def _strip_protocol(cls, path):
         path = stringify_path(path)
         if path.startswith("tmp://"):
-```
-
-#### 89. [tests/io/test_csv.py](https://github.com/huggingface/datasets/blob/main/tests/io/test_csv.py#L174) (Line 174)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dataset_to_csv_fsspec`
-- **Arguments:** `dataset_path, 'rb'`
-- **Keywords:** `{}`
-
-```python
-
-    with fsspec.open(dataset_path, "rb", **mockfs.storage_options) as f:
-        assert f.read()
-```
-
-#### 90. [tests/io/test_json.py](https://github.com/huggingface/datasets/blob/main/tests/io/test_json.py#L294) (Line 294)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestJsonDatasetWriter.test_dataset_to_json_compression`
-- **Arguments:** `path, 'rb'`
-- **Keywords:** `{'compression': "'infer'"}`
-
-```python
-
-        with fsspec.open(path, "rb", compression="infer") as f:
-            exported_content = f.read()
-```
-
-#### 91. [tests/io/test_json.py](https://github.com/huggingface/datasets/blob/main/tests/io/test_json.py#L296) (Line 296)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestJsonDatasetWriter.test_dataset_to_json_compression`
-- **Arguments:** `original_path, 'rb'`
-- **Keywords:** `{'compression': "'infer'"}`
-
-```python
-            exported_content = f.read()
-        with fsspec.open(original_path, "rb", compression="infer") as f:
-            original_content = f.read()
-```
-
-#### 92. [tests/io/test_json.py](https://github.com/huggingface/datasets/blob/main/tests/io/test_json.py#L306) (Line 306)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `TestJsonDatasetWriter.test_dataset_to_json_fsspec`
-- **Arguments:** `dataset_path, 'rb'`
-- **Keywords:** `{}`
-
-```python
-
-        with fsspec.open(dataset_path, "rb", **mockfs.storage_options) as f:
-            assert f.read()
-```
-
-#### 93. [tests/io/test_parquet.py](https://github.com/huggingface/datasets/blob/main/tests/io/test_parquet.py#L310) (Line 310)
-- **Target Call:** `fsspec.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_dataset_to_parquet_fsspec`
-- **Arguments:** `dataset_path, 'rb'`
-- **Keywords:** `{}`
-
-```python
-
-    with fsspec.open(dataset_path, "rb", **mockfs.storage_options) as f:
-        assert f.read()
-```
-
-#### 94. [tests/test_arrow_dataset.py](https://github.com/huggingface/datasets/blob/main/tests/test_arrow_dataset.py#L4539) (Line 4539)
-- **Target Call:** `strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_build_local_temp_path`
-- **Arguments:** `uri_or_path`
-- **Keywords:** `{}`
-
-```python
-def test_build_local_temp_path(uri_or_path):
-    extracted_path = strip_protocol(uri_or_path)
-    local_temp_path = Dataset._build_local_temp_path(extracted_path).as_posix()
-```
-
-#### 95. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L29) (Line 29)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `_load_bucket_module`
-- **Arguments:** ``
-- **Keywords:** `{'skip_instance_cache': 'True'}`
-
-```python
-    # resolution so only the card / metadata handling under test runs for real
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    # Write files with full paths relative to the bucket path (forward slashes for MemoryFileSystem)
-```
-
-#### 96. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L112) (Line 112)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_returns_legacy_infos_as_dict`
-- **Arguments:** ``
-- **Keywords:** `{'skip_instance_cache': 'True'}`
-
-```python
-def test_get_updated_dataset_card_returns_legacy_infos_as_dict():
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/repo", fs=mem)
-```
-
-#### 97. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L113) (Line 113)
-- **Target Call:** `DirFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_returns_legacy_infos_as_dict`
-- **Arguments:** `'/repo'`
-- **Keywords:** `{'fs': 'mem'}`
-
-```python
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/repo", fs=mem)
-
-```
-
-#### 98. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L120) (Line 120)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_returns_legacy_infos_as_dict`
-- **Arguments:** `config.DATASETDICT_INFOS_FILENAME, 'w'`
-- **Keywords:** `{}`
-
-```python
-    }
-    with fs.open(config.DATASETDICT_INFOS_FILENAME, "w") as f:
-        f.write(json.dumps(existing))
-```
-
-#### 99. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L143) (Line 143)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_drops_removed_splits_when_replacing_split_set`
-- **Arguments:** ``
-- **Keywords:** `{'skip_instance_cache': 'True'}`
-
-```python
-def test_get_updated_dataset_card_drops_removed_splits_when_replacing_split_set():
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/shrink", fs=mem)
-```
-
-#### 100. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L144) (Line 144)
-- **Target Call:** `DirFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_drops_removed_splits_when_replacing_split_set`
-- **Arguments:** `'/shrink'`
-- **Keywords:** `{'fs': 'mem'}`
-
-```python
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/shrink", fs=mem)
-
-```
-
-#### 101. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L146) (Line 146)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_drops_removed_splits_when_replacing_split_set`
-- **Arguments:** `config.REPOCARD_FILENAME, 'w'`
-- **Keywords:** `{}`
-
-```python
-
-    with fs.open(config.REPOCARD_FILENAME, "w") as f:
-        f.write(
-```
-
-#### 102. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L176) (Line 176)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_keeps_existing_splits_when_appending`
-- **Arguments:** ``
-- **Keywords:** `{'skip_instance_cache': 'True'}`
-
-```python
-def test_get_updated_dataset_card_keeps_existing_splits_when_appending():
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/append", fs=mem)
-```
-
-#### 103. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L177) (Line 177)
-- **Target Call:** `DirFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_keeps_existing_splits_when_appending`
-- **Arguments:** `'/append'`
-- **Keywords:** `{'fs': 'mem'}`
-
-```python
-    mem = MemoryFileSystem(skip_instance_cache=True)
-    fs = DirFileSystem("/append", fs=mem)
-
-```
-
-#### 104. [tests/test_buckets.py](https://github.com/huggingface/datasets/blob/main/tests/test_buckets.py#L179) (Line 179)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_updated_dataset_card_keeps_existing_splits_when_appending`
-- **Arguments:** `config.REPOCARD_FILENAME, 'w'`
-- **Keywords:** `{}`
-
-```python
-
-    with fs.open(config.REPOCARD_FILENAME, "w") as f:
-        f.write(README_WITH_CONFIG)
-```
-
-#### 105. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L104) (Line 104)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `pattern_results`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-            Path(os.path.abspath(path)).as_posix()
-            for path in fsspec.filesystem("file").glob(os.path.join(complex_data_dir, pattern))
-            if Path(path).name not in _FILES_TO_IGNORE
-```
-
-#### 106. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L669) (Line 669)
-- **Target Call:** `fs._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `resolver`
-- **Arguments:** `base_path`
-- **Keywords:** `{}`
-
-```python
-        return [
-            file_path[len(fs._strip_protocol(base_path)) :].lstrip("/")
-            for file_path in fs.glob(pattern)
-```
-
-#### 107. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L670) (Line 670)
-- **Target Call:** `fs.glob` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `resolver`
-- **Arguments:** `pattern`
-- **Keywords:** `{}`
-
-```python
-            file_path[len(fs._strip_protocol(base_path)) :].lstrip("/")
-            for file_path in fs.glob(pattern)
-            if fs.isfile(file_path)
-```
-
-#### 108. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L671) (Line 671)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `resolver`
-- **Arguments:** `file_path`
-- **Keywords:** `{}`
-
-```python
-            for file_path in fs.glob(pattern)
-            if fs.isfile(file_path)
-        ]
-```
-
-#### 109. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L679) (Line 679)
-- **Target Call:** `fs._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_data_files_patterns`
-- **Arguments:** `file_path`
-- **Keywords:** `{}`
-
-```python
-        expected = [
-            fs._strip_protocol(file_path)[len(fs._strip_protocol(base_path)) :].lstrip("/")
-            for file_path in data_file_per_split[split]
-```
-
-#### 110. [tests/test_data_files.py](https://github.com/huggingface/datasets/blob/main/tests/test_data_files.py#L679) (Line 679)
-- **Target Call:** `fs._strip_protocol` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_get_data_files_patterns`
-- **Arguments:** `base_path`
-- **Keywords:** `{}`
-
-```python
-        expected = [
-            fs._strip_protocol(file_path)[len(fs._strip_protocol(base_path)) :].lstrip("/")
-            for file_path in data_file_per_split[split]
-```
-
-#### 111. [tests/test_dataset_dict.py](https://github.com/huggingface/datasets/blob/main/tests/test_dataset_dict.py#L429) (Line 429)
-- **Target Call:** `MemoryFileSystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `DatasetDictTest.test_iterable_dataset_dict_push_to_hub_forwards_max_shard_size_to_each_split`
-- **Arguments:** ``
-- **Keywords:** `{'skip_instance_cache': 'True'}`
-
-```python
-
-        dummy_fs = MemoryFileSystem(skip_instance_cache=True)
-        dummy_fs.touch("datasets/user/dataset@dummy-sha/README.md")
-```
-
-#### 112. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L27) (Line 27)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_is_remote_filesystem`
-- **Arguments:** `'file'`
-- **Keywords:** `{}`
-
-```python
-
-    fs = fsspec.filesystem("file")
-
-```
-
-#### 113. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L44) (Line 44)
-- **Target Call:** `fsspec.filesystem` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_compression_filesystems`
-- **Arguments:** `compression_fs_class.protocol`
-- **Keywords:** `{'fo': 'input_path'}`
-
-```python
-        pytest.skip(reason)
-    fs = fsspec.filesystem(compression_fs_class.protocol, fo=input_path)
-    expected_filename = os.path.basename(input_path)
-```
-
-#### 114. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L47) (Line 47)
-- **Target Call:** `fs.glob` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_compression_filesystems`
-- **Arguments:** `'*'`
-- **Keywords:** `{}`
-
-```python
-    expected_filename = expected_filename[: expected_filename.rindex(".")]
-    assert fs.glob("*") == [expected_filename]
-    with fs.open(expected_filename, "r", encoding="utf-8") as f, open(text_file, encoding="utf-8") as expected_file:
-```
-
-#### 115. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L48) (Line 48)
-- **Target Call:** `fs.open` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_compression_filesystems`
-- **Arguments:** `expected_filename, 'r'`
-- **Keywords:** `{'encoding': "'utf-8'"}`
-
-```python
-    assert fs.glob("*") == [expected_filename]
-    with fs.open(expected_filename, "r", encoding="utf-8") as f, open(text_file, encoding="utf-8") as expected_file:
-        assert f.read() == expected_file.read()
-```
-
-#### 116. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L58) (Line 58)
-- **Target Call:** `url_to_fs` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fs_isfile`
-- **Arguments:** `path`
-- **Keywords:** `{}`
-
-```python
-    path = f"{protocol}://{member_file_path}::{compressed_file_path}"
-    fs, *_ = url_to_fs(path)
-    assert fs.isfile(member_file_path)
-```
-
-#### 117. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L59) (Line 59)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fs_isfile`
-- **Arguments:** `member_file_path`
-- **Keywords:** `{}`
-
-```python
-    fs, *_ = url_to_fs(path)
-    assert fs.isfile(member_file_path)
-    assert not fs.isfile("non_existing_" + member_file_path)
-```
-
-#### 118. [tests/test_filesystem.py](https://github.com/huggingface/datasets/blob/main/tests/test_filesystem.py#L60) (Line 60)
-- **Target Call:** `fs.isfile` | **Cache_Type:** `NOT_EXPLICIT`
-- **Context:** `test_fs_isfile`
-- **Arguments:** `'non_existing_' + member_file_path`
-- **Keywords:** `{}`
-
-```python
-    assert fs.isfile(member_file_path)
-    assert not fs.isfile("non_existing_" + member_file_path)
 ```

@@ -76,6 +76,19 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 # DATA STRUCTURES FOR CRAWLER RESULTS
 # ================================================================================
 
+SPECIFIED_CACHE_KEYWORDS = {
+    "mmap",
+    "readahead",
+    "first",
+    "blockcache",
+    "block",
+    "bytes",
+    "all",
+    "parts",
+    "background",
+}
+
+
 @dataclass
 class FsspecUsage:
     """Represents a single detected usage of fsspec.open or related file handle call."""
@@ -86,9 +99,10 @@ class FsspecUsage:
     enclosing_function: Optional[str] = None
     enclosing_class: Optional[str] = None
     cache_type: str = "NOT_EXPLICIT"  # Extracted cache_type value or default
+    is_specified_cache_keyword: bool = False  # True if cache_type in SPECIFIED_CACHE_KEYWORDS
     cache_options: Optional[str] = None  # Extracted cache_options dict string
-    repo_url: Optional[str] = None  # Full repository web link (e.g. https://github.com/googleapis/python-bigquery)
-    file_url: Optional[str] = None  # Full line URL (e.g. https://github.com/.../file.py#L42)
+    repo_url: Optional[str] = None  # Full repository web link
+    file_url: Optional[str] = None  # Full line URL
     args: List[str] = field(default_factory=list)
     kwargs: Dict[str, str] = field(default_factory=dict)
     code_snippet: str = ""
@@ -357,6 +371,7 @@ class FsspecASTVisitor(ast.NodeVisitor):
                     enclosing_function=self.current_function,
                     enclosing_class=self.current_class,
                     cache_type=cache_type,
+                    is_specified_cache_keyword=cache_type.lower() in SPECIFIED_CACHE_KEYWORDS,
                     cache_options=cache_options,
                     repo_url=self.repo_url,
                     file_url=file_url,
@@ -405,6 +420,7 @@ class RegexFallbackScanner:
                             end_line_number=idx,
                             target_name="regex_match",
                             cache_type=ct_val,
+                            is_specified_cache_keyword=ct_val.lower() in SPECIFIED_CACHE_KEYWORDS,
                             repo_url=repo_url,
                             file_url=file_url,
                             code_snippet=line.strip(),
@@ -422,8 +438,9 @@ class RegexFallbackScanner:
 class FsspecCrawlerEngine:
     """Engine that manages scanning of files, directories, or GitHub repositories."""
 
-    def __init__(self, use_regex_fallback: bool = True):
+    def __init__(self, use_regex_fallback: bool = True, include_tests: bool = False):
         self.use_regex_fallback = use_regex_fallback
+        self.include_tests = include_tests
 
     def _build_cache_type_summary(self, usages: List[FsspecUsage]) -> Dict[str, int]:
         """Summarize count of each cache_type found in usages."""
@@ -469,8 +486,9 @@ class FsspecCrawlerEngine:
         files_with_matches = 0
 
         for path in root_path.rglob("*.py"):
+            if not self.include_tests and path.name.startswith("test_"):
+                continue
             scanned_count += 1
-            rel_path = str(path.relative_to(root_path))
             usages = self.scan_file(str(path), repo_url=repo_url, branch=branch)
             if usages:
                 files_with_matches += 1
@@ -511,7 +529,12 @@ class FsspecCrawlerEngine:
             )
 
         tree = data.get("tree", [])
-        py_files = [f["path"] for f in tree if f.get("path", "").endswith(".py")]
+        py_files = [
+            f["path"]
+            for f in tree
+            if f.get("path", "").endswith(".py")
+            and (self.include_tests or not Path(f.get("path", "")).name.startswith("test_"))
+        ]
 
         all_usages: List[FsspecUsage] = []
         scanned_count = len(py_files)

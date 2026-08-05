@@ -100,6 +100,7 @@ def crawl_all():
                 u.line_number,
                 u.target_name,
                 u.cache_type,
+                u.is_specified_cache_keyword,
                 u.cache_options or "None",
                 u.enclosing_class or "None",
                 u.enclosing_function or "global",
@@ -111,8 +112,8 @@ def crawl_all():
         writer = csv.writer(f)
         writer.writerow([
             "repository", "file_path", "line_number", "target_name",
-            "cache_type", "cache_options", "enclosing_class",
-            "enclosing_function", "file_url", "code_snippet"
+            "cache_type", "is_specified_cache_keyword", "cache_options",
+            "enclosing_class", "enclosing_function", "file_url", "code_snippet"
         ])
         writer.writerows(csv_rows)
     print(f"\nSaved CSV report ({len(csv_rows)} rows) to: {csv_path}")
