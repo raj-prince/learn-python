@@ -200,3 +200,25 @@ def test_report_export(tmp_path):
     export_markdown_report(report, str(md_file))
     assert md_file.exists()
     assert "Master FSSPEC Usage Report" in md_file.read_text(encoding="utf-8")
+
+
+def test_dict_subscript_cache_type_mmap():
+    code = """
+import fsspec
+
+def main(args):
+    open_kwargs = {}
+    if args.cache_type is not None:
+        open_kwargs["cache_type"] = args.cache_type
+    else:
+        open_kwargs["cache_type"] = "mmap"
+
+    with fsspec.open(args.url, "rb", **open_kwargs) as f:
+        pass
+"""
+    engine = FsspecCrawlerEngine()
+    usages = engine.scan_code("bench.py", code)
+    assert len(usages) == 1
+    assert usages[0].cache_type in ("mmap", "args.cache_type")
+    assert usages[0].is_specified_cache_keyword is True or usages[0].cache_type == "mmap"
+

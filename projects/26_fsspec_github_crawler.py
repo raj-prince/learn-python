@@ -78,6 +78,7 @@ DEFAULT_TARGET_REPOS = [
     ("PyTorch Lightning", "Lightning-AI/pytorch-lightning"),
     ("TorchTitan", "pytorch/torchtitan"),
     ("Ray", "ray-project/ray"),
+    ("learn-python", "raj-prince/learn-python"),
 ]
 
 
@@ -177,6 +178,7 @@ class FsspecASTVisitor(ast.NodeVisitor):
         self.current_class: Optional[str] = None
         self.current_function: Optional[str] = None
         self.local_cache_type: Optional[str] = None
+        self.dict_cache_types: Dict[str, str] = {}
         self.imports: Dict[str, str] = {}
         self.filesystem_vars: set = {"fs", "self.fs", "gcs_fs", "s3_fs"}
 
@@ -259,7 +261,7 @@ class FsspecASTVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Assign(self, node: ast.Assign):
-        """Track filesystem assignments, e.g. `fs = fsspec.filesystem('gcs')`."""
+        """Track filesystem assignments and dictionary cache_type assignments."""
         if isinstance(node.value, ast.Call):
             func = node.value.func
             if isinstance(func, ast.Attribute) and func.attr == "filesystem":
@@ -267,6 +269,30 @@ class FsspecASTVisitor(ast.NodeVisitor):
                     var_name = self._get_node_source(target)
                     if var_name:
                         self.filesystem_vars.add(var_name)
+
+        # Track dict_name['cache_type'] = 'mmap' or dict_name['cache_type'] = val
+        for target in node.targets:
+            if isinstance(target, ast.Subscript) and isinstance(target.value, ast.Name):
+                dict_name = target.value.id
+                slice_node = target.slice
+                if isinstance(slice_node, ast.Constant) and slice_node.value in ("cache_type", "simple_cache"):
+                    if isinstance(node.value, ast.Constant):
+                        self.dict_cache_types[dict_name] = str(node.value.value)
+                    else:
+                        self.dict_cache_types[dict_name] = self._get_node_source(node.value)
+
+        # Track dict_name = {'cache_type': 'mmap'}
+        if isinstance(node.value, ast.Dict):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    dict_name = target.id
+                    for k, v in zip(node.value.keys, node.value.values):
+                        if isinstance(k, ast.Constant) and k.value in ("cache_type", "simple_cache"):
+                            if isinstance(v, ast.Constant):
+                                self.dict_cache_types[dict_name] = str(v.value)
+                            else:
+                                self.dict_cache_types[dict_name] = self._get_node_source(v)
+
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call):
@@ -305,8 +331,16 @@ class FsspecASTVisitor(ast.NodeVisitor):
                 if kw.arg is not None
             }
 
+            # Check for unpacked kwargs dictionary, e.g. **open_kwargs
+            unpacked_ct = None
+            for kw in node.keywords:
+                if kw.arg is None and isinstance(kw.value, ast.Name):
+                    dict_name = kw.value.id
+                    if dict_name in self.dict_cache_types:
+                        unpacked_ct = self.dict_cache_types[dict_name]
+
             # Extract cache_type and cache_options explicitly
-            raw_cache_type = kwargs_repr.get("cache_type") or kwargs_repr.get("simple_cache")
+            raw_cache_type = kwargs_repr.get("cache_type") or kwargs_repr.get("simple_cache") or unpacked_ct
             if raw_cache_type:
                 cache_type = self._clean_str_literal(raw_cache_type)
             elif getattr(self, "local_cache_type", None):
@@ -643,30 +677,25 @@ def main():
 
     args = parser.parse_args()
 
-    target_repos = []
-    if args.all:
-        target_repos = [repo for _, repo in DEFAULT_TARGET_REPOS]
-    elif args.repo:
-        target_repos = args.repo
+    engine = FsspecCrawlerEngine(include_tests=args.include_tests)
+    reports: List[CrawlReport] = []
+    start_time = time.time()
+
+    if args.all or args.repo:
+        target_repos = [repo for _, repo in DEFAULT_TARGET_REPOS] if args.all else (args.repo or [])
+        for repo in target_repos:
+            print(f"\n[+] Crawling GitHub repo: {repo}...")
+            report = engine.scan_github_repo(repo, branch=args.branch)
+            if report.total_files_scanned == 0 and args.branch == "main":
+                report = engine.scan_github_repo(repo, branch="master")
+            print(f"    - Scanned {report.total_files_scanned} files | Found {report.total_usages_found} usages in {report.files_with_usages} files.")
+            print(f"    - Cache_Type Summary: {report.cache_type_summary}")
+            reports.append(report)
     else:
         parser.error("Please specify --repo <owner/repo...> or --all")
 
-    engine = FsspecCrawlerEngine(include_tests=args.include_tests)
-    reports: List[CrawlReport] = []
-
-    start_time = time.time()
-    for repo in target_repos:
-        print(f"\n[+] Crawling GitHub repo: {repo}...")
-        report = engine.scan_github_repo(repo, branch=args.branch)
-        if report.total_files_scanned == 0 and args.branch == "main":
-            report = engine.scan_github_repo(repo, branch="master")
-
-        print(f"    - Scanned {report.total_files_scanned} files | Found {report.total_usages_found} usages in {report.files_with_usages} files.")
-        print(f"    - Cache_Type Summary: {report.cache_type_summary}")
-        reports.append(report)
-
     elapsed = time.time() - start_time
-    print(f"\nCompleted crawling {len(reports)} repositories in {elapsed:.2f} seconds.")
+    print(f"\nCompleted scan across {len(reports)} target(s) in {elapsed:.2f} seconds.")
 
     # Export CSV report
     if args.output_csv:
@@ -676,13 +705,13 @@ def main():
     if args.output_json:
         json_data = {
             "summary": {
-                "total_repositories": len(reports),
+                "total_targets": len(reports),
                 "total_files_scanned": sum(r.total_files_scanned for r in reports),
                 "files_with_usages": sum(r.files_with_usages for r in reports),
                 "total_usages_found": sum(r.total_usages_found for r in reports),
                 "elapsed_seconds": round(elapsed, 2)
             },
-            "per_repository": [r.to_dict() for r in reports]
+            "per_target": [r.to_dict() for r in reports]
         }
         Path(args.output_json).write_text(json.dumps(json_data, indent=2), encoding="utf-8")
         print(f"JSON report saved to: {args.output_json}")
