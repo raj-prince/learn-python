@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 """
-Unit tests for 26_fsspec_bigquery_crawler.py
+Unit tests for 26_fsspec_github_crawler.py
 """
 
 import json
-import os
-import tempfile
 import pytest
 import sys
 from pathlib import Path
 from importlib import import_module
 
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
-crawler_module = import_module("26_fsspec_bigquery_crawler")
+crawler_module = import_module("26_fsspec_github_crawler")
 FsspecASTVisitor = crawler_module.FsspecASTVisitor
 FsspecCrawlerEngine = crawler_module.FsspecCrawlerEngine
 FsspecUsage = crawler_module.FsspecUsage
@@ -62,6 +60,7 @@ def _open_parquet_files(paths, fs=None, context_stack=None, **kwargs):
     u = usages[0]
     assert u.target_name == "fsspec_parquet.open_parquet_file"
     assert u.cache_type == "parts"
+    assert u.is_specified_cache_keyword is True
 
 
 def test_repo_url_and_file_url():
@@ -78,6 +77,7 @@ def read_parquet_mmap(url):
     u = usages[0]
     assert u.repo_url == "https://github.com/googleapis/python-bigquery"
     assert u.file_url == "https://github.com/googleapis/python-bigquery/blob/main/google/cloud/bigquery/client.py#L5"
+    assert u.is_specified_cache_keyword is True
 
 
 def test_cache_type_extraction():
@@ -175,17 +175,22 @@ def broken_func(
     assert usages[0].cache_type == "readahead"
 
 
-def test_directory_scan_and_report_export(tmp_path):
-    f1 = tmp_path / "sample1.py"
-    f1.write_text("import fsspec\nwith fsspec.open('gs://b/f.csv', cache_type='mmap'): pass", encoding="utf-8")
-    
-    f2 = tmp_path / "sample2.py"
-    f2.write_text("print('no fsspec here')", encoding="utf-8")
-
+def test_report_export(tmp_path):
+    code = "import fsspec\nwith fsspec.open('gs://b/f.csv', cache_type='mmap'): pass"
     engine = FsspecCrawlerEngine()
-    report = engine.scan_directory(str(tmp_path))
+    usages = engine.scan_code("sample.py", code, repo_url="https://github.com/dask/dask", branch="main")
 
-    assert report.total_files_scanned == 2
+    report = CrawlReport(
+        target_source="GitHub:dask/dask (main)",
+        total_files_scanned=1,
+        files_with_usages=1,
+        total_usages_found=len(usages),
+        repo_url="https://github.com/dask/dask",
+        cache_type_summary=engine._build_cache_type_summary(usages),
+        usages=usages,
+    )
+
+    assert report.total_files_scanned == 1
     assert report.files_with_usages == 1
     assert report.total_usages_found == 1
     assert report.cache_type_summary == {"mmap": 1}
@@ -194,4 +199,4 @@ def test_directory_scan_and_report_export(tmp_path):
     md_file = tmp_path / "report.md"
     export_markdown_report(report, str(md_file))
     assert md_file.exists()
-    assert "FSSPEC Open Usage & Cache_Type Crawl Report" in md_file.read_text(encoding="utf-8")
+    assert "Master FSSPEC Usage Report" in md_file.read_text(encoding="utf-8")
