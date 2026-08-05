@@ -60,7 +60,7 @@ def main() -> None:
     if args.cache_type is not None:
         open_kwargs["cache_type"] = args.cache_type
     # else :
-        # open_kwargs["cache_type"] = None  # Disable caching if not specified
+        open_kwargs["cache_type"] = "mmap"  # Disable caching if not specified
 
     logger.debug("Opening %s with block_size=%s and cache_type=%s", args.url, args.block_size, args.cache_type)
 
