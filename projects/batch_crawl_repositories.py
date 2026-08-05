@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 ================================================================================
-BATCH FSSPEC CRAWLER FOR MAJOR PYTHON DATA SCIENCE & ML LIBRARIES
+BATCH FSSPEC CRAWLER FOR MAJOR PYTHON DATA SCIENCE, ML & AI FRAMEWORKS
 ================================================================================
 
-Crawls and performs AST static analysis on 8 major open-source data repositories:
+Crawls and performs AST static analysis on 12 major open-source repositories:
 1. Dask (dask/dask)
 2. Intake (intake/intake)
 3. pandas (pandas-dev/pandas)
@@ -13,9 +13,13 @@ Crawls and performs AST static analysis on 8 major open-source data repositories
 6. DVC (iterative/dvc)
 7. Kedro (kedro-org/kedro)
 8. Hugging Face Datasets (huggingface/datasets)
+9. PyTorch (pytorch/pytorch)
+10. PyTorch Lightning (Lightning-AI/pytorch-lightning)
+11. TorchTitan (pytorch/torchtitan)
+12. Ray (ray-project/ray)
 
 Generates combined outputs:
-- fsspec_crawl_results.csv (CSV format for data analysis)
+- fsspec_crawl_results.csv (CSV format with is_specified_cache_keyword boolean column)
 - combined_fsspec_report.json (JSON format)
 - combined_fsspec_report.md (Markdown format)
 """
@@ -36,6 +40,7 @@ crawler_module = import_module("26_fsspec_bigquery_crawler")
 FsspecCrawlerEngine = crawler_module.FsspecCrawlerEngine
 CrawlReport = crawler_module.CrawlReport
 FsspecUsage = crawler_module.FsspecUsage
+SPECIFIED_CACHE_KEYWORDS = crawler_module.SPECIFIED_CACHE_KEYWORDS
 export_markdown_report = crawler_module.export_markdown_report
 
 TARGET_REPOS = [
@@ -47,14 +52,19 @@ TARGET_REPOS = [
     ("DVC", "iterative/dvc"),
     ("Kedro", "kedro-org/kedro"),
     ("Hugging Face Datasets", "huggingface/datasets"),
+    ("PyTorch", "pytorch/pytorch"),
+    ("PyTorch Lightning", "Lightning-AI/pytorch-lightning"),
+    ("TorchTitan", "pytorch/torchtitan"),
+    ("Ray", "ray-project/ray"),
 ]
 
-def crawl_all():
+def crawl_all(include_tests: bool = False):
     print("=" * 80)
-    print("STARTING BATCH FSSPEC CRAWL ACROSS 8 MAJOR REPOSITORIES")
+    print("STARTING BATCH FSSPEC CRAWL ACROSS 12 MAJOR FRAMEWORKS & LIBRARIES")
+    print(f"Skipping test python files (test_*.py): {not include_tests}")
     print("=" * 80)
     
-    engine = FsspecCrawlerEngine(use_regex_fallback=True)
+    engine = FsspecCrawlerEngine(use_regex_fallback=True, include_tests=include_tests)
     all_reports: List[CrawlReport] = []
     combined_usages: List[FsspecUsage] = []
     
@@ -94,13 +104,14 @@ def crawl_all():
     for r in all_reports:
         repo_name = r.target_source.replace("GitHub:", "").split()[0]
         for u in r.usages:
+            is_spec = u.cache_type.lower() in SPECIFIED_CACHE_KEYWORDS
             csv_rows.append([
                 repo_name,
                 u.file_path,
                 u.line_number,
                 u.target_name,
                 u.cache_type,
-                u.is_specified_cache_keyword,
+                is_spec,
                 u.cache_options or "None",
                 u.enclosing_class or "None",
                 u.enclosing_function or "global",
@@ -137,13 +148,14 @@ def crawl_all():
     # 3. Generate combined Markdown Report
     md_path = base_dir / "combined_fsspec_report.md"
     md_lines = [
-        f"# Master FSSPEC Usage Report Across 8 Major Python Ecosystem Repositories",
+        f"# Master FSSPEC Usage Report Across 12 Major Python Ecosystem & AI Repositories",
         f"",
         f"- **Repositories Crawled:** `{len(TARGET_REPOS)}`",
         f"- **Total Files Scanned:** `{total_files}`",
         f"- **Files with FSSPEC Usages:** `{total_matches_files}`",
         f"- **Total FSSPEC Usages Detected:** `{total_usages}`",
         f"- **Time Elapsed:** `{elapsed:.2f} seconds`",
+        f"- **Skipping Test Files (test_*.py):** `{not include_tests}`",
         f"",
         f"---",
         f"",
@@ -165,24 +177,27 @@ def crawl_all():
         f"",
         f"## 📈 Global Cache_Type Breakdown",
         f"",
-        f"| Cache_Type Option | Total Occurrences | Description |",
-        f"| :--- | :--- | :--- |"
+        f"| Cache_Type Option | Total Occurrences | Is Specified Keyword | Description |",
+        f"| :--- | :--- | :--- | :--- |"
     ])
     
     descriptions = {
         "readahead": "Default prefetching chunks for sequential reading",
         "mmap": "Memory-mapped temporary file for random binary/columnar seeking (Parquet/ORC)",
         "block": "Fixed-size block memory caching",
+        "blockcache": "Fixed-size block memory caching",
         "none": "No cache, direct HTTP Range GET requests",
         "bytes": "Dictionary of exact byte ranges in RAM",
         "background": "Async background block prefetching",
         "file": "Downloads complete file to local disk first",
+        "parts": "Parquet section/column block caching (required for fsspec.parquet precaching)",
         "NOT_EXPLICIT": "cache_type keyword omitted (uses default fsspec strategy)"
     }
     
     for ct, cnt in global_cache_summary.items():
         desc = descriptions.get(ct, "Custom cache strategy")
-        md_lines.append(f"| `{ct}` | `{cnt}` | {desc} |")
+        is_spec = ct.lower() in SPECIFIED_CACHE_KEYWORDS
+        md_lines.append(f"| `{ct}` | `{cnt}` | `{is_spec}` | {desc} |")
         
     md_lines.extend([
         f"",
@@ -208,7 +223,7 @@ def crawl_all():
                 file_link_str = f"[{usage.file_path}]({usage.file_url})" if usage.file_url else f"`{usage.file_path}`"
                 md_lines.extend([
                     f"#### {idx}. {file_link_str} (Line {usage.line_number})",
-                    f"- **Target Call:** `{usage.target_name}` | **Cache_Type:** `{usage.cache_type}`",
+                    f"- **Target Call:** `{usage.target_name}` | **Cache_Type:** `{usage.cache_type}` | **Is Specified Keyword:** `{usage.is_specified_cache_keyword}`",
                     f"- **Context:** {func_info}",
                     f"- **Arguments:** `{', '.join(usage.args)}`",
                     f"- **Keywords:** `{usage.kwargs}`",
@@ -223,4 +238,4 @@ def crawl_all():
     print(f"Generated Master Markdown report at: {md_path}")
 
 if __name__ == "__main__":
-    crawl_all()
+    crawl_all(include_tests=False)
