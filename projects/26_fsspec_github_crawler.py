@@ -78,6 +78,7 @@ DEFAULT_TARGET_REPOS = [
     ("PyTorch Lightning", "Lightning-AI/pytorch-lightning"),
     ("TorchTitan", "pytorch/torchtitan"),
     ("Ray", "ray-project/ray"),
+    ("Apache Arrow", "apache/arrow"),
     ("learn-python", "raj-prince/learn-python"),
 ]
 
