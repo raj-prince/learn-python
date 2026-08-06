@@ -103,9 +103,6 @@ PERFORMANCE_LABELS: Set[str] = {
 }
 
 DEFAULT_TARGET_REPOS: List[Tuple[str, str]] = [
-    ("fsspec Core", "fsspec/filesystem_spec"),
-    ("gcsfs", "fsspec/gcsfs"),
-    ("s3fs", "fsspec/s3fs"),
     ("Dask", "dask/dask"),
     ("pandas", "pandas-dev/pandas"),
     ("xarray", "pydata/xarray"),
