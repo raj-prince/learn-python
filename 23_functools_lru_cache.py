@@ -131,19 +131,23 @@ def demonstrate_cache_info_and_clear():
     res_unwrapped = compute_square.__wrapped__(10)
     print(f"   Executed directly via __wrapped__: {res_unwrapped}")
 
+    # calling compute_square(10) will not use the cached value
+    again_10 = compute_square(10)
+    print(f"Cache miss only for 10 because we used __wrapped__: {again_10}")
+
 
 # ================================================================================
 # PART 3: `typed=True` vs `typed=False`
 # ================================================================================
 
 @lru_cache(maxsize=16, typed=False)
-def untyped_func(val):
-    return f"Processed {val}"
+def untyped_func(val1, val2="a"):
+    return f"Processed {val1}, {val2}"
 
 
 @lru_cache(maxsize=16, typed=True)
-def typed_func(val):
-    return f"Processed {val}"
+def typed_func(val1, val2="a"):
+    return f"Processed {val1}, {val2}"
 
 
 def demonstrate_typed_parameter():
@@ -154,15 +158,23 @@ def demonstrate_typed_parameter():
     untyped_func.cache_clear()
     typed_func.cache_clear()
 
-    # untyped: 3 and 3.0 share the same entry
-    untyped_func(3)
-    untyped_func(3.0)
-    print(f"Untyped Cache (typed=False) -> CurrSize: {untyped_func.cache_info().currsize} (Shared entry for 3 & 3.0)")
+    # 1. Multi-argument call: shared entry for 3 & 3.0 when typed=False
+    untyped_func(3, "a")
+    untyped_func(3.0, "a")
+    print(f"Untyped Cache (typed=False) [3, 'a'] vs [3.0, 'a'] -> CurrSize: {untyped_func.cache_info().currsize} (Shared entry for 3 & 3.0!)")
 
-    # typed: 3 and 3.0 get separate entries
-    typed_func(3)
-    typed_func(3.0)
-    print(f"Typed   Cache (typed=True)  -> CurrSize: {typed_func.cache_info().currsize} (Separate entries for 3 & 3.0)")
+    # typed=True: 3 and 3.0 get separate entries because types (int vs float) are included in the key
+    typed_func(3, "a")
+    typed_func(3.0, "a")
+    print(f"Typed   Cache (typed=True)  [3, 'a'] vs [3.0, 'a'] -> CurrSize: {typed_func.cache_info().currsize} (Separate entries for 3 & 3.0)")
+
+    # 2. Gotcha: Single scalar int vs float fast-path quirk in functools._make_key
+    # Python optimizes single int/str args by returning raw values, but wraps floats in _HashedSeq.
+    # Hence, single-arg untyped_func(3) vs untyped_func(3.0) results in key comparison `3 == _HashedSeq((3.0,))` (False), producing CurrSize=2.
+    untyped_single = lru_cache(maxsize=16, typed=False)(lambda x: x)
+    untyped_single(3)
+    untyped_single(3.0)
+    print(f"Single-arg int vs float Quirk (typed=False)        -> CurrSize: {untyped_single.cache_info().currsize} (int unwrapped vs float _HashedSeq)")
 
 
 # ================================================================================
@@ -253,40 +265,46 @@ def demonstrate_programmatic_lru_cache():
 
 
 # ================================================================================
-# PART 6: ADVANCED TRICK — USING lru_cache AS AN EVICTION QUEUE FOR DICTIONARIES
+# PART 6: BUILDING AN LRU DICTIONARY (collections.OrderedDict)
 # ================================================================================
+
+from collections import OrderedDict
+
 
 class LRUDictCache:
     """
-    A dictionary cache (commonly used in fsspec / gcsfs / s3fs) that automatically 
-    evicts the oldest items when size exceeds max_paths, using a single-line 
-    lru_cache eviction queue trick!
+    An LRU (Least Recently Used) dictionary cache built using `collections.OrderedDict`.
     
-    Pattern:
-      self._q = lru_cache(max_paths + 1)(lambda key: self._cache.pop(key, None))
+    NOTE ON A COMMON PITFALL:
+    Attempting to use `@lru_cache` as an eviction callback queue for a dict via:
+        self._q = lru_cache(maxsize)(lambda key: self._cache.pop(key, None))
+    DOES NOT WORK! `@lru_cache` only calls the decorated function on a CACHE MISS, 
+    NOT upon eviction. Eviction in `@lru_cache` silently drops internal keys without 
+    triggering callbacks.
+    
+    The standard Pythonic solution is `OrderedDict` with `move_to_end()` and `popitem(last=False)`.
     """
     def __init__(self, max_paths: int = 3):
         self.max_paths = max_paths
-        self._cache = {}
-        # The Trick: Wrap a lambda that pops keys from self._cache in an lru_cache.
-        # - When key is in lru_cache (HIT), lambda does NOT run. Item stays in self._cache.
-        # - When lru_cache EVICTS a key (MISS on next access), lambda runs and POPS item from self._cache!
-        self._q = lru_cache(max_paths + 1)(lambda key: self._cache.pop(key, None))
+        self._cache = OrderedDict()
 
     def put(self, key: str, value: str):
-        self._q(key)          # 1. Register/Refresh key in lru_cache (Warm up hit)
-        self._cache[key] = value  # 2. Store payload in underlying dictionary
+        if key in self._cache:
+            self._cache.move_to_end(key)  # Refresh position
+        self._cache[key] = value
+        if len(self._cache) > self.max_paths:
+            self._cache.popitem(last=False)  # Evict oldest / least recently used item!
 
     def get(self, key: str):
         if key in self._cache:
-            self._q(key)      # Refreshes key position (marks as Most Recently Used in lru_cache)
+            self._cache.move_to_end(key)  # Mark as Most Recently Used
             return self._cache[key]
         return None
 
 
-def demonstrate_lru_queue_trick():
+def demonstrate_lru_dict_cache():
     print("\n" + "=" * 80)
-    print("PART 6: ADVANCED TRICK — lru_cache AS AN EVICTION QUEUE FOR DICTS")
+    print("PART 6: BUILDING AN LRU DICTIONARY (USING collections.OrderedDict)")
     print("=" * 80)
 
     cache_system = LRUDictCache(max_paths=3)
@@ -298,13 +316,15 @@ def demonstrate_lru_queue_trick():
     print("   Current Cache Keys:", list(cache_system._cache.keys()))
 
     print("\n2. Accessing 'path/A' to mark it as Most Recently Used:")
-    cache_system.get("path/A")
+    val_a = cache_system.get("path/A")
+    print(f"   Fetched 'path/A': {val_a} -> Updated Order:", list(cache_system._cache.keys()))
 
     print("\n3. Inserting 4th path ('path/D') -> Exceeds max_paths=3:")
     cache_system.put("path/D", "Data_D")
     
-    print("   Cache Keys active in self._cache:", list(cache_system._cache.keys()))
-    print("   Notice how 'path/B' was evicted from self._cache because 'path/A' was recently refreshed!")
+    print("   Active Cache Keys:", list(cache_system._cache.keys()))
+    print(f"   Value of 'path/D': {cache_system._cache['path/D']}")
+    print("   ✅ 'path/B' was correctly evicted because 'path/A' was refreshed!")
 
 
 
@@ -318,6 +338,7 @@ if __name__ == "__main__":
     demonstrate_typed_parameter()
     demonstrate_unhashable_args_fix()
     demonstrate_programmatic_lru_cache()
-    demonstrate_lru_queue_trick()
+    demonstrate_lru_dict_cache()
+
 
 

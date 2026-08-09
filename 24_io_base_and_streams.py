@@ -259,30 +259,31 @@ def demonstrate_metaclass_stream_caching():
 
 
 
-# --- TEST CODE (Un-comment below to test your implementation) ---
-# if __name__ == "__main__":
-#     demonstrate_in_memory_streams()
-#     demonstrate_polymorphic_streams()
-#     demonstrate_custom_stream()
-#     demonstrate_metaclass_stream_caching()
-# 
-#     print("\n==================================================")
-#     print("RUNNING EXERCISE 24 TESTS")
-#     print("==================================================")
-#     
-#     secrets = ["PASSWORD", "SECRET", "API_KEY"]
-#     sanitizer = SanitizingTextStream(redactions=secrets)
-#     
-#     sanitizer.write("User login attempt with PASSWORD=12345!\n")
-#     sanitizer.write("Exporting API_KEY=abc_999 to config.\n")
-#     sanitizer.write("This line has no SECRET info.\n")
-#     
-#     output = sanitizer.getvalue()
-#     print("Sanitizer Stream Output:")
-#     print(output)
-#     
-#     assert "PASSWORD" not in output, "FAILED: 'PASSWORD' was not redacted!"
-#     assert "API_KEY" not in output, "FAILED: 'API_KEY' was not redacted!"
-#     assert "SECRET" not in output, "FAILED: 'SECRET' was not redacted!"
-#     assert "[REDACTED]" in output, "FAILED: '[REDACTED]' missing from output!"
-#     print("🎉 Exercise 24 Passed Successfully!")
+if __name__ == "__main__":
+    demonstrate_in_memory_streams()
+    demonstrate_polymorphic_streams()
+    demonstrate_custom_stream()
+    demonstrate_metaclass_stream_caching()
+
+    # --- EXERCISE 24 TEST CODE (Un-comment below to test your implementation) ---
+    # print("\n==================================================")
+    # print("RUNNING EXERCISE 24 TESTS")
+    # print("==================================================")
+    # 
+    # secrets = ["PASSWORD", "SECRET", "API_KEY"]
+    # sanitizer = SanitizingTextStream(redactions=secrets)
+    # 
+    # sanitizer.write("User login attempt with PASSWORD=12345!\n")
+    # sanitizer.write("Exporting API_KEY=abc_999 to config.\n")
+    # sanitizer.write("This line has no SECRET info.\n")
+    # 
+    # output = sanitizer.getvalue()
+    # print("Sanitizer Stream Output:")
+    # print(output)
+    # 
+    # assert "PASSWORD" not in output, "FAILED: 'PASSWORD' was not redacted!"
+    # assert "API_KEY" not in output, "FAILED: 'API_KEY' was not redacted!"
+    # assert "SECRET" not in output, "FAILED: 'SECRET' was not redacted!"
+    # assert "[REDACTED]" in output, "FAILED: '[REDACTED]' missing from output!"
+    # print("🎉 Exercise 24 Passed Successfully!")
+
